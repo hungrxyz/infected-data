@@ -8,7 +8,6 @@
 import Foundation
 import ArgumentParser
 import CodableCSV
-import ShellOut
 
 struct Scalpel: ParsableCommand {
 

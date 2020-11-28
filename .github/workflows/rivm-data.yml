@@ -1,0 +1,19 @@
+name: Swift
+
+on:
+  schedule:
+    - cron: "*/15 12-15 * * *"
+
+jobs:
+  rivm-numbers-per-municipality:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download and dissect
+      run: swift run scalpel
+      
+    - name: Status
+      run: |
+        git status

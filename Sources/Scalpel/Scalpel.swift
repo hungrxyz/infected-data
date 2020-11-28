@@ -114,6 +114,7 @@ struct Scalpel: ParsableCommand {
         let summaryJSON = try encoder.encode(summary)
 
         let latestURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("data")
             .appendingPathComponent("rivm")
             .appendingPathComponent("latest")
 

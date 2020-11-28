@@ -121,7 +121,7 @@ struct Scalpel: ParsableCommand {
 
         try FileManager.default.createDirectory(at: regionURL, withIntermediateDirectories: true)
 
-        let nationalURL = regionURL.appendingPathComponent("NL1.json")
+        let nationalURL = latestURL.appendingPathComponent("national.json")
 
         FileManager.default.createFile(atPath: nationalURL.path, contents: summaryJSON)
 
@@ -220,7 +220,7 @@ struct Scalpel: ParsableCommand {
 
         let allMunicipalitiesJSON = try encoder.encode(allMunicipalitiesDTO)
 
-        let allMunicipalitiesURL = latestURL.appendingPathComponent("all_municipalities.json")
+        let allMunicipalitiesURL = latestURL.appendingPathComponent("municipalities.json")
 
         FileManager.default.createFile(atPath: allMunicipalitiesURL.path, contents: allMunicipalitiesJSON)
 
@@ -232,7 +232,7 @@ struct Scalpel: ParsableCommand {
 
         let allSecurityRegionsJSON = try encoder.encode(allSecurityRegionsDTO)
 
-        let allSecurityRegionsURL = latestURL.appendingPathComponent("all_security_regions.json")
+        let allSecurityRegionsURL = latestURL.appendingPathComponent("security_regions.json")
 
         FileManager.default.createFile(atPath: allSecurityRegionsURL.path, contents: allSecurityRegionsJSON)
 

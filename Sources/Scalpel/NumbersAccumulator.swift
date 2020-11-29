@@ -7,10 +7,9 @@
 
 import Foundation
 
+typealias AccumulatedNumbers = (positiveCases: Int, hospitalAdmissions: Int, deaths: Int)
 
 final class NumbersAccumulator {
-
-    typealias AccumulatedNumbers = (positiveCases: Int, hospitalAdmissions: Int, deaths: Int)
 
     func accumulate(entries: [RIVMRegionalEntry]) -> AccumulatedNumbers {
         entries.reduce(into: (0, 0, 0), { (result, entry) in

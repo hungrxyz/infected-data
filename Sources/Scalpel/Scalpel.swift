@@ -57,27 +57,13 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
-        let positiveCasesNumbers = SummaryNumbers(
-            new: todayCounts.positiveCases,
-            trend: trend(today: todayCounts.positiveCases, yesterday: yesterdaysCounts.positiveCases),
-            total: totalCounts.positiveCases
-        )
-
-        let hospitalAdmissionsNumbers = SummaryNumbers(
-            new: todayCounts.hospitalAdmissions,
-            trend: trend(today: todayCounts.hospitalAdmissions, yesterday: yesterdaysCounts.hospitalAdmissions),
-            total: totalCounts.hospitalAdmissions
-        )
-
-        let deathNumbers = SummaryNumbers(
-            new: todayCounts.deaths,
-            trend: trend(today: todayCounts.deaths, yesterday: yesterdaysCounts.deaths),
-            total: totalCounts.deaths
-        )
-
         guard let updatedAt = lastModified, let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")
         }
+
+        let summarizedNumbers = summarizeEntries(today: todayCounts,
+                                                 yesterday: yesterdaysCounts,
+                                                 total: totalCounts)
 
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
@@ -85,9 +71,9 @@ struct Scalpel: ParsableCommand {
                               municupalityName: nil,
                               provinceName: nil,
                               securityRegionName: nil,
-                              positiveCases: positiveCasesNumbers,
-                              hospitalAdmissions: hospitalAdmissionsNumbers,
-                              deaths: deathNumbers)
+                              positiveCases: summarizedNumbers.positiveCases,
+                              hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                              deaths: summarizedNumbers.deaths)
 
         let encoder = JSONEncoder()
         if #available(OSX 10.15, *) {
@@ -123,26 +109,16 @@ struct Scalpel: ParsableCommand {
             let totalsEntries = allEntries.filter { $0.municipalityCode == regionCode }
             let totals = accumulator.accumulate(entries: totalsEntries)
 
-            let todaysEntry = todaysEntries.first { $0.municipalityCode == regionCode }
-            let yesterdaysEntry = yesterdaysEntries.first { $0.municipalityCode == regionCode }
+            guard
+                let todaysEntry = todaysEntries.first(where: { $0.municipalityCode == regionCode }),
+                let yesterdaysEntry = yesterdaysEntries.first(where: { $0.municipalityCode == regionCode })
+            else {
+                continue
+            }
 
-            let positiveCases = SummaryNumbers(
-                new: todaysEntry?.totalReported,
-                trend: trend(today: todaysEntry?.totalReported, yesterday: yesterdaysEntry?.totalReported),
-                total: totals.positiveCases
-            )
-
-            let hospitalAdmissions = SummaryNumbers(
-                new: todaysEntry?.hospitalAdmissions,
-                trend: trend(today: todaysEntry?.hospitalAdmissions, yesterday: yesterdaysEntry?.hospitalAdmissions),
-                total: totals.hospitalAdmissions
-            )
-
-            let deaths = SummaryNumbers(
-                new: todaysEntry?.deceased,
-                trend: trend(today: todaysEntry?.deceased, yesterday: yesterdaysEntry?.deceased),
-                total: totals.deaths
-            )
+            let summarizedNumbers = summarizeEntries(today: todaysEntry.accumulatedNumbers,
+                                                     yesterday: yesterdaysEntry.accumulatedNumbers,
+                                                     total: totals)
 
             let summary = Summary(
                 updatedAt: updatedAt,
@@ -151,9 +127,9 @@ struct Scalpel: ParsableCommand {
                 municupalityName: entry.municipalityName,
                 provinceName: entry.provinceName,
                 securityRegionName: entry.securityRegionName,
-                positiveCases: positiveCases,
-                hospitalAdmissions: hospitalAdmissions,
-                deaths: deaths
+                positiveCases: summarizedNumbers.positiveCases,
+                hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                deaths: summarizedNumbers.deaths
             )
 
             let json = try encoder.encode(summary)
@@ -197,23 +173,7 @@ struct Scalpel: ParsableCommand {
             let yesterdaysEntriesForSecurityRegion = yesterdaysEntries.filter { $0.securityRegionCode == regionCode }
             let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysEntriesForSecurityRegion)
 
-            let positiveCases = SummaryNumbers(
-                new: todaysNumbers.positiveCases,
-                trend: trend(today: todaysNumbers.positiveCases, yesterday: yesterdaysNumbers.positiveCases),
-                total: totals.positiveCases
-            )
-
-            let hospitalAdmissions = SummaryNumbers(
-                new: todaysNumbers.hospitalAdmissions,
-                trend: trend(today: todaysNumbers.hospitalAdmissions, yesterday: yesterdaysNumbers.hospitalAdmissions),
-                total: totals.hospitalAdmissions
-            )
-
-            let deaths = SummaryNumbers(
-                new: todaysNumbers.deaths,
-                trend: trend(today: todaysNumbers.deaths, yesterday: yesterdaysNumbers.deaths),
-                total: totals.deaths
-            )
+            let summarizedNumbers = summarizeEntries(today: todaysNumbers, yesterday: yesterdaysNumbers, total: totals)
 
             let summary = Summary(
                 updatedAt: updatedAt,
@@ -222,9 +182,9 @@ struct Scalpel: ParsableCommand {
                 municupalityName: entry.municipalityName,
                 provinceName: entry.provinceName,
                 securityRegionName: entry.securityRegionName,
-                positiveCases: positiveCases,
-                hospitalAdmissions: hospitalAdmissions,
-                deaths: deaths
+                positiveCases: summarizedNumbers.positiveCases,
+                hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                deaths: summarizedNumbers.deaths
             )
 
             let json = try encoder.encode(summary)
@@ -256,6 +216,32 @@ struct Scalpel: ParsableCommand {
             return nil
         }
         return today - yesterday
+    }
+
+    func summarizeEntries(today: AccumulatedNumbers,
+                          yesterday: AccumulatedNumbers,
+                          total: AccumulatedNumbers) -> (positiveCases: SummaryNumbers, hospitalAdmissions: SummaryNumbers, deaths: SummaryNumbers) {
+
+        let positiveCases = SummaryNumbers(
+            new: today.positiveCases,
+            trend: trend(today: today.positiveCases, yesterday: yesterday.positiveCases),
+            total: total.positiveCases
+        )
+
+        let hospitalAdmissions = SummaryNumbers(
+            new: today.hospitalAdmissions,
+            trend: trend(today: today.hospitalAdmissions, yesterday: yesterday.hospitalAdmissions),
+            total: total.hospitalAdmissions
+        )
+
+        let deaths = SummaryNumbers(
+            new: today.deaths,
+            trend: trend(today: today.deaths, yesterday: yesterday.deaths),
+            total: total.deaths
+        )
+
+        return (positiveCases, hospitalAdmissions, deaths)
+
     }
 
 }
@@ -290,6 +276,14 @@ private extension Summary {
                 positiveCases: positiveCases,
                 hospitalAdmissions: hospitalAdmissions,
                 deaths: deaths)
+    }
+
+}
+
+private extension RIVMRegionalEntry {
+
+    var accumulatedNumbers: AccumulatedNumbers {
+        (totalReported ?? 0, hospitalAdmissions ?? 0, deceased ?? 0)
     }
 
 }

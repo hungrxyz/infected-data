@@ -15,10 +15,8 @@ struct Scalpel: ParsableCommand {
 
         let semaphore = DispatchSemaphore(value: 0)
 
-        var lastModified: Date?
-        var allEntries: [RIVMRegionalEntry]?
-        var todaysEntries: [RIVMRegionalEntry]?
-        var yesterdaysEntries: [RIVMRegionalEntry]?
+        var lastModified: Date!
+        var allEntries: [RIVMRegionalEntry]!
 
         let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv")!
 
@@ -41,62 +39,49 @@ struct Scalpel: ParsableCommand {
 
             allEntries = entries
 
-            let calendar = Calendar(identifier: .iso8601)
-
-            todaysEntries = entries.filter { calendar.isDateInToday($0.dateOfPublication) }
-            yesterdaysEntries = entries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
-
             semaphore.signal()
         }.resume()
 
         semaphore.wait()
 
-        let totalCounts = allEntries?
-            .reduce(into: (cases: 0, hospitalizations: 0, deaths: 0), { (result, entry) in
-                result.cases += entry.totalReported ?? 0
-                result.hospitalizations += entry.hospitalAdmissions ?? 0
-                result.deaths += entry.deceased ?? 0
-            })
+        let accumulator = NumbersAccumulator()
+        let calendar = Calendar(identifier: .iso8601)
 
-        let todayCounts = todaysEntries?
-            .reduce(into: (cases: 0, hospitalizations: 0, deaths: 0), { (result, entry) in
-                result.cases += entry.totalReported ?? 0
-                result.hospitalizations += entry.hospitalAdmissions ?? 0
-                result.deaths += entry.deceased ?? 0
-            })
+        // MARK: - National
 
-        let yesterdaysCounts = yesterdaysEntries?
-            .reduce(into: (cases: 0, hospitalizations: 0, deaths: 0), { (result, entry) in
-                result.cases += entry.totalReported ?? 0
-                result.hospitalizations += entry.hospitalAdmissions ?? 0
-                result.deaths += entry.deceased ?? 0
-            })
+        let totalCounts = accumulator.accumulate(entries: allEntries)
+
+        let todaysEntries = allEntries.filter { calendar.isDateInToday($0.dateOfPublication) }
+        let todayCounts = accumulator.accumulate(entries: todaysEntries)
+
+        let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
+        let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
         let positiveCasesNumbers = SummaryNumbers(
-            new: todayCounts?.cases,
-            trend: trend(today: todayCounts?.cases, yesterday: yesterdaysCounts?.cases),
-            total: totalCounts?.cases
+            new: todayCounts.positiveCases,
+            trend: trend(today: todayCounts.positiveCases, yesterday: yesterdaysCounts.positiveCases),
+            total: totalCounts.positiveCases
         )
 
         let hospitalAdmissionsNumbers = SummaryNumbers(
-            new: todayCounts?.hospitalizations,
-            trend: trend(today: todayCounts?.hospitalizations, yesterday: yesterdaysCounts?.hospitalizations),
-            total: totalCounts?.hospitalizations
+            new: todayCounts.hospitalAdmissions,
+            trend: trend(today: todayCounts.hospitalAdmissions, yesterday: yesterdaysCounts.hospitalAdmissions),
+            total: totalCounts.hospitalAdmissions
         )
 
         let deathNumbers = SummaryNumbers(
-            new: todayCounts?.deaths,
-            trend: trend(today: todayCounts?.deaths, yesterday: yesterdaysCounts?.deaths),
-            total: totalCounts?.deaths
+            new: todayCounts.deaths,
+            trend: trend(today: todayCounts.deaths, yesterday: yesterdaysCounts.deaths),
+            total: totalCounts.deaths
         )
 
-        guard let updatedAt = lastModified, let numbersDate = todaysEntries?.first?.dateOfPublication else {
-            fatalError("Missing dates")
+        guard let updatedAt = lastModified, let numbersDate = todaysEntries.first?.dateOfPublication else {
+            fatalError("Missing todays entries dates")
         }
 
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
-                              regionCode: "NL0",
+                              regionCode: "NL00",
                               municupalityName: nil,
                               provinceName: nil,
                               securityRegionName: nil,
@@ -125,65 +110,38 @@ struct Scalpel: ParsableCommand {
 
         FileManager.default.createFile(atPath: nationalURL.path, contents: summaryJSON)
 
+        // MARK: - Municipal
+
         var municipalSummaries = [Summary]()
-        var securityRegionSummaries = [Summary]()
 
-        for entry in todaysEntries ?? [] {
+        let municipalEntries = todaysEntries.filter { $0.municipalityCode != nil }
 
-            let isMunicipality = entry.municipalityCode != nil
-            let regionCode = entry.municipalityCode ?? entry.securityRegionCode ?? "XX0"
+        for entry in municipalEntries {
 
-            let totals: (positiveCases: Int, hospitalAdmissions: Int, deaths: Int)?
-            if isMunicipality {
-                totals = allEntries?
-                    .filter { $0.municipalityCode == regionCode }
-                    .compactMap { $0 }
-                    .reduce(into: (positiveCases: 0, hospitalAdmissions: 0, deaths: 0), { (result, entry) in
-                        result.positiveCases += entry.totalReported ?? 0
-                        result.hospitalAdmissions += entry.hospitalAdmissions ?? 0
-                        result.deaths += entry.deceased ?? 0
-                    })
-            } else {
-                totals = allEntries?
-                    .filter { $0.securityRegionCode == regionCode }
-                    .compactMap { $0 }
-                    .reduce(into: (positiveCases: 0, hospitalAdmissions: 0, deaths: 0), { (result, entry) in
-                        result.positiveCases += entry.totalReported ?? 0
-                        result.hospitalAdmissions += entry.hospitalAdmissions ?? 0
-                        result.deaths += entry.deceased ?? 0
-                    })
-            }
+            let regionCode = entry.municipalityCode!
 
-            let todays: RIVMRegionalEntry?
-            if isMunicipality {
-                todays = todaysEntries?.first(where: { $0.municipalityCode == regionCode })
-            } else {
-                todays = todaysEntries?.first(where: { $0.securityRegionCode == regionCode })
-            }
+            let totalsEntries = allEntries.filter { $0.municipalityCode == regionCode }
+            let totals = accumulator.accumulate(entries: totalsEntries)
 
-            let yesterdays: RIVMRegionalEntry?
-            if isMunicipality {
-                yesterdays = yesterdaysEntries?.first(where: { $0.municipalityCode == regionCode })
-            } else {
-                yesterdays = yesterdaysEntries?.first(where: { $0.securityRegionCode == regionCode })
-            }
+            let todaysEntry = todaysEntries.first { $0.municipalityCode == regionCode }
+            let yesterdaysEntry = yesterdaysEntries.first { $0.municipalityCode == regionCode }
 
             let positiveCases = SummaryNumbers(
-                new: todays?.totalReported,
-                trend: trend(today: todays?.totalReported, yesterday: yesterdays?.totalReported),
-                total: totals?.positiveCases
+                new: todaysEntry?.totalReported,
+                trend: trend(today: todaysEntry?.totalReported, yesterday: yesterdaysEntry?.totalReported),
+                total: totals.positiveCases
             )
 
             let hospitalAdmissions = SummaryNumbers(
-                new: todays?.hospitalAdmissions,
-                trend: trend(today: todays?.hospitalAdmissions, yesterday: yesterdays?.hospitalAdmissions),
-                total: totals?.hospitalAdmissions
+                new: todaysEntry?.hospitalAdmissions,
+                trend: trend(today: todaysEntry?.hospitalAdmissions, yesterday: yesterdaysEntry?.hospitalAdmissions),
+                total: totals.hospitalAdmissions
             )
 
             let deaths = SummaryNumbers(
-                new: todays?.deceased,
-                trend: trend(today: todays?.deceased, yesterday: yesterdays?.deceased),
-                total: totals?.deaths
+                new: todaysEntry?.deceased,
+                trend: trend(today: todaysEntry?.deceased, yesterday: yesterdaysEntry?.deceased),
+                total: totals.deaths
             )
 
             let summary = Summary(
@@ -205,11 +163,7 @@ struct Scalpel: ParsableCommand {
 
             FileManager.default.createFile(atPath: fileURL.path, contents: json, attributes: nil)
 
-            if isMunicipality {
-                municipalSummaries.append(summary)
-            } else {
-                securityRegionSummaries.append(summary)
-            }
+            municipalSummaries.append(summary)
         }
 
         let allMunicipalitiesDTO = GroupedRegionsDTO(
@@ -224,10 +178,69 @@ struct Scalpel: ParsableCommand {
 
         FileManager.default.createFile(atPath: allMunicipalitiesURL.path, contents: allMunicipalitiesJSON)
 
+        // MARK: - Security Regions
+
+        var securityRegionsSummaries = [Summary]()
+
+        let securityRegionEntries = todaysEntries.filter { $0.municipalityCode == nil }
+
+        for entry in securityRegionEntries {
+
+            let regionCode = entry.securityRegionCode ?? "XX00"
+
+            let totalsEntries = allEntries.filter { $0.securityRegionCode == regionCode }
+            let totals = accumulator.accumulate(entries: totalsEntries)
+
+            let todaysEntriesForSecurityRegion = todaysEntries.filter { $0.securityRegionCode == regionCode }
+            let todaysNumbers = accumulator.accumulate(entries: todaysEntriesForSecurityRegion)
+
+            let yesterdaysEntriesForSecurityRegion = yesterdaysEntries.filter { $0.securityRegionCode == regionCode }
+            let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysEntriesForSecurityRegion)
+
+            let positiveCases = SummaryNumbers(
+                new: todaysNumbers.positiveCases,
+                trend: trend(today: todaysNumbers.positiveCases, yesterday: yesterdaysNumbers.positiveCases),
+                total: totals.positiveCases
+            )
+
+            let hospitalAdmissions = SummaryNumbers(
+                new: todaysNumbers.hospitalAdmissions,
+                trend: trend(today: todaysNumbers.hospitalAdmissions, yesterday: yesterdaysNumbers.hospitalAdmissions),
+                total: totals.hospitalAdmissions
+            )
+
+            let deaths = SummaryNumbers(
+                new: todaysNumbers.deaths,
+                trend: trend(today: todaysNumbers.deaths, yesterday: yesterdaysNumbers.deaths),
+                total: totals.deaths
+            )
+
+            let summary = Summary(
+                updatedAt: updatedAt,
+                numbersDate: numbersDate,
+                regionCode: regionCode,
+                municupalityName: entry.municipalityName,
+                provinceName: entry.provinceName,
+                securityRegionName: entry.securityRegionName,
+                positiveCases: positiveCases,
+                hospitalAdmissions: hospitalAdmissions,
+                deaths: deaths
+            )
+
+            let json = try encoder.encode(summary)
+
+            let filename = [regionCode, "json"].joined(separator: ".")
+            let fileURL = regionURL.appendingPathComponent(filename)
+
+            FileManager.default.createFile(atPath: fileURL.path, contents: json, attributes: nil)
+
+            securityRegionsSummaries.append(summary)
+        }
+
         let allSecurityRegionsDTO = GroupedRegionsDTO(
             updatedAt: updatedAt,
             numbersDate: numbersDate,
-            regions: securityRegionSummaries.map { $0.nillifyingDates() }
+            regions: securityRegionsSummaries.map { $0.nillifyingDates() }
         )
 
         let allSecurityRegionsJSON = try encoder.encode(allSecurityRegionsDTO)

@@ -3,41 +3,22 @@
   "regions" : [
     {
       "positiveCases" : {
-        "new" : 430,
-        "trend" : 85,
-        "total" : 43824
+        "new" : 53,
+        "trend" : -38,
+        "total" : 7746
       },
       "deaths" : {
-        "new" : 6,
+        "new" : 0,
+        "trend" : -3,
+        "total" : 112
+      },
+      "hospitalAdmissions" : {
+        "new" : 0,
         "trend" : -1,
-        "total" : 681
+        "total" : 204
       },
-      "hospitalAdmissions" : {
-        "new" : 4,
-        "trend" : -5,
-        "total" : 1418
-      },
-      "regionCode" : "NL-UT",
-      "provinceName" : "Utrecht"
-    },
-    {
-      "positiveCases" : {
-        "new" : 340,
-        "trend" : 58,
-        "total" : 24923
-      },
-      "deaths" : {
-        "new" : 1,
-        "trend" : -9,
-        "total" : 884
-      },
-      "hospitalAdmissions" : {
-        "new" : 5,
-        "trend" : 3,
-        "total" : 1784
-      },
-      "regionCode" : "NL-LI",
-      "provinceName" : "Limburg"
+      "regionCode" : "NL-DR",
+      "provinceName" : "Drenthe"
     },
     {
       "positiveCases" : {
@@ -60,6 +41,63 @@
     },
     {
       "positiveCases" : {
+        "new" : 115,
+        "trend" : -40,
+        "total" : 11008
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : 0,
+        "total" : 137
+      },
+      "hospitalAdmissions" : {
+        "new" : 2,
+        "trend" : 0,
+        "total" : 391
+      },
+      "regionCode" : "NL-FL",
+      "provinceName" : "Flevoland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 889,
+        "trend" : 172,
+        "total" : 94019
+      },
+      "deaths" : {
+        "new" : 3,
+        "trend" : -3,
+        "total" : 1288
+      },
+      "hospitalAdmissions" : {
+        "new" : 12,
+        "trend" : 7,
+        "total" : 2748
+      },
+      "regionCode" : "NL-NH",
+      "provinceName" : "Noord-Holland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 464,
+        "trend" : 68,
+        "total" : 31486
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : -6,
+        "total" : 536
+      },
+      "hospitalAdmissions" : {
+        "new" : 1,
+        "trend" : -3,
+        "total" : 739
+      },
+      "regionCode" : "NL-OV",
+      "provinceName" : "Overijssel"
+    },
+    {
+      "positiveCases" : {
         "new" : 1339,
         "trend" : 216,
         "total" : 147725
@@ -76,44 +114,6 @@
       },
       "regionCode" : "NL-ZH",
       "provinceName" : "Zuid-Holland"
-    },
-    {
-      "positiveCases" : {
-        "new" : 751,
-        "trend" : 268,
-        "total" : 51946
-      },
-      "deaths" : {
-        "new" : 0,
-        "trend" : -6,
-        "total" : 1053
-      },
-      "hospitalAdmissions" : {
-        "new" : 9,
-        "trend" : 7,
-        "total" : 2038
-      },
-      "regionCode" : "NL-GE",
-      "provinceName" : "Gelderland"
-    },
-    {
-      "positiveCases" : {
-        "new" : 75,
-        "trend" : 11,
-        "total" : 6226
-      },
-      "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 102
-      },
-      "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : 1,
-        "total" : 235
-      },
-      "regionCode" : "NL-ZE",
-      "provinceName" : "Zeeland"
     },
     {
       "positiveCases" : {
@@ -155,79 +155,79 @@
     },
     {
       "positiveCases" : {
-        "new" : 115,
-        "trend" : -40,
-        "total" : 11008
-      },
-      "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 137
-      },
-      "hospitalAdmissions" : {
-        "new" : 2,
-        "trend" : 0,
-        "total" : 391
-      },
-      "regionCode" : "NL-FL",
-      "provinceName" : "Flevoland"
-    },
-    {
-      "positiveCases" : {
-        "new" : 464,
-        "trend" : 68,
-        "total" : 31486
+        "new" : 751,
+        "trend" : 268,
+        "total" : 51946
       },
       "deaths" : {
         "new" : 0,
         "trend" : -6,
-        "total" : 536
+        "total" : 1053
+      },
+      "hospitalAdmissions" : {
+        "new" : 9,
+        "trend" : 7,
+        "total" : 2038
+      },
+      "regionCode" : "NL-GE",
+      "provinceName" : "Gelderland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 75,
+        "trend" : 11,
+        "total" : 6226
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : 0,
+        "total" : 102
       },
       "hospitalAdmissions" : {
         "new" : 1,
-        "trend" : -3,
-        "total" : 739
+        "trend" : 1,
+        "total" : 235
       },
-      "regionCode" : "NL-OV",
-      "provinceName" : "Overijssel"
+      "regionCode" : "NL-ZE",
+      "provinceName" : "Zeeland"
     },
     {
       "positiveCases" : {
-        "new" : 889,
-        "trend" : 172,
-        "total" : 94019
+        "new" : 340,
+        "trend" : 58,
+        "total" : 24923
       },
       "deaths" : {
-        "new" : 3,
-        "trend" : -3,
-        "total" : 1288
+        "new" : 1,
+        "trend" : -9,
+        "total" : 884
       },
       "hospitalAdmissions" : {
-        "new" : 12,
-        "trend" : 7,
-        "total" : 2748
+        "new" : 5,
+        "trend" : 3,
+        "total" : 1784
       },
-      "regionCode" : "NL-NH",
-      "provinceName" : "Noord-Holland"
+      "regionCode" : "NL-LI",
+      "provinceName" : "Limburg"
     },
     {
       "positiveCases" : {
-        "new" : 53,
-        "trend" : -38,
-        "total" : 7746
+        "new" : 430,
+        "trend" : 85,
+        "total" : 43824
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : -3,
-        "total" : 112
-      },
-      "hospitalAdmissions" : {
-        "new" : 0,
+        "new" : 6,
         "trend" : -1,
-        "total" : 204
+        "total" : 681
       },
-      "regionCode" : "NL-DR",
-      "provinceName" : "Drenthe"
+      "hospitalAdmissions" : {
+        "new" : 4,
+        "trend" : -5,
+        "total" : 1418
+      },
+      "regionCode" : "NL-UT",
+      "provinceName" : "Utrecht"
     }
   ],
   "numbersDate" : "2020-11-28T23:00:00Z"

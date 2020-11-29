@@ -96,7 +96,7 @@ struct Scalpel: ParsableCommand {
 
         FileManager.default.createFile(atPath: nationalURL.path, contents: summaryJSON)
 
-        // MARK: - Municipal
+        // MARK: - Municipalities
 
         var municipalSummaries = [Summary]()
 
@@ -208,6 +208,89 @@ struct Scalpel: ParsableCommand {
         let allSecurityRegionsURL = latestURL.appendingPathComponent("security_regions.json")
 
         FileManager.default.createFile(atPath: allSecurityRegionsURL.path, contents: allSecurityRegionsJSON)
+
+        // MARK: - Provinces
+
+        // Map of province name and ISO 3166-2 codes
+        // https://nl.wikipedia.org/wiki/ISO_3166-2:NL
+        let provincesNameCodes = [
+            "Drenthe": "NL-DR",
+            "Flevoland": "NL-FL",
+            "Friesland": "NL-FR",
+            "Gelderland": "NL-GE",
+            "Groningen": "NL-GR",
+            "Limburg": "NL-LI",
+            "Noord-Brabant": "NL-NB",
+            "Noord-Holland": "NL-NH",
+            "Overijssel": "NL-OV",
+            "Utrecht": "NL-UT",
+            "Zeeland": "NL-ZE",
+            "Zuid-Holland": "NL-ZH",
+            "Bonaire": "NL-BQ1",
+            "Saba": "NL-BQ2",
+            "Sint Eustatius": "NL-BQ3",
+            "Aruba": "NL-AW",
+            "Curaçao": "NL-CW",
+            "Sint Maarten": "NL-SX"
+        ]
+
+        let provinceNames = Array(provincesNameCodes.keys)
+
+        var provincesSummaries = [Summary]()
+
+        for provinceName in provinceNames {
+
+            let regionCode = provincesNameCodes[provinceName]!
+
+            let totalsEntries = allEntries.filter { $0.provinceName == provinceName }
+            let totals = accumulator.accumulate(entries: totalsEntries)
+
+            let todaysProvincialEntries = todaysEntries.filter { $0.provinceName == provinceName }
+            let todaysNumbers = accumulator.accumulate(entries: todaysProvincialEntries)
+
+            let yesterdaysProvincialEntries = yesterdaysEntries.filter { $0.provinceName == provinceName }
+            let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysProvincialEntries)
+
+            // Early exit in case no entries found for province
+            if todaysProvincialEntries.isEmpty {
+                continue
+            }
+
+            let summarizedNumbers = summarizeEntries(today: todaysNumbers, yesterday: yesterdaysNumbers, total: totals)
+
+            let summary = Summary(
+                updatedAt: updatedAt,
+                numbersDate: numbersDate,
+                regionCode: regionCode,
+                municupalityName: nil,
+                provinceName: provinceName,
+                securityRegionName: nil,
+                positiveCases: summarizedNumbers.positiveCases,
+                hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                deaths: summarizedNumbers.deaths
+            )
+
+            let json = try encoder.encode(summary)
+
+            let filename = [regionCode, "json"].joined(separator: ".")
+            let fileURL = regionURL.appendingPathComponent(filename)
+
+            FileManager.default.createFile(atPath: fileURL.path, contents: json, attributes: nil)
+
+            provincesSummaries.append(summary)
+        }
+
+        let allProvincesDTO = GroupedRegionsDTO(
+            updatedAt: updatedAt,
+            numbersDate: numbersDate,
+            regions: provincesSummaries.map { $0.nillifyingDates() }
+        )
+
+        let allProvincesJSON = try encoder.encode(allProvincesDTO)
+
+        let allProvincesURL = latestURL.appendingPathComponent("provinces.json")
+
+        FileManager.default.createFile(atPath: allProvincesURL.path, contents: allProvincesJSON)
 
     }
 

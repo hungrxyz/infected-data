@@ -14,6 +14,13 @@ jobs:
     - name: Download and dissect
       run: swift run scalpel
       
-    - name: Status
+    - name: Commit files
       run: |
-        git status
+        git config --local user.email "marko@hungry.dev"
+        git config --local user.name "infected-data Action"
+        git commit -m "Updates latest RIVM data" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}

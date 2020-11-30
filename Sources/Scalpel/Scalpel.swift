@@ -234,7 +234,7 @@ struct Scalpel: ParsableCommand {
             "Sint Maarten": "NL-SX"
         ]
 
-        let provinceNames = Array(provincesNameCodes.keys)
+        let provinceNames = Array(provincesNameCodes.keys).sorted()
 
         var provincesSummaries = [Summary]()
 

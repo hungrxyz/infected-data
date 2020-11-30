@@ -2,7 +2,7 @@ name: RIVM daily numbers per municipality
 
 on:
   schedule:
-    - cron: "*/15 12-15 * * *"
+    - cron: "15 13-16 * * *"
 
 jobs:
   rivm-numbers-per-municipality:

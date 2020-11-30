@@ -3,25 +3,6 @@
   "regions" : [
     {
       "positiveCases" : {
-        "new" : 322,
-        "trend" : -18,
-        "total" : 25244
-      },
-      "deaths" : {
-        "new" : 3,
-        "trend" : 2,
-        "total" : 887
-      },
-      "hospitalAdmissions" : {
-        "new" : 2,
-        "trend" : -3,
-        "total" : 1786
-      },
-      "regionCode" : "NL-LI",
-      "provinceName" : "Limburg"
-    },
-    {
-      "positiveCases" : {
         "new" : 386,
         "trend" : -43,
         "total" : 44206
@@ -41,117 +22,22 @@
     },
     {
       "positiveCases" : {
-        "new" : 98,
-        "trend" : 5,
-        "total" : 8531
+        "new" : 322,
+        "trend" : -18,
+        "total" : 25244
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 48
+        "new" : 3,
+        "trend" : 2,
+        "total" : 887
       },
       "hospitalAdmissions" : {
         "new" : 2,
-        "trend" : 1,
-        "total" : 147
-      },
-      "regionCode" : "NL-GR",
-      "provinceName" : "Groningen"
-    },
-    {
-      "positiveCases" : {
-        "new" : 111,
-        "trend" : 1,
-        "total" : 8703
-      },
-      "deaths" : {
-        "new" : 1,
-        "trend" : 1,
-        "total" : 131
-      },
-      "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : 1,
-        "total" : 204
-      },
-      "regionCode" : "NL-FR",
-      "provinceName" : "Friesland"
-    },
-    {
-      "positiveCases" : {
-        "new" : 762,
-        "trend" : -188,
-        "total" : 83734
-      },
-      "deaths" : {
-        "new" : 5,
         "trend" : -3,
-        "total" : 2044
+        "total" : 1786
       },
-      "hospitalAdmissions" : {
-        "new" : 8,
-        "trend" : -4,
-        "total" : 3487
-      },
-      "regionCode" : "NL-NB",
-      "provinceName" : "Noord-Brabant"
-    },
-    {
-      "positiveCases" : {
-        "new" : 73,
-        "trend" : 20,
-        "total" : 7818
-      },
-      "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 112
-      },
-      "hospitalAdmissions" : {
-        "new" : 2,
-        "trend" : 2,
-        "total" : 206
-      },
-      "regionCode" : "NL-DR",
-      "provinceName" : "Drenthe"
-    },
-    {
-      "positiveCases" : {
-        "new" : 51,
-        "trend" : -24,
-        "total" : 6277
-      },
-      "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 102
-      },
-      "hospitalAdmissions" : {
-        "new" : 0,
-        "trend" : -1,
-        "total" : 235
-      },
-      "regionCode" : "NL-ZE",
-      "provinceName" : "Zeeland"
-    },
-    {
-      "positiveCases" : {
-        "new" : 457,
-        "trend" : -289,
-        "total" : 52398
-      },
-      "deaths" : {
-        "new" : 2,
-        "trend" : 2,
-        "total" : 1055
-      },
-      "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : -8,
-        "total" : 2039
-      },
-      "regionCode" : "NL-GE",
-      "provinceName" : "Gelderland"
+      "regionCode" : "NL-LI",
+      "provinceName" : "Limburg"
     },
     {
       "positiveCases" : {
@@ -174,22 +60,41 @@
     },
     {
       "positiveCases" : {
-        "new" : 159,
-        "trend" : 45,
-        "total" : 11165
+        "new" : 714,
+        "trend" : -174,
+        "total" : 94720
+      },
+      "deaths" : {
+        "new" : 1,
+        "trend" : -2,
+        "total" : 1289
+      },
+      "hospitalAdmissions" : {
+        "new" : 9,
+        "trend" : -3,
+        "total" : 2757
+      },
+      "regionCode" : "NL-NH",
+      "provinceName" : "Noord-Holland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 51,
+        "trend" : -24,
+        "total" : 6277
       },
       "deaths" : {
         "new" : 0,
         "trend" : 0,
-        "total" : 137
+        "total" : 102
       },
       "hospitalAdmissions" : {
         "new" : 0,
-        "trend" : -2,
-        "total" : 390
+        "trend" : -1,
+        "total" : 235
       },
-      "regionCode" : "NL-FL",
-      "provinceName" : "Flevoland"
+      "regionCode" : "NL-ZE",
+      "provinceName" : "Zeeland"
     },
     {
       "positiveCases" : {
@@ -212,22 +117,117 @@
     },
     {
       "positiveCases" : {
-        "new" : 714,
-        "trend" : -174,
-        "total" : 94720
+        "new" : 457,
+        "trend" : -289,
+        "total" : 52398
+      },
+      "deaths" : {
+        "new" : 2,
+        "trend" : 2,
+        "total" : 1055
+      },
+      "hospitalAdmissions" : {
+        "new" : 1,
+        "trend" : -8,
+        "total" : 2039
+      },
+      "regionCode" : "NL-GE",
+      "provinceName" : "Gelderland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 762,
+        "trend" : -188,
+        "total" : 83734
+      },
+      "deaths" : {
+        "new" : 5,
+        "trend" : -3,
+        "total" : 2044
+      },
+      "hospitalAdmissions" : {
+        "new" : 8,
+        "trend" : -4,
+        "total" : 3487
+      },
+      "regionCode" : "NL-NB",
+      "provinceName" : "Noord-Brabant"
+    },
+    {
+      "positiveCases" : {
+        "new" : 111,
+        "trend" : 1,
+        "total" : 8703
       },
       "deaths" : {
         "new" : 1,
-        "trend" : -2,
-        "total" : 1289
+        "trend" : 1,
+        "total" : 131
       },
       "hospitalAdmissions" : {
-        "new" : 9,
-        "trend" : -3,
-        "total" : 2757
+        "new" : 1,
+        "trend" : 1,
+        "total" : 204
       },
-      "regionCode" : "NL-NH",
-      "provinceName" : "Noord-Holland"
+      "regionCode" : "NL-FR",
+      "provinceName" : "Friesland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 98,
+        "trend" : 5,
+        "total" : 8531
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : 0,
+        "total" : 48
+      },
+      "hospitalAdmissions" : {
+        "new" : 2,
+        "trend" : 1,
+        "total" : 147
+      },
+      "regionCode" : "NL-GR",
+      "provinceName" : "Groningen"
+    },
+    {
+      "positiveCases" : {
+        "new" : 73,
+        "trend" : 20,
+        "total" : 7818
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : 0,
+        "total" : 112
+      },
+      "hospitalAdmissions" : {
+        "new" : 2,
+        "trend" : 2,
+        "total" : 206
+      },
+      "regionCode" : "NL-DR",
+      "provinceName" : "Drenthe"
+    },
+    {
+      "positiveCases" : {
+        "new" : 159,
+        "trend" : 45,
+        "total" : 11165
+      },
+      "deaths" : {
+        "new" : 0,
+        "trend" : 0,
+        "total" : 137
+      },
+      "hospitalAdmissions" : {
+        "new" : 0,
+        "trend" : -2,
+        "total" : 390
+      },
+      "regionCode" : "NL-FL",
+      "provinceName" : "Flevoland"
     }
   ],
   "numbersDate" : "2020-11-30T00:00:00Z"

@@ -77,7 +77,6 @@ struct Scalpel: ParsableCommand {
 
         let encoder = JSONEncoder()
 
-
         if #available(OSX 10.15, *) {
             let iso8601WithTimeZoneFormatter = ISO8601DateFormatter()
             iso8601WithTimeZoneFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
@@ -104,6 +103,10 @@ struct Scalpel: ParsableCommand {
         let nationalURL = latestURL.appendingPathComponent("national.json")
 
         FileManager.default.createFile(atPath: nationalURL.path, contents: summaryJSON)
+
+        let nlRegionURL = regionURL.appendingPathComponent("NL00.json")
+
+        FileManager.default.createFile(atPath: nlRegionURL.path, contents: summaryJSON)
 
         // MARK: - Municipalities
 

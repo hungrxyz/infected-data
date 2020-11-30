@@ -76,8 +76,18 @@ struct Scalpel: ParsableCommand {
                               deaths: summarizedNumbers.deaths)
 
         let encoder = JSONEncoder()
+
+
         if #available(OSX 10.15, *) {
-            encoder.dateEncodingStrategy = .iso8601
+            let iso8601WithTimeZoneFormatter = ISO8601DateFormatter()
+            iso8601WithTimeZoneFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+
+            encoder.dateEncodingStrategy = .custom({ (date, encoder) in
+                let stringRepresentation = iso8601WithTimeZoneFormatter.string(from: date)
+                var container = encoder.singleValueContainer()
+                try container.encode(stringRepresentation)
+            })
+
             encoder.outputFormatting = .prettyPrinted
         }
 

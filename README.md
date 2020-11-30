@@ -4,8 +4,10 @@ Data repository and Scalpel - tool that downloads and disects latest RIVM COVID-
 
 ## Data
 Currently contains only latest numbers (< 24h) separated into files: 
-- per region - `rivm/latest/region/{region code}.json`. 
-- Or a single file grouping specific regions - `rivm/latest/{municipalities|security_regions|national}.json`. 
+- per region  
+`data/latest/region/{region code}.json`. 
+- Or a single file grouping specific regions  
+ `data/latest/{municipalities|security_regions|provinces|national}.json`. 
 
 ## Scalpel
 Swift command line tool that creates files in `data` directory.

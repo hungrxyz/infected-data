@@ -85,7 +85,6 @@ struct Scalpel: ParsableCommand {
 
         let latestURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
             .appendingPathComponent("data")
-            .appendingPathComponent("rivm")
             .appendingPathComponent("latest")
 
         let regionURL = latestURL.appendingPathComponent("region")

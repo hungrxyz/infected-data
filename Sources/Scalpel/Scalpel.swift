@@ -223,36 +223,19 @@ struct Scalpel: ParsableCommand {
 
         // MARK: - Provinces
 
-        // Map of province name and ISO 3166-2 codes
-        // https://nl.wikipedia.org/wiki/ISO_3166-2:NL
-        let provincesNameCodes = [
-            "Drenthe": "NL-DR",
-            "Flevoland": "NL-FL",
-            "Friesland": "NL-FR",
-            "Gelderland": "NL-GE",
-            "Groningen": "NL-GR",
-            "Limburg": "NL-LI",
-            "Noord-Brabant": "NL-NB",
-            "Noord-Holland": "NL-NH",
-            "Overijssel": "NL-OV",
-            "Utrecht": "NL-UT",
-            "Zeeland": "NL-ZE",
-            "Zuid-Holland": "NL-ZH",
-            "Bonaire": "NL-BQ1",
-            "Saba": "NL-BQ2",
-            "Sint Eustatius": "NL-BQ3",
-            "Aruba": "NL-AW",
-            "Curaçao": "NL-CW",
-            "Sint Maarten": "NL-SX"
-        ]
+        let cbsAreaProvider = CBSAreaProvider()
+        let cbsAreas = try cbsAreaProvider.areas()
 
-        let provinceNames = Array(provincesNameCodes.keys).sorted()
+        // Dictionary with province name as key and province code as value.
+        let provinceNameCodeMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.provinceName] = $1.provinceCode }
+
+        let provinceNames = Array(provinceNameCodeMap.keys).sorted()
 
         var provincesSummaries = [Summary]()
 
         for provinceName in provinceNames {
 
-            let regionCode = provincesNameCodes[provinceName]!
+            let regionCode = provinceNameCodeMap[provinceName]!
 
             let totalsEntries = allEntries.filter { $0.provinceName == provinceName }
             let totals = accumulator.accumulate(entries: totalsEntries)

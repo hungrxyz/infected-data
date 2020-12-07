@@ -118,6 +118,11 @@ struct Scalpel: ParsableCommand {
 
             let regionCode = entry.municipalityCode!
 
+            // Some municipalities are duplicated. For example: Amsterdam.
+            if municipalSummaries.contains(where: { $0.regionCode == regionCode }) {
+                continue
+            }
+
             let totalsEntries = allEntries.filter { $0.municipalityCode == regionCode }
             let totals = accumulator.accumulate(entries: totalsEntries)
 

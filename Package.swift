@@ -18,7 +18,9 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "CodableCSV", package: "CodableCSV")
-            ]),
+            ],
+            resources: [.process("Gebieden_in_Nederland_2020_07122020_202646.csv")]
+        ),
         .testTarget(
             name: "ScalpelTests",
             dependencies: ["Scalpel"]),

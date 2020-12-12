@@ -18,12 +18,7 @@ final class CBSAreaProvider {
 
         let decoder = CSVDecoder(configuration: configuration)
 
-        let fileManager = FileManager.default
-
-        let filename = "Gebieden_in_Nederland_2020_07122020_202646.csv"
-        let fileURL = URL(fileURLWithPath: fileManager.currentDirectoryPath)
-            .appendingPathComponent(filename)
-
+        let fileURL = Bundle.module.url(forResource: "Gebieden_in_Nederland_2020_07122020_202646", withExtension: "csv")!
         let fileData = try Data(contentsOf: fileURL)
 
         let areas = try decoder.decode([CBSArea].self, from: fileData)

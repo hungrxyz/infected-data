@@ -13,39 +13,23 @@ struct Scalpel: ParsableCommand {
 
     func run() throws {
 
-        let semaphore = DispatchSemaphore(value: 0)
+        var rivmRegional: RIVMRegional!
 
-        var lastModified: Date!
-        var allEntries: [RIVMRegionalEntry]!
+        let group = DispatchGroup()
 
-        let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv")!
+        group.enter()
+        RIVMRegionalProvider().regional { result in
+            rivmRegional = try! result.get()
+            group.leave()
+        }
 
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-
-            lastModified = response?.lastModified
-
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-
-            var configuration = CSVDecoder.Configuration()
-            configuration.delimiters.field = ";"
-            configuration.delimiters.row = "\r\n"
-            configuration.headerStrategy = .firstLine
-            configuration.dateStrategy = .formatted(dateFormatter)
-
-            let decoder = CSVDecoder(configuration: configuration)
-
-            let entries = try! decoder.decode([RIVMRegionalEntry].self, from: data!)
-
-            allEntries = entries
-
-            semaphore.signal()
-        }.resume()
-
-        semaphore.wait()
+        group.wait()
 
         let accumulator = NumbersAccumulator()
         let calendar = Calendar(identifier: .iso8601)
+
+        let allEntries = rivmRegional.entries
+        let updatedAt = rivmRegional.lastModified
 
         // MARK: - National
 
@@ -57,7 +41,7 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
-        guard let updatedAt = lastModified, let numbersDate = todaysEntries.first?.dateOfPublication else {
+        guard let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")
         }
 
@@ -291,7 +275,6 @@ struct Scalpel: ParsableCommand {
         let allProvincesURL = latestURL.appendingPathComponent("provinces.json")
 
         FileManager.default.createFile(atPath: allProvincesURL.path, contents: allProvincesJSON)
-
     }
 
     func trend(today: Int?, yesterday: Int?) -> Int? {
@@ -325,24 +308,6 @@ struct Scalpel: ParsableCommand {
 
         return (positiveCases, hospitalAdmissions, deaths)
 
-    }
-
-}
-
-private extension URLResponse {
-
-    var lastModified: Date? {
-        let lastModifiedDateFormatter = DateFormatter()
-        lastModifiedDateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss Z"
-
-        guard
-            let httpResponse = self as? HTTPURLResponse,
-            let lastModifiedHeaderValue = httpResponse.allHeaderFields["Last-Modified"] as? String
-        else {
-            return nil
-        }
-
-        return lastModifiedDateFormatter.date(from: lastModifiedHeaderValue)
     }
 
 }

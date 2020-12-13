@@ -1,5 +1,5 @@
 //
-//  RIVMRegionalProvider.swift
+//  RIVMAPI.swift
 //  
 //
 //  Created by marko on 12/12/20.
@@ -8,7 +8,7 @@
 import Foundation
 import CodableCSV
 
-final class RIVMRegionalProvider {
+final class RIVMAPI {
 
     private let urlSession: URLSession
 

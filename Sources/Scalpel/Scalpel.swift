@@ -21,7 +21,7 @@ struct Scalpel: ParsableCommand {
         let group = DispatchGroup()
 
         group.enter()
-        RIVMRegionalProvider().regional { result in
+        RIVMAPI().regional { result in
             rivmRegional = try! result.get()
             group.leave()
         }

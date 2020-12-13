@@ -26,17 +26,23 @@ struct Scalpel: ParsableCommand {
             group.leave()
         }
 
+        group.wait()
+
         group.enter()
         NICEAPI().dailyHospitalAdmissions { result in
             niceDailyHospitalAdmissions = try! result.get()
             group.leave()
         }
 
+        group.wait()
+
         group.enter()
         NICEAPI().dailyIntensiveCareAddmissions { result in
             niceDailyIntensiveCareAdmissions = try! result.get()
             group.leave()
         }
+
+        group.wait()
 
         group.enter()
         LCPSAPI().entries { result in

@@ -26,19 +26,19 @@ struct Scalpel: ParsableCommand {
             group.leave()
         }
 
-        let niceAPI = NICEAPI()
-
-        group.enter()
-        niceAPI.dailyHospitalAdmissions { result in
-            niceDailyHospitalAdmissions = try! result.get()
-            group.leave()
-        }
-
-        group.enter()
-        niceAPI.dailyIntensiveCareAddmissions { result in
-            niceDailyIntensiveCareAdmissions = try! result.get()
-            group.leave()
-        }
+//        let niceAPI = NICEAPI()
+//
+//        group.enter()
+//        niceAPI.dailyHospitalAdmissions { result in
+//            niceDailyHospitalAdmissions = try! result.get()
+//            group.leave()
+//        }
+//
+//        group.enter()
+//        niceAPI.dailyIntensiveCareAddmissions { result in
+//            niceDailyIntensiveCareAdmissions = try! result.get()
+//            group.leave()
+//        }
 
         group.enter()
         LCPSAPI().entries { result in
@@ -329,6 +329,8 @@ struct Scalpel: ParsableCommand {
         let allProvincesURL = latestURL.appendingPathComponent("provinces.json")
 
         FileManager.default.createFile(atPath: allProvincesURL.path, contents: allProvincesJSON)
+
+        RunLoop.main.run()
     }
 
     func trend(today: Int?, yesterday: Int?) -> Int? {

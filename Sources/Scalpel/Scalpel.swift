@@ -26,19 +26,17 @@ struct Scalpel: ParsableCommand {
             group.leave()
         }
 
-//        let niceAPI = NICEAPI()
-//
-//        group.enter()
-//        niceAPI.dailyHospitalAdmissions { result in
-//            niceDailyHospitalAdmissions = try! result.get()
-//            group.leave()
-//        }
-//
-//        group.enter()
-//        niceAPI.dailyIntensiveCareAddmissions { result in
-//            niceDailyIntensiveCareAdmissions = try! result.get()
-//            group.leave()
-//        }
+        group.enter()
+        NICEAPI().dailyHospitalAdmissions { result in
+            niceDailyHospitalAdmissions = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        NICEAPI().dailyIntensiveCareAddmissions { result in
+            niceDailyIntensiveCareAdmissions = try! result.get()
+            group.leave()
+        }
 
         group.enter()
         LCPSAPI().entries { result in

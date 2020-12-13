@@ -1,11 +1,14 @@
-name: RIVM daily numbers per municipality
+name: Run Scalpel
 
 on:
   schedule:
-    - cron: "15 13-16 * * *"
+    - cron: "10 13-16 * * *"
+  
+  workflow_dispatch:
+
 
 jobs:
-  rivm-numbers-per-municipality:
+  scalpel:
 
     runs-on: macos-latest
 

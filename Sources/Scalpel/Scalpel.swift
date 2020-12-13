@@ -14,12 +14,28 @@ struct Scalpel: ParsableCommand {
     func run() throws {
 
         var rivmRegional: RIVMRegional!
+        var niceDailyHospitalAdmissions: [NICEEntry]!
+        var niceDailyIntensiveCareAdmissions: [NICEEntry]!
 
         let group = DispatchGroup()
 
         group.enter()
         RIVMRegionalProvider().regional { result in
             rivmRegional = try! result.get()
+            group.leave()
+        }
+
+        let niceAPI = NICEAPI()
+
+        group.enter()
+        niceAPI.dailyHospitalAdmissions { result in
+            niceDailyHospitalAdmissions = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        niceAPI.dailyIntensiveCareAddmissions { result in
+            niceDailyIntensiveCareAdmissions = try! result.get()
             group.leave()
         }
 

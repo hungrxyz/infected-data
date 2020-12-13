@@ -16,6 +16,7 @@ struct Scalpel: ParsableCommand {
         var rivmRegional: RIVMRegional!
         var niceDailyHospitalAdmissions: [NICEEntry]!
         var niceDailyIntensiveCareAdmissions: [NICEEntry]!
+        var lcpsEntries: [LCPSEntry]!
 
         let group = DispatchGroup()
 
@@ -36,6 +37,12 @@ struct Scalpel: ParsableCommand {
         group.enter()
         niceAPI.dailyIntensiveCareAddmissions { result in
             niceDailyIntensiveCareAdmissions = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        LCPSAPI().entries { result in
+            lcpsEntries = try! result.get()
             group.leave()
         }
 

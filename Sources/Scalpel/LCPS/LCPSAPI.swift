@@ -20,7 +20,7 @@ final class LCPSAPI {
         let url = URL(string: "https://lcps.nu/wp-content/uploads/covid-19.csv")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
-
+            print(response)
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd-MM-yyyy"
 

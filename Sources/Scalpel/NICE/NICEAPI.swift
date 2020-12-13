@@ -29,6 +29,7 @@ final class NICEAPI {
         let url = URL(string: "https://stichting-nice.nl/covid-19/public/zkh/new-intake/confirmed")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
+            print(response)
             let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))
@@ -40,6 +41,7 @@ final class NICEAPI {
         let url = URL(string: "https://stichting-nice.nl/covid-19/public/new-intake/confirmed")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
+            print(response)
             let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))

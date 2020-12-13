@@ -64,6 +64,29 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
+        let latestNationalHospitalAdmissions = niceDailyHospitalAdmissions.first { calendar.isDateInYesterday($0.date) }
+        let previousNationalHospitalAdmissions = niceDailyHospitalAdmissions.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+
+        let latestNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions.first { calendar.isDateInYesterday($0.date) }
+        let previousNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+
+        let latestLCPSEntry = lcpsEntries.first { calendar.isDateInToday($0.date) }
+        let previousLCPSEntry = lcpsEntries.first { calendar.isDateInYesterday($0.date) }
+
+        let hospitalOccupancy = Occupancy(
+            newAdmissions: latestNationalHospitalAdmissions?.value,
+            newAdmissionsTrend: trend(today: latestNationalHospitalAdmissions?.value, yesterday: previousNationalHospitalAdmissions?.value),
+            currentlyOccupied: latestLCPSEntry?.clinicCOVIDOccupancy,
+            currentlyOccupiedTrend: trend(today: latestLCPSEntry?.clinicCOVIDOccupancy, yesterday: previousLCPSEntry?.clinicCOVIDOccupancy)
+        )
+
+        let intensiveCareOccupancy = Occupancy(
+            newAdmissions: latestNationalIntensiveCareAdmissions?.value,
+            newAdmissionsTrend: trend(today: latestNationalIntensiveCareAdmissions?.value, yesterday: previousNationalIntensiveCareAdmissions?.value),
+            currentlyOccupied: latestLCPSEntry?.intensiveCareCOVIDOccupancy,
+            currentlyOccupiedTrend: trend(today: latestLCPSEntry?.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry?.intensiveCareCOVIDOccupancy)
+        )
+
         guard let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")
         }
@@ -80,6 +103,8 @@ struct Scalpel: ParsableCommand {
                               securityRegionName: nil,
                               positiveCases: summarizedNumbers.positiveCases,
                               hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                              hospitalOccupancy: hospitalOccupancy,
+                              intensiveCareOccupancy: intensiveCareOccupancy,
                               deaths: summarizedNumbers.deaths)
 
         let encoder = JSONEncoder()
@@ -153,6 +178,8 @@ struct Scalpel: ParsableCommand {
                 securityRegionName: entry.securityRegionName,
                 positiveCases: summarizedNumbers.positiveCases,
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                hospitalOccupancy: nil,
+                intensiveCareOccupancy: nil,
                 deaths: summarizedNumbers.deaths
             )
 
@@ -208,6 +235,8 @@ struct Scalpel: ParsableCommand {
                 securityRegionName: entry.securityRegionName,
                 positiveCases: summarizedNumbers.positiveCases,
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                hospitalOccupancy: nil,
+                intensiveCareOccupancy: nil,
                 deaths: summarizedNumbers.deaths
             )
 
@@ -274,6 +303,8 @@ struct Scalpel: ParsableCommand {
                 securityRegionName: nil,
                 positiveCases: summarizedNumbers.positiveCases,
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                hospitalOccupancy: nil,
+                intensiveCareOccupancy: nil,
                 deaths: summarizedNumbers.deaths
             )
 
@@ -346,6 +377,8 @@ private extension Summary {
                 securityRegionName: securityRegionName,
                 positiveCases: positiveCases,
                 hospitalAdmissions: hospitalAdmissions,
+                hospitalOccupancy: hospitalOccupancy,
+                intensiveCareOccupancy: intensiveCareOccupancy,
                 deaths: deaths)
     }
 
@@ -355,6 +388,18 @@ private extension RIVMRegionalEntry {
 
     var accumulatedNumbers: AccumulatedNumbers {
         (totalReported ?? 0, hospitalAdmissions ?? 0, deceased ?? 0)
+    }
+
+}
+
+private extension Calendar {
+
+    func isDate(_ date: Date, inSameDayAsDaysAgo days: Int) -> Bool {
+        guard let daysAgoDate = self.date(byAdding: .day, value: -days, to: Date()) else {
+            return false
+        }
+
+        return isDate(date, inSameDayAs: daysAgoDate)
     }
 
 }

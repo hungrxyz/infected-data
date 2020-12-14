@@ -29,8 +29,14 @@ final class NICEAPI {
         let url = URL(string: "https://stichting-nice.nl/covid-19/public/zkh/new-intake/confirmed")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
-            print(response)
-            let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+
+            let entries = try! decoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))
         }.resume()
@@ -41,8 +47,15 @@ final class NICEAPI {
         let url = URL(string: "https://stichting-nice.nl/covid-19/public/new-intake/confirmed")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
-            print(response)
-            let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+
+            let entries = try! decoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))
         }.resume()

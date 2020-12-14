@@ -13,25 +13,21 @@ struct Scalpel: ParsableCommand {
 
     func run() throws {
 
-        let semaphore = DispatchSemaphore(value: 1)
+        let semaphore = DispatchSemaphore(value: 0)
 
         var rivmRegional: RIVMRegional!
         var niceDailyHospitalAdmissions: [NICEEntry]!
         var niceDailyIntensiveCareAdmissions: [NICEEntry]!
         var lcpsEntries: [LCPSEntry]!
 
-//        let group = DispatchGroup()
 
-        semaphore.wait()
-
-//        group.enter()
         RIVMAPI().regional { result in
             rivmRegional = try! result.get()
-//            group.leave()
             semaphore.signal()
         }
 
         semaphore.wait()
+
 //        group.enter()
         NICEAPI().dailyHospitalAdmissions { result in
             niceDailyHospitalAdmissions = try! result.get()
@@ -40,6 +36,7 @@ struct Scalpel: ParsableCommand {
         }
 
         semaphore.wait()
+
 //        group.enter()
         NICEAPI().dailyIntensiveCareAddmissions { result in
             niceDailyIntensiveCareAdmissions = try! result.get()
@@ -49,15 +46,14 @@ struct Scalpel: ParsableCommand {
         }
 
         semaphore.wait()
-//        group.enter()
+
         LCPSAPI().entries { result in
             lcpsEntries = try! result.get()
-//            group.leave()
 
             semaphore.signal()
         }
 
-//        group.wait()
+        semaphore.wait()
 
         let accumulator = NumbersAccumulator()
         let calendar = Calendar(identifier: .iso8601)

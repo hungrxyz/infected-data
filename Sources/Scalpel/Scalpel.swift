@@ -16,9 +16,9 @@ struct Scalpel: ParsableCommand {
         let semaphore = DispatchSemaphore(value: 0)
 
         var rivmRegional: RIVMRegional!
-        var niceDailyHospitalAdmissions: [NICEEntry]!
-        var niceDailyIntensiveCareAdmissions: [NICEEntry]!
-        var lcpsEntries: [LCPSEntry]!
+        var niceDailyHospitalAdmissions: [NICEEntry]?
+        var niceDailyIntensiveCareAdmissions: [NICEEntry]?
+        var lcpsEntries: [LCPSEntry]?
 
 
         RIVMAPI().regional { result in
@@ -28,32 +28,32 @@ struct Scalpel: ParsableCommand {
 
         semaphore.wait()
 
-//        group.enter()
-        NICEAPI().dailyHospitalAdmissions { result in
-            niceDailyHospitalAdmissions = try! result.get()
-//            group.leave()
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-
-//        group.enter()
-        NICEAPI().dailyIntensiveCareAddmissions { result in
-            niceDailyIntensiveCareAdmissions = try! result.get()
-//            group.leave()
-
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-
-        LCPSAPI().entries { result in
-            lcpsEntries = try! result.get()
-
-            semaphore.signal()
-        }
-
-        semaphore.wait()
+////        group.enter()
+//        NICEAPI().dailyHospitalAdmissions { result in
+//            niceDailyHospitalAdmissions = try! result.get()
+////            group.leave()
+//            semaphore.signal()
+//        }
+//
+//        semaphore.wait()
+//
+////        group.enter()
+//        NICEAPI().dailyIntensiveCareAddmissions { result in
+//            niceDailyIntensiveCareAdmissions = try! result.get()
+////            group.leave()
+//
+//            semaphore.signal()
+//        }
+//
+//        semaphore.wait()
+//
+//        LCPSAPI().entries { result in
+//            lcpsEntries = try! result.get()
+//
+//            semaphore.signal()
+//        }
+//
+//        semaphore.wait()
 
         let accumulator = NumbersAccumulator()
         let calendar = Calendar(identifier: .iso8601)
@@ -71,14 +71,14 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
-        let latestNationalHospitalAdmissions = niceDailyHospitalAdmissions.first { calendar.isDateInYesterday($0.date) }
-        let previousNationalHospitalAdmissions = niceDailyHospitalAdmissions.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+        let latestNationalHospitalAdmissions = niceDailyHospitalAdmissions?.first { calendar.isDateInYesterday($0.date) }
+        let previousNationalHospitalAdmissions = niceDailyHospitalAdmissions?.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
 
-        let latestNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions.first { calendar.isDateInYesterday($0.date) }
-        let previousNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+        let latestNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions?.first { calendar.isDateInYesterday($0.date) }
+        let previousNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions?.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
 
-        let latestLCPSEntry = lcpsEntries.first { calendar.isDateInToday($0.date) }
-        let previousLCPSEntry = lcpsEntries.first { calendar.isDateInYesterday($0.date) }
+        let latestLCPSEntry = lcpsEntries?.first { calendar.isDateInToday($0.date) }
+        let previousLCPSEntry = lcpsEntries?.first { calendar.isDateInYesterday($0.date) }
 
         let hospitalOccupancy = Occupancy(
             newAdmissions: latestNationalHospitalAdmissions?.value,

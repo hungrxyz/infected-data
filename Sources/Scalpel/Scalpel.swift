@@ -13,44 +13,51 @@ struct Scalpel: ParsableCommand {
 
     func run() throws {
 
+        let semaphore = DispatchSemaphore(value: 1)
+
         var rivmRegional: RIVMRegional!
         var niceDailyHospitalAdmissions: [NICEEntry]!
         var niceDailyIntensiveCareAdmissions: [NICEEntry]!
         var lcpsEntries: [LCPSEntry]!
 
-        let group = DispatchGroup()
+//        let group = DispatchGroup()
 
-        group.enter()
+        semaphore.wait()
+
+//        group.enter()
         RIVMAPI().regional { result in
             rivmRegional = try! result.get()
-            group.leave()
+//            group.leave()
+            semaphore.signal()
         }
 
-        group.wait()
-
-        group.enter()
+        semaphore.wait()
+//        group.enter()
         NICEAPI().dailyHospitalAdmissions { result in
             niceDailyHospitalAdmissions = try! result.get()
-            group.leave()
+//            group.leave()
+            semaphore.signal()
         }
 
-        group.wait()
-
-        group.enter()
+        semaphore.wait()
+//        group.enter()
         NICEAPI().dailyIntensiveCareAddmissions { result in
             niceDailyIntensiveCareAdmissions = try! result.get()
-            group.leave()
+//            group.leave()
+
+            semaphore.signal()
         }
 
-        group.wait()
-
-        group.enter()
+        semaphore.wait()
+//        group.enter()
         LCPSAPI().entries { result in
             lcpsEntries = try! result.get()
-            group.leave()
+//            group.leave()
+
+            semaphore.signal()
         }
 
-        group.wait()
+//        group.wait()
 
         let accumulator = NumbersAccumulator()
         let calendar = Calendar(identifier: .iso8601)
@@ -333,8 +340,6 @@ struct Scalpel: ParsableCommand {
         let allProvincesURL = latestURL.appendingPathComponent("provinces.json")
 
         FileManager.default.createFile(atPath: allProvincesURL.path, contents: allProvincesJSON)
-
-        RunLoop.main.run()
     }
 
     func trend(today: Int?, yesterday: Int?) -> Int? {

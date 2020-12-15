@@ -7,7 +7,14 @@ Currently contains only latest numbers (< 24h) separated into files:
 - per region  
 `data/latest/region/{region code}.json`. 
 - Or a single file grouping specific regions  
- `data/latest/{municipalities|security_regions|provinces|national}.json`. 
+ `data/latest/{municipalities|security_regions|provinces|national}.json`.
+
+ ### Sources
+ - [RIVM](https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv) - confirmed cases, hospitalizations and deaths for all regions.
+ - [CBS](https://opendata.cbs.nl/#/CBS/nl/dataset/84721NED/table?dl=3A154) - region codes and population for all regions.
+ - [NICE](https://stichting-nice.nl/covid-19/public/zkh/new-intake/confirmed) - national new hospital admissions.
+ - [NICE](https://stichting-nice.nl/covid-19/public/new-intake/confirmed) - national new intensive care admissions.
+ - [LCPS](https://lcps.nu/wp-content/uploads/covid-19.csv) - national currently occupied hospital and intensive care beds.
 
 ## Scalpel
 Swift command line tool that creates files in `data` directory.

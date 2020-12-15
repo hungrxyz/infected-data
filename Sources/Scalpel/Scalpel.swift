@@ -52,9 +52,10 @@ struct Scalpel: ParsableCommand {
         let calendar = Calendar(identifier: .iso8601)
 
         let allEntries = rivmRegional.entries
-        let updatedAt = rivmRegional.lastModified
 
         // MARK: - National
+
+        // MARK: RIVM
 
         let totalCounts = accumulator.accumulate(entries: allEntries)
 
@@ -64,24 +65,36 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
-        let latestNationalHospitalAdmissions = niceDailyHospitalAdmissions?.first { calendar.isDateInYesterday($0.date) }
-        let previousNationalHospitalAdmissions = niceDailyHospitalAdmissions?.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+        // MARK: NICE
 
-        let latestNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions?.first { calendar.isDateInYesterday($0.date) }
-        let previousNationalIntensiveCareAdmissions = niceDailyIntensiveCareAdmissions?.first { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+        let niceHospitalizations1_2_3DaysAgo = niceDailyHospitalAdmissions?.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
+        let niceHospitalizations4_5_6DaysAgo = niceDailyHospitalAdmissions?.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
+
+        let latestHospitalizationsAverage = niceHospitalizations1_2_3DaysAgo?.average()
+        let previousHospitalizationsAverage = niceHospitalizations4_5_6DaysAgo?.average()
+
+        let niceIntensiveCare1_2_3DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
+        let niceIntensiveCare4_5_6DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
+
+        let latestIntensiveCareAverage = niceIntensiveCare1_2_3DaysAgo?.average()
+        let previousIntensiveCareAverage = niceIntensiveCare4_5_6DaysAgo?.average()
+
+        // MARK: LCPS
 
         let latestLCPSEntry = lcpsEntries?.first { calendar.isDateInToday($0.date) }
         let previousLCPSEntry = lcpsEntries?.first { calendar.isDateInYesterday($0.date) }
 
+        // MARK: Hospital Occupancy
+
         let hospitalOccupancy: Occupancy?
-        if let latestNationalHospitalAdmissions = latestNationalHospitalAdmissions,
-           let previousNationalHospitalAdmissions = previousNationalHospitalAdmissions,
+        if let latestHospitalizationsAverage = latestHospitalizationsAverage,
+           let previousHospitalizationsAverage = previousHospitalizationsAverage,
            let latestLCPSEntry = latestLCPSEntry,
            let previousLCPSEntry = previousLCPSEntry {
 
             hospitalOccupancy = Occupancy(
-                newAdmissions: latestNationalHospitalAdmissions.value,
-                newAdmissionsTrend: trend(today: latestNationalHospitalAdmissions.value, yesterday: previousNationalHospitalAdmissions.value),
+                newAdmissions: latestHospitalizationsAverage,
+                newAdmissionsTrend: trend(today: latestHospitalizationsAverage, yesterday: previousHospitalizationsAverage),
                 currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
             )
@@ -89,15 +102,17 @@ struct Scalpel: ParsableCommand {
             hospitalOccupancy = nil
         }
 
+        // MARK: Intensive Care Occupancy
+
         let intensiveCareOccupancy: Occupancy?
-        if let latestNationalIntensiveCareAdmissions = latestNationalIntensiveCareAdmissions,
-           let previousNationalIntensiveCareAdmissions = previousNationalIntensiveCareAdmissions,
+        if let latestIntensiveCareAverage = latestIntensiveCareAverage,
+           let previousIntensiveCareAverage = previousIntensiveCareAverage,
            let latestLCPSEntry = latestLCPSEntry,
            let previousLCPSEntry = previousLCPSEntry {
 
             intensiveCareOccupancy = Occupancy(
-                newAdmissions: latestNationalIntensiveCareAdmissions.value,
-                newAdmissionsTrend: trend(today: latestNationalIntensiveCareAdmissions.value, yesterday: previousNationalIntensiveCareAdmissions.value),
+                newAdmissions: latestIntensiveCareAverage,
+                newAdmissionsTrend: trend(today: latestIntensiveCareAverage, yesterday: previousIntensiveCareAverage),
                 currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
             )
@@ -108,6 +123,8 @@ struct Scalpel: ParsableCommand {
         guard let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")
         }
+
+        let updatedAt = Date()
 
         let summarizedNumbers = summarizeEntries(today: todayCounts,
                                                  yesterday: yesterdaysCounts,
@@ -384,6 +401,25 @@ struct Scalpel: ParsableCommand {
 
 }
 
+private extension Array where Element == NICEEntry {
+
+    func filter(inRangeOfDaysAgo range: ClosedRange<Int>, calendar: Calendar) -> Self {
+        var entries = [NICEEntry]()
+        for daysAgo in range {
+            guard let entry = first(where: { calendar.isDate($0.date, inSameDayAsDaysAgo: daysAgo) }) else {
+                continue
+            }
+            entries.append(entry)
+        }
+        return entries
+    }
+
+    func average() -> Int {
+        reduce(into: 0) { $0 += $1.value } / count
+    }
+
+}
+
 private extension Summary {
 
     func nillifyingDates() -> Summary {
@@ -410,10 +446,16 @@ private extension RIVMRegionalEntry {
 
 }
 
+private extension Date {
+
+    static let thisMoment = Date()
+
+}
+
 private extension Calendar {
 
     func isDate(_ date: Date, inSameDayAsDaysAgo days: Int) -> Bool {
-        guard let daysAgoDate = self.date(byAdding: .day, value: -days, to: Date()) else {
+        guard let daysAgoDate = self.date(byAdding: .day, value: -days, to: Date.thisMoment) else {
             return false
         }
 

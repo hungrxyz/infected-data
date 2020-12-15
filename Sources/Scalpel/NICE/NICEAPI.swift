@@ -26,17 +26,13 @@ final class NICEAPI {
     }
 
     func dailyHospitalAdmissions(completion: @escaping (Result<[NICEEntry], Error>) -> Void) {
-        let url = URL(string: "https://stichting-nice.nl/covid-19/public/zkh/new-intake/confirmed")!
+        let url = URL(string: "https://luscii-infected-data.s3.eu-central-1.amazonaws.com/nice_hospital_new_intakes.json")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
 
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-
-
-            let entries = try! decoder.decode([NICEEntry].self, from: data!)
+            let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))
         }.resume()
@@ -44,18 +40,14 @@ final class NICEAPI {
     }
 
     func dailyIntensiveCareAddmissions(completion: @escaping (Result<[NICEEntry], Error>) -> Void) {
-        let url = URL(string: "https://stichting-nice.nl/covid-19/public/new-intake/confirmed")!
+        let url = URL(string: "https://luscii-infected-data.s3.eu-central-1.amazonaws.com/nice_intensive_care_new_intakes.json")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
 
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
 
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-
-
-            let entries = try! decoder.decode([NICEEntry].self, from: data!)
+            let entries = try! Self.jsonDecoder.decode([NICEEntry].self, from: data!)
 
             completion(.success(entries))
         }.resume()

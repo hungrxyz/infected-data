@@ -20,7 +20,6 @@ final class RIVMAPI {
         let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
-            print(response)
             let lastModified = response?.lastModified
 
             let dateFormatter = DateFormatter()

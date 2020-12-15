@@ -13,47 +13,40 @@ struct Scalpel: ParsableCommand {
 
     func run() throws {
 
-        let semaphore = DispatchSemaphore(value: 0)
-
         var rivmRegional: RIVMRegional!
         var niceDailyHospitalAdmissions: [NICEEntry]?
         var niceDailyIntensiveCareAdmissions: [NICEEntry]?
         var lcpsEntries: [LCPSEntry]?
 
+        let group = DispatchGroup()
 
+        group.enter()
         RIVMAPI().regional { result in
             rivmRegional = try! result.get()
-            semaphore.signal()
+            group.leave()
         }
 
-        semaphore.wait()
+        let niceAPI = NICEAPI()
 
-////        group.enter()
-//        NICEAPI().dailyHospitalAdmissions { result in
-//            niceDailyHospitalAdmissions = try! result.get()
-////            group.leave()
-//            semaphore.signal()
-//        }
-//
-//        semaphore.wait()
-//
-////        group.enter()
-//        NICEAPI().dailyIntensiveCareAddmissions { result in
-//            niceDailyIntensiveCareAdmissions = try! result.get()
-////            group.leave()
-//
-//            semaphore.signal()
-//        }
-//
-//        semaphore.wait()
-//
-//        LCPSAPI().entries { result in
-//            lcpsEntries = try! result.get()
-//
-//            semaphore.signal()
-//        }
-//
-//        semaphore.wait()
+        group.enter()
+        niceAPI.dailyHospitalAdmissions { result in
+            niceDailyHospitalAdmissions = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        niceAPI.dailyIntensiveCareAddmissions { result in
+            niceDailyIntensiveCareAdmissions = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        LCPSAPI().entries { result in
+            lcpsEntries = try! result.get()
+            group.leave()
+        }
+
+        group.wait()
 
         let accumulator = NumbersAccumulator()
         let calendar = Calendar(identifier: .iso8601)
@@ -80,19 +73,37 @@ struct Scalpel: ParsableCommand {
         let latestLCPSEntry = lcpsEntries?.first { calendar.isDateInToday($0.date) }
         let previousLCPSEntry = lcpsEntries?.first { calendar.isDateInYesterday($0.date) }
 
-        let hospitalOccupancy = Occupancy(
-            newAdmissions: latestNationalHospitalAdmissions?.value,
-            newAdmissionsTrend: trend(today: latestNationalHospitalAdmissions?.value, yesterday: previousNationalHospitalAdmissions?.value),
-            currentlyOccupied: latestLCPSEntry?.clinicCOVIDOccupancy,
-            currentlyOccupiedTrend: trend(today: latestLCPSEntry?.clinicCOVIDOccupancy, yesterday: previousLCPSEntry?.clinicCOVIDOccupancy)
-        )
+        let hospitalOccupancy: Occupancy?
+        if let latestNationalHospitalAdmissions = latestNationalHospitalAdmissions,
+           let previousNationalHospitalAdmissions = previousNationalHospitalAdmissions,
+           let latestLCPSEntry = latestLCPSEntry,
+           let previousLCPSEntry = previousLCPSEntry {
 
-        let intensiveCareOccupancy = Occupancy(
-            newAdmissions: latestNationalIntensiveCareAdmissions?.value,
-            newAdmissionsTrend: trend(today: latestNationalIntensiveCareAdmissions?.value, yesterday: previousNationalIntensiveCareAdmissions?.value),
-            currentlyOccupied: latestLCPSEntry?.intensiveCareCOVIDOccupancy,
-            currentlyOccupiedTrend: trend(today: latestLCPSEntry?.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry?.intensiveCareCOVIDOccupancy)
-        )
+            hospitalOccupancy = Occupancy(
+                newAdmissions: latestNationalHospitalAdmissions.value,
+                newAdmissionsTrend: trend(today: latestNationalHospitalAdmissions.value, yesterday: previousNationalHospitalAdmissions.value),
+                currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
+                currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
+            )
+        } else {
+            hospitalOccupancy = nil
+        }
+
+        let intensiveCareOccupancy: Occupancy?
+        if let latestNationalIntensiveCareAdmissions = latestNationalIntensiveCareAdmissions,
+           let previousNationalIntensiveCareAdmissions = previousNationalIntensiveCareAdmissions,
+           let latestLCPSEntry = latestLCPSEntry,
+           let previousLCPSEntry = previousLCPSEntry {
+
+            intensiveCareOccupancy = Occupancy(
+                newAdmissions: latestNationalIntensiveCareAdmissions.value,
+                newAdmissionsTrend: trend(today: latestNationalIntensiveCareAdmissions.value, yesterday: previousNationalIntensiveCareAdmissions.value),
+                currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
+                currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
+            )
+        } else {
+            intensiveCareOccupancy = nil
+        }
 
         guard let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")

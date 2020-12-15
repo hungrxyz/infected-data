@@ -33,9 +33,9 @@ struct SummaryNumbers: Encodable {
 
 struct Occupancy: Encodable {
 
-    let newAdmissions: Int?
+    let newAdmissions: Int
     let newAdmissionsTrend: Int?
-    let currentlyOccupied: Int?
+    let currentlyOccupied: Int
     let currentlyOccupiedTrend: Int?
 
 }

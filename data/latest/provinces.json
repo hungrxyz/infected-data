@@ -1,5 +1,5 @@
 {
-  "updatedAt" : "2020-12-22T21:38:59+01:00",
+  "updatedAt" : "2020-12-22T22:30:15+01:00",
   "regions" : [
     {
       "positiveCases" : {
@@ -38,6 +38,25 @@
       },
       "regionCode" : "PV24",
       "provinceName" : "Flevoland"
+    },
+    {
+      "positiveCases" : {
+        "new" : 196,
+        "trend" : -94,
+        "total" : 12654
+      },
+      "deaths" : {
+        "new" : 1,
+        "trend" : 1,
+        "total" : 151
+      },
+      "hospitalAdmissions" : {
+        "new" : 2,
+        "trend" : 2,
+        "total" : 233
+      },
+      "regionCode" : "PV21",
+      "provinceName" : "Friesland"
     },
     {
       "positiveCases" : {
@@ -211,5 +230,5 @@
       "provinceName" : "Zuid-Holland"
     }
   ],
-  "numbersDate" : "2020-12-22T01:00:00+01:00"
+  "numbersDate" : "2020-12-22T00:00:00+01:00"
 }

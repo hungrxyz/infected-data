@@ -242,13 +242,16 @@ struct Scalpel: ParsableCommand {
 
         // MARK: - Security Regions
 
+        let cbsAreaProvider = CBSAreaProvider()
+        let cbsAreas = try cbsAreaProvider.areas()
+
         var securityRegionsSummaries = [Summary]()
 
-        let securityRegionEntries = todaysEntries.filter { $0.municipalityCode == nil }
+        let provinceCodeNameMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.securityRegionCode] = $1.securityRegionName }
 
-        for entry in securityRegionEntries {
+        let securityRegionCodes = Array(provinceCodeNameMap.keys).sorted()
 
-            let regionCode = entry.securityRegionCode ?? "XX00"
+        for regionCode in securityRegionCodes {
 
             let totalsEntries = allEntries.filter { $0.securityRegionCode == regionCode }
             let totals = accumulator.accumulate(entries: totalsEntries)
@@ -261,13 +264,18 @@ struct Scalpel: ParsableCommand {
 
             let summarizedNumbers = summarizeEntries(today: todaysNumbers, yesterday: yesterdaysNumbers, total: totals)
 
+            let provinceName = todaysEntriesForSecurityRegion.first?.provinceName
+                ?? cbsAreas.first(where: { $0.securityRegionCode == regionCode })?.provinceName
+            let securityRegionName = todaysEntriesForSecurityRegion.first?.securityRegionName
+                ?? cbsAreas.first(where: { $0.securityRegionCode == regionCode })?.securityRegionName
+
             let summary = Summary(
                 updatedAt: updatedAt,
                 numbersDate: numbersDate,
                 regionCode: regionCode,
-                municupalityName: entry.municipalityName,
-                provinceName: entry.provinceName,
-                securityRegionName: entry.securityRegionName,
+                municupalityName: nil,
+                provinceName: provinceName,
+                securityRegionName: securityRegionName,
                 positiveCases: summarizedNumbers.positiveCases,
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
@@ -285,10 +293,14 @@ struct Scalpel: ParsableCommand {
             securityRegionsSummaries.append(summary)
         }
 
+        let groupedSecurityRegions = securityRegionsSummaries
+            .sorted(by: { ($0.securityRegionName ?? "zzz") < ($1.securityRegionName ?? "zzz") })
+            .map { $0.nillifyingDates() }
+
         let allSecurityRegionsDTO = GroupedRegionsDTO(
             updatedAt: updatedAt,
             numbersDate: numbersDate,
-            regions: securityRegionsSummaries.map { $0.nillifyingDates() }
+            regions: groupedSecurityRegions
         )
 
         let allSecurityRegionsJSON = try encoder.encode(allSecurityRegionsDTO)
@@ -298,9 +310,6 @@ struct Scalpel: ParsableCommand {
         FileManager.default.createFile(atPath: allSecurityRegionsURL.path, contents: allSecurityRegionsJSON)
 
         // MARK: - Provinces
-
-        let cbsAreaProvider = CBSAreaProvider()
-        let cbsAreas = try cbsAreaProvider.areas()
 
         // Dictionary with province name as key and province code as value.
         let provinceNameCodeMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.provinceName] = $1.provinceCode }

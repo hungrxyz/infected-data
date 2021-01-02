@@ -10,6 +10,21 @@ import CodableCSV
 
 final class RIVMAPI {
 
+    private static let csvDecoder: CSVDecoder = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        var configuration = CSVDecoder.Configuration()
+        configuration.delimiters.field = ";"
+        configuration.delimiters.row = "\r\n"
+        configuration.headerStrategy = .firstLine
+        configuration.dateStrategy = .formatted(dateFormatter)
+
+        let decoder = CSVDecoder(configuration: configuration)
+
+        return decoder
+    }()
+
     private let urlSession: URLSession
 
     init(urlSession: URLSession = .shared) {
@@ -20,42 +35,22 @@ final class RIVMAPI {
         let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
-            let lastModified = response?.lastModified
+            let entries = try! Self.csvDecoder.decode([RIVMRegionalEntry].self, from: data!)
 
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-
-            var configuration = CSVDecoder.Configuration()
-            configuration.delimiters.field = ";"
-            configuration.delimiters.row = "\r\n"
-            configuration.headerStrategy = .firstLine
-            configuration.dateStrategy = .formatted(dateFormatter)
-
-            let decoder = CSVDecoder(configuration: configuration)
-
-            let entries = try! decoder.decode([RIVMRegionalEntry].self, from: data!)
-
-            completion(.success(RIVMRegional(lastModified: lastModified!, entries: entries)))
+            completion(.success(RIVMRegional(lastModified: Date(), entries: entries)))
         }.resume()
 
     }
 
-}
+    func hospitalAdmissions(completion: @escaping (Result<[RIVMHospitalAdmissionsEntry], Error>) -> Void) {
+        let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv")!
 
-private extension URLResponse {
+        urlSession.dataTask(with: url) { (data, response, error) in
+            let entries = try! Self.csvDecoder.decode([RIVMHospitalAdmissionsEntry].self, from: data!)
 
-    var lastModified: Date? {
-        let lastModifiedDateFormatter = DateFormatter()
-        lastModifiedDateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss Z"
+            completion(.success(entries))
+        }.resume()
 
-        guard
-            let httpResponse = self as? HTTPURLResponse,
-            let lastModifiedHeaderValue = httpResponse.allHeaderFields["Last-Modified"] as? String
-        else {
-            return nil
-        }
-
-        return lastModifiedDateFormatter.date(from: lastModifiedHeaderValue)
     }
 
 }

@@ -14,23 +14,24 @@ struct Scalpel: ParsableCommand {
     func run() throws {
 
         var rivmRegional: RIVMRegional!
-        var niceDailyHospitalAdmissions: [NICEEntry]?
+        var rivmHospitalAdmissions: [RIVMHospitalAdmissionsEntry]!
         var niceDailyIntensiveCareAdmissions: [NICEEntry]?
         var lcpsEntries: [LCPSEntry]?
 
         let group = DispatchGroup()
 
+        let rivmAPI = RIVMAPI()
+        let niceAPI = NICEAPI()
+
         group.enter()
-        RIVMAPI().regional { result in
+        rivmAPI.regional { result in
             rivmRegional = try! result.get()
             group.leave()
         }
 
-        let niceAPI = NICEAPI()
-
         group.enter()
-        niceAPI.dailyHospitalAdmissions { result in
-            niceDailyHospitalAdmissions = try! result.get()
+        rivmAPI.hospitalAdmissions { result in
+            rivmHospitalAdmissions = try! result.get()
             group.leave()
         }
 
@@ -65,13 +66,14 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
+        let latestRIVMHospitalAdmissionsAverage = rivmHospitalAdmissions
+            .filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
+            .averageOfThreeDays()
+        let previousRIVMHospitalAdmissionsAverage = rivmHospitalAdmissions
+            .filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
+            .averageOfThreeDays()
+
         // MARK: NICE
-
-        let niceHospitalizations1_2_3DaysAgo = niceDailyHospitalAdmissions?.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
-        let niceHospitalizations4_5_6DaysAgo = niceDailyHospitalAdmissions?.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
-
-        let latestHospitalizationsAverage = niceHospitalizations1_2_3DaysAgo?.average()
-        let previousHospitalizationsAverage = niceHospitalizations4_5_6DaysAgo?.average()
 
         let niceIntensiveCare1_2_3DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
         let niceIntensiveCare4_5_6DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
@@ -87,14 +89,12 @@ struct Scalpel: ParsableCommand {
         // MARK: Hospital Occupancy
 
         let hospitalOccupancy: Occupancy?
-        if let latestHospitalizationsAverage = latestHospitalizationsAverage,
-           let previousHospitalizationsAverage = previousHospitalizationsAverage,
-           let latestLCPSEntry = latestLCPSEntry,
+        if let latestLCPSEntry = latestLCPSEntry,
            let previousLCPSEntry = previousLCPSEntry {
 
             hospitalOccupancy = Occupancy(
-                newAdmissions: latestHospitalizationsAverage,
-                newAdmissionsTrend: trend(today: latestHospitalizationsAverage, yesterday: previousHospitalizationsAverage),
+                newAdmissions: latestRIVMHospitalAdmissionsAverage,
+                newAdmissionsTrend: trend(today: latestRIVMHospitalAdmissionsAverage, yesterday: previousRIVMHospitalAdmissionsAverage),
                 currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
             )
@@ -410,21 +410,31 @@ struct Scalpel: ParsableCommand {
 
 }
 
-private extension Array where Element == NICEEntry {
+private extension Array where Element: Entry {
 
     func filter(inRangeOfDaysAgo range: ClosedRange<Int>, calendar: Calendar) -> Self {
-        var entries = [NICEEntry]()
+        var elements = [Element]()
         for daysAgo in range {
-            guard let entry = first(where: { calendar.isDate($0.date, inSameDayAsDaysAgo: daysAgo) }) else {
-                continue
-            }
-            entries.append(entry)
+            let entries = filter { calendar.isDate($0.date, inSameDayAsDaysAgo: daysAgo) }
+            elements.append(contentsOf: entries)
         }
-        return entries
+        return elements
     }
+
+}
+
+private extension Array where Element == NICEEntry {
 
     func average() -> Int {
         reduce(into: 0) { $0 += $1.value } / count
+    }
+
+}
+
+private extension Array where Element == RIVMHospitalAdmissionsEntry {
+
+    func averageOfThreeDays() -> Int {
+        reduce(into: 0) { $0 += $1.hospitalAdmission ?? 0 } / 3
     }
 
 }
@@ -451,24 +461,6 @@ private extension RIVMRegionalEntry {
 
     var accumulatedNumbers: AccumulatedNumbers {
         (totalReported ?? 0, hospitalAdmissions ?? 0, deceased ?? 0)
-    }
-
-}
-
-private extension Date {
-
-    static let thisMoment = Date()
-
-}
-
-private extension Calendar {
-
-    func isDate(_ date: Date, inSameDayAsDaysAgo days: Int) -> Bool {
-        guard let daysAgoDate = self.date(byAdding: .day, value: -days, to: Date.thisMoment) else {
-            return false
-        }
-
-        return isDate(date, inSameDayAs: daysAgoDate)
     }
 
 }

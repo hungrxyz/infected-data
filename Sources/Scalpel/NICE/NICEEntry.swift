@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NICEEntry {
+struct NICEEntry: Entry {
 
     let date: Date
     let value: Int

@@ -19,4 +19,8 @@ final class NumbersAccumulator {
         })
     }
 
+    func accumulateHospitalAdmissions(fromEntries entries: [RIVMHospitalAdmissionsEntry]) -> Int {
+        entries.reduce(into: 0) { $0 += $1.hospitalAdmission ?? 0 }
+    }
+
 }

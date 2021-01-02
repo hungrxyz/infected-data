@@ -66,12 +66,11 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
 
-        let latestRIVMHospitalAdmissionsAverage = rivmHospitalAdmissions
-            .filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
-            .averageOfThreeDays()
-        let previousRIVMHospitalAdmissionsAverage = rivmHospitalAdmissions
-            .filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
-            .averageOfThreeDays()
+        let latestRIVMHospitalAdmissions = rivmHospitalAdmissions.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
+        let previousRIVMHospitalAdmissions = rivmHospitalAdmissions.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
+
+        let latestRIVMHospitalAdmissionsAverage = latestRIVMHospitalAdmissions.averageOfThreeDays()
+        let previousRIVMHospitalAdmissionsAverage = previousRIVMHospitalAdmissions.averageOfThreeDays()
 
         // MARK: NICE
 
@@ -200,9 +199,22 @@ struct Scalpel: ParsableCommand {
                 continue
             }
 
-            let summarizedNumbers = summarizeEntries(today: todaysEntry.accumulatedNumbers,
-                                                     yesterday: yesterdaysEntry.accumulatedNumbers,
-                                                     total: totals)
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+                .filter { $0.municipalityCode == regionCode }
+                .averageOfThreeDays()
+
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+                .filter { $0.municipalityCode == regionCode }
+                .averageOfThreeDays()
+
+            let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions.filter { $0.municipalityCode == regionCode }
+            let totalHospitalAdmissions = accumulator.accumulateHospitalAdmissions(fromEntries: allHospitalAdmissionsForThisRegion)
+
+            let summarizedNumbers = summarizeEntries(
+                today: (todaysEntry.totalReported ?? 0, latestHospitalAdmissionsAverage, todaysEntry.deceased ?? 0),
+                yesterday: (yesterdaysEntry.totalReported ?? 0, previousHospitalAdmissionsAverage, yesterdaysEntry.deceased ?? 0),
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+            )
 
             let summary = Summary(
                 updatedAt: updatedAt,
@@ -247,9 +259,8 @@ struct Scalpel: ParsableCommand {
 
         var securityRegionsSummaries = [Summary]()
 
-        let provinceCodeNameMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.securityRegionCode] = $1.securityRegionName }
-
-        let securityRegionCodes = Array(provinceCodeNameMap.keys).sorted()
+        let safetyRegionCodeNameMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.securityRegionCode] = $1.securityRegionName }
+        let securityRegionCodes = Array(safetyRegionCodeNameMap.keys).sorted()
 
         for regionCode in securityRegionCodes {
 
@@ -262,7 +273,22 @@ struct Scalpel: ParsableCommand {
             let yesterdaysEntriesForSecurityRegion = yesterdaysEntries.filter { $0.securityRegionCode == regionCode }
             let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysEntriesForSecurityRegion)
 
-            let summarizedNumbers = summarizeEntries(today: todaysNumbers, yesterday: yesterdaysNumbers, total: totals)
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+                .filter { $0.securityRegionCode == regionCode }
+                .averageOfThreeDays()
+
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+                .filter { $0.securityRegionCode == regionCode }
+                .averageOfThreeDays()
+
+            let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions.filter { $0.securityRegionCode == regionCode }
+            let totalHospitalAdmissions = accumulator.accumulateHospitalAdmissions(fromEntries: allHospitalAdmissionsForThisRegion)
+
+            let summarizedNumbers = summarizeEntries(
+                today: (todaysNumbers.positiveCases, latestHospitalAdmissionsAverage, todaysNumbers.deaths),
+                yesterday: (yesterdaysNumbers.positiveCases, previousHospitalAdmissionsAverage, yesterdaysNumbers.deaths),
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+            )
 
             let provinceName = todaysEntriesForSecurityRegion.first?.provinceName
                 ?? cbsAreas.first(where: { $0.securityRegionCode == regionCode })?.provinceName
@@ -313,8 +339,10 @@ struct Scalpel: ParsableCommand {
 
         // Dictionary with province name as key and province code as value.
         let provinceNameCodeMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.provinceName] = $1.provinceCode }
-
         let provinceNames = Array(provinceNameCodeMap.keys).sorted()
+
+        let provinceNameSafetyRegionCodesMap = cbsAreas
+            .reduce(into: [String: Set<String>]()) { $0[$1.provinceName] = Set(($0[$1.provinceName] ?? []) + [$1.securityRegionCode]) }
 
         var provincesSummaries = [Summary]()
 
@@ -336,7 +364,25 @@ struct Scalpel: ParsableCommand {
                 continue
             }
 
-            let summarizedNumbers = summarizeEntries(today: todaysNumbers, yesterday: yesterdaysNumbers, total: totals)
+            let safetyRegionCodes = provinceNameSafetyRegionCodesMap[provinceName] ?? []
+
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+                .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
+                .averageOfThreeDays()
+
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+                .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
+                .averageOfThreeDays()
+
+            let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions
+                .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
+            let totalHospitalAdmissions = accumulator.accumulateHospitalAdmissions(fromEntries: allHospitalAdmissionsForThisRegion)
+
+            let summarizedNumbers = summarizeEntries(
+                today: (todaysNumbers.positiveCases, latestHospitalAdmissionsAverage, todaysNumbers.deaths),
+                yesterday: (yesterdaysNumbers.positiveCases, previousHospitalAdmissionsAverage, yesterdaysNumbers.deaths),
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+            )
 
             let summary = Summary(
                 updatedAt: updatedAt,

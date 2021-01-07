@@ -129,6 +129,12 @@ struct Scalpel: ParsableCommand {
                                                  yesterday: yesterdaysCounts,
                                                  total: totalCounts)
 
+        let nationalHospitalizationsSummary = SummaryNumbers(
+            new: hospitalOccupancy?.newAdmissions,
+            trend: hospitalOccupancy?.newAdmissionsTrend,
+            total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions)
+        )
+
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
                               regionCode: "NL00",
@@ -136,7 +142,7 @@ struct Scalpel: ParsableCommand {
                               provinceName: nil,
                               securityRegionName: nil,
                               positiveCases: summarizedNumbers.positiveCases,
-                              hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
+                              hospitalAdmissions: nationalHospitalizationsSummary,
                               hospitalOccupancy: hospitalOccupancy,
                               intensiveCareOccupancy: intensiveCareOccupancy,
                               deaths: summarizedNumbers.deaths)

@@ -20,6 +20,7 @@ struct Summary: Encodable {
     let hospitalOccupancy: Occupancy?
     let intensiveCareOccupancy: Occupancy?
     let deaths: SummaryNumbers
+    let vaccinations: SummaryNumbers?
 
 }
 

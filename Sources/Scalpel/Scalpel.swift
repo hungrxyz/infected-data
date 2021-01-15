@@ -135,6 +135,8 @@ struct Scalpel: ParsableCommand {
             total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions)
         )
 
+        let vaccinations = SummaryNumbers(new: nil, trend: nil, total: 55000)
+
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
                               regionCode: "NL00",
@@ -145,7 +147,8 @@ struct Scalpel: ParsableCommand {
                               hospitalAdmissions: nationalHospitalizationsSummary,
                               hospitalOccupancy: hospitalOccupancy,
                               intensiveCareOccupancy: intensiveCareOccupancy,
-                              deaths: summarizedNumbers.deaths)
+                              deaths: summarizedNumbers.deaths,
+                              vaccinations: vaccinations)
 
         let encoder = JSONEncoder()
 
@@ -233,7 +236,8 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
-                deaths: summarizedNumbers.deaths
+                deaths: summarizedNumbers.deaths,
+                vaccinations: nil
             )
 
             let json = try encoder.encode(summary)
@@ -312,7 +316,8 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
-                deaths: summarizedNumbers.deaths
+                deaths: summarizedNumbers.deaths,
+                vaccinations: nil
             )
 
             let json = try encoder.encode(summary)
@@ -401,7 +406,8 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
-                deaths: summarizedNumbers.deaths
+                deaths: summarizedNumbers.deaths,
+                vaccinations: nil
             )
 
             let json = try encoder.encode(summary)
@@ -504,7 +510,8 @@ private extension Summary {
                 hospitalAdmissions: hospitalAdmissions,
                 hospitalOccupancy: hospitalOccupancy,
                 intensiveCareOccupancy: intensiveCareOccupancy,
-                deaths: deaths)
+                deaths: deaths,
+                vaccinations: vaccinations)
     }
 
 }

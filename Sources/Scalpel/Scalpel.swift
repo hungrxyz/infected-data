@@ -54,7 +54,12 @@ struct Scalpel: ParsableCommand {
 
         let allEntries = rivmRegional.entries
 
+        let cbsAreaProvider = CBSAreaProvider()
+        let cbsAreas = try cbsAreaProvider.areas()
+
         // MARK: - National
+
+        let nationalPopulation = cbsAreas.reduce(into: 0) { $0 += $1.population }
 
         // MARK: RIVM
 
@@ -132,10 +137,19 @@ struct Scalpel: ParsableCommand {
         let nationalHospitalizationsSummary = SummaryNumbers(
             new: hospitalOccupancy?.newAdmissions,
             trend: hospitalOccupancy?.newAdmissionsTrend,
-            total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions)
+            total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions),
+            per100_000People: nil,
+            percentageOfPopulation: nil
         )
 
-        let vaccinations = SummaryNumbers(new: nil, trend: nil, total: 55000)
+        let totalVaccinations = 55_000
+        let percentageVaccinations = (Float(totalVaccinations) / Float(nationalPopulation)) * 100
+
+        let vaccinations = SummaryNumbers(new: nil,
+                                          trend: nil,
+                                          total: totalVaccinations,
+                                          per100_000People: nil,
+                                          percentageOfPopulation: percentageVaccinations)
 
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
@@ -263,9 +277,6 @@ struct Scalpel: ParsableCommand {
         FileManager.default.createFile(atPath: allMunicipalitiesURL.path, contents: allMunicipalitiesJSON)
 
         // MARK: - Security Regions
-
-        let cbsAreaProvider = CBSAreaProvider()
-        let cbsAreas = try cbsAreaProvider.areas()
 
         var securityRegionsSummaries = [Summary]()
 
@@ -447,19 +458,25 @@ struct Scalpel: ParsableCommand {
         let positiveCases = SummaryNumbers(
             new: today.positiveCases,
             trend: trend(today: today.positiveCases, yesterday: yesterday.positiveCases),
-            total: total.positiveCases
+            total: total.positiveCases,
+            per100_000People: nil,
+            percentageOfPopulation: nil
         )
 
         let hospitalAdmissions = SummaryNumbers(
             new: today.hospitalAdmissions,
             trend: trend(today: today.hospitalAdmissions, yesterday: yesterday.hospitalAdmissions),
-            total: total.hospitalAdmissions
+            total: total.hospitalAdmissions,
+            per100_000People: nil,
+            percentageOfPopulation: nil
         )
 
         let deaths = SummaryNumbers(
             new: today.deaths,
             trend: trend(today: today.deaths, yesterday: yesterday.deaths),
-            total: total.deaths
+            total: total.deaths,
+            per100_000People: nil,
+            percentageOfPopulation: nil
         )
 
         return (positiveCases, hospitalAdmissions, deaths)

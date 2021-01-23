@@ -9,7 +9,8 @@
   "positiveCases" : {
     "new" : 5487,
     "trend" : -289,
-    "total" : 944042
+    "total" : 944042,
+    "per100KInhabitants" : 31.520744323730469
   },
   "intensiveCareOccupancy" : {
     "newAdmissionsTrend" : -1,
@@ -20,18 +21,21 @@
   "deaths" : {
     "new" : 89,
     "trend" : 0,
-    "total" : 13510
+    "total" : 13510,
+    "per100KInhabitants" : 0.51127141714096069
   },
   "hospitalAdmissions" : {
     "new" : 129,
     "trend" : -69,
-    "total" : 39699
+    "total" : 39699,
+    "per100KInhabitants" : 0.74105632305145264
   },
-  "updatedAt" : "2021-01-23T17:46:36+01:00",
+  "updatedAt" : "2021-01-23T19:15:06+01:00",
   "vaccinations" : {
     "new" : 35000,
+    "percentageOfPopulation" : 0.0077552404254674911,
     "total" : 135000,
-    "percentageOfPopulation" : 0.0077552404254674911
+    "per100KInhabitants" : 775.5240478515625
   },
   "regionCode" : "NL00"
 }

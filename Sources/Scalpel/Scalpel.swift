@@ -57,6 +57,8 @@ struct Scalpel: ParsableCommand {
         let cbsAreaProvider = CBSAreaProvider()
         let cbsAreas = try cbsAreaProvider.areas()
 
+        let updatedAt = Date()
+
         // MARK: - National
 
         let nationalPopulation = cbsAreas.reduce(into: 0) { $0 += $1.population }
@@ -76,6 +78,10 @@ struct Scalpel: ParsableCommand {
 
         let latestRIVMHospitalAdmissionsAverage = latestRIVMHospitalAdmissions.averageOfThreeDays()
         let previousRIVMHospitalAdmissionsAverage = previousRIVMHospitalAdmissions.averageOfThreeDays()
+
+        guard let numbersDate = todaysEntries.first?.dateOfPublication else {
+            fatalError("Missing todays entries dates")
+        }
 
         // MARK: NICE
 
@@ -124,21 +130,18 @@ struct Scalpel: ParsableCommand {
             intensiveCareOccupancy = nil
         }
 
-        guard let numbersDate = todaysEntries.first?.dateOfPublication else {
-            fatalError("Missing todays entries dates")
-        }
-
-        let updatedAt = Date()
-
         let summarizedNumbers = summarizeEntries(today: todayCounts,
                                                  yesterday: yesterdaysCounts,
-                                                 total: totalCounts)
+                                                 total: totalCounts,
+                                                 population: nationalPopulation)
+
+        let nationalHospitalizationsPer100K = hospitalOccupancy.flatMap { per100k(number: $0.newAdmissions, population: nationalPopulation) }
 
         let nationalHospitalizationsSummary = SummaryNumbers(
             new: hospitalOccupancy?.newAdmissions,
             trend: hospitalOccupancy?.newAdmissionsTrend,
             total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions),
-            per100_000People: nil,
+            per100KInhabitants: nationalHospitalizationsPer100K,
             percentageOfPopulation: nil
         )
 
@@ -146,11 +149,12 @@ struct Scalpel: ParsableCommand {
         let currentVaccinationsTotal = 135_000
         let newVaccinations = currentVaccinationsTotal - previousVaccinationsTotal
         let percentageVaccinations = Float(currentVaccinationsTotal) / Float(nationalPopulation)
+        let nationalVaccinationsPer100K = per100k(number: currentVaccinationsTotal, population: nationalPopulation)
 
         let vaccinations = SummaryNumbers(new: newVaccinations,
                                           trend: nil,
                                           total: currentVaccinationsTotal,
-                                          per100_000People: nil,
+                                          per100KInhabitants: nationalVaccinationsPer100K,
                                           percentageOfPopulation: percentageVaccinations)
 
         let summary = Summary(updatedAt: updatedAt,
@@ -201,6 +205,8 @@ struct Scalpel: ParsableCommand {
 
         // MARK: - Municipalities
 
+        let populationPerMunicipality = cbsAreas.reduce(into: [String: Int]()) { $0[$1.municipalityCode] = $1.population }
+
         var municipalSummaries = [Summary]()
 
         let municipalEntries = todaysEntries.filter { $0.municipalityCode != nil }
@@ -238,7 +244,8 @@ struct Scalpel: ParsableCommand {
             let summarizedNumbers = summarizeEntries(
                 today: (todaysEntry.totalReported ?? 0, latestHospitalAdmissionsAverage, todaysEntry.deceased ?? 0),
                 yesterday: (yesterdaysEntry.totalReported ?? 0, previousHospitalAdmissionsAverage, yesterdaysEntry.deceased ?? 0),
-                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths),
+                population: populationPerMunicipality[regionCode]
             )
 
             let summary = Summary(
@@ -280,6 +287,10 @@ struct Scalpel: ParsableCommand {
 
         // MARK: - Security Regions
 
+        let populationPerSafetyRegion = cbsAreas.reduce(into: [String: Int]()) {
+            $0[$1.securityRegionCode] = ($0[$1.securityRegionCode] ?? 0) + $1.population
+        }
+
         var securityRegionsSummaries = [Summary]()
 
         let safetyRegionCodeNameMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.securityRegionCode] = $1.securityRegionName }
@@ -310,7 +321,8 @@ struct Scalpel: ParsableCommand {
             let summarizedNumbers = summarizeEntries(
                 today: (todaysNumbers.positiveCases, latestHospitalAdmissionsAverage, todaysNumbers.deaths),
                 yesterday: (yesterdaysNumbers.positiveCases, previousHospitalAdmissionsAverage, yesterdaysNumbers.deaths),
-                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths),
+                population: populationPerSafetyRegion[regionCode]
             )
 
             let provinceName = todaysEntriesForSecurityRegion.first?.provinceName
@@ -361,6 +373,10 @@ struct Scalpel: ParsableCommand {
 
         // MARK: - Provinces
 
+        let populationPerProvince = cbsAreas.reduce(into: [String: Int]()) {
+            $0[$1.provinceCode] = ($0[$1.provinceCode] ?? 0) + $1.population
+        }
+
         // Dictionary with province name as key and province code as value.
         let provinceNameCodeMap = cbsAreas.reduce(into: [String: String]()) { $0[$1.provinceName] = $1.provinceCode }
         let provinceNames = Array(provinceNameCodeMap.keys).sorted()
@@ -405,7 +421,8 @@ struct Scalpel: ParsableCommand {
             let summarizedNumbers = summarizeEntries(
                 today: (todaysNumbers.positiveCases, latestHospitalAdmissionsAverage, todaysNumbers.deaths),
                 yesterday: (yesterdaysNumbers.positiveCases, previousHospitalAdmissionsAverage, yesterdaysNumbers.deaths),
-                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths)
+                total: (totals.positiveCases, totalHospitalAdmissions, totals.deaths),
+                population: populationPerProvince[regionCode]
             )
 
             let summary = Summary(
@@ -453,15 +470,20 @@ struct Scalpel: ParsableCommand {
         return today - yesterday
     }
 
+    func per100k(number: Int, population: Int) -> Float {
+        (Float(number) / Float(population)) * 100_000
+    }
+
     func summarizeEntries(today: AccumulatedNumbers,
                           yesterday: AccumulatedNumbers,
-                          total: AccumulatedNumbers) -> (positiveCases: SummaryNumbers, hospitalAdmissions: SummaryNumbers, deaths: SummaryNumbers) {
+                          total: AccumulatedNumbers,
+                          population: Int?) -> (positiveCases: SummaryNumbers, hospitalAdmissions: SummaryNumbers, deaths: SummaryNumbers) {
 
         let positiveCases = SummaryNumbers(
             new: today.positiveCases,
             trend: trend(today: today.positiveCases, yesterday: yesterday.positiveCases),
             total: total.positiveCases,
-            per100_000People: nil,
+            per100KInhabitants: population.flatMap { per100k(number: today.positiveCases, population: $0) },
             percentageOfPopulation: nil
         )
 
@@ -469,7 +491,7 @@ struct Scalpel: ParsableCommand {
             new: today.hospitalAdmissions,
             trend: trend(today: today.hospitalAdmissions, yesterday: yesterday.hospitalAdmissions),
             total: total.hospitalAdmissions,
-            per100_000People: nil,
+            per100KInhabitants: population.flatMap { per100k(number: today.hospitalAdmissions, population: $0) },
             percentageOfPopulation: nil
         )
 
@@ -477,7 +499,7 @@ struct Scalpel: ParsableCommand {
             new: today.deaths,
             trend: trend(today: today.deaths, yesterday: yesterday.deaths),
             total: total.deaths,
-            per100_000People: nil,
+            per100KInhabitants: population.flatMap { per100k(number: today.deaths, population: $0) },
             percentageOfPopulation: nil
         )
 

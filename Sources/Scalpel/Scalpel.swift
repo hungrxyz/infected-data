@@ -105,6 +105,7 @@ struct Scalpel: ParsableCommand {
             hospitalOccupancy = Occupancy(
                 newAdmissions: latestRIVMHospitalAdmissionsAverage,
                 newAdmissionsTrend: trend(today: latestRIVMHospitalAdmissionsAverage, yesterday: previousRIVMHospitalAdmissionsAverage),
+                newAdmissionsPer100KInhabitants: per100k(number: latestRIVMHospitalAdmissionsAverage, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
             )
@@ -123,6 +124,7 @@ struct Scalpel: ParsableCommand {
             intensiveCareOccupancy = Occupancy(
                 newAdmissions: latestIntensiveCareAverage,
                 newAdmissionsTrend: trend(today: latestIntensiveCareAverage, yesterday: previousIntensiveCareAverage),
+                newAdmissionsPer100KInhabitants: per100k(number: latestIntensiveCareAverage, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
             )

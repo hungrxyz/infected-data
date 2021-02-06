@@ -1,25 +1,25 @@
 {
   "regionCode" : "GM0344",
-  "numbersDate" : "2021-02-05T01:00:00+01:00",
+  "numbersDate" : "2021-02-06T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 56,
-    "trend" : 11,
-    "total" : 20554,
-    "per100KInhabitants" : 15.660087585449219
+    "new" : 53,
+    "trend" : -2,
+    "total" : 20607,
+    "per100KInhabitants" : 14.82115364074707
   },
   "deaths" : {
-    "new" : 1,
-    "trend" : 1,
-    "total" : 208,
-    "per100KInhabitants" : 0.27964439988136292
-  },
-  "securityRegionName" : "Utrecht",
-  "updatedAt" : "2021-02-05T23:30:30+01:00",
-  "hospitalAdmissions" : {
     "new" : 0,
     "trend" : -1,
-    "total" : 832,
+    "total" : 208,
     "per100KInhabitants" : 0
+  },
+  "securityRegionName" : "Utrecht",
+  "updatedAt" : "2021-02-06T15:27:11+01:00",
+  "hospitalAdmissions" : {
+    "new" : 1,
+    "trend" : 0,
+    "total" : 835,
+    "per100KInhabitants" : 0.27964439988136292
   },
   "provinceName" : "Utrecht",
   "municupalityName" : "Utrecht"

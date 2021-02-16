@@ -1,25 +1,25 @@
 {
   "regionCode" : "GM0168",
-  "numbersDate" : "2021-02-15T01:00:00+01:00",
+  "numbersDate" : "2021-02-16T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 7,
-    "trend" : 2,
-    "total" : 2001,
-    "per100KInhabitants" : 30.860115051269531
+    "new" : 5,
+    "trend" : -2,
+    "total" : 2006,
+    "per100KInhabitants" : 22.042940139770508
   },
   "deaths" : {
-    "new" : 0,
-    "trend" : 0,
-    "total" : 30,
-    "per100KInhabitants" : 0
-  },
-  "securityRegionName" : "Twente",
-  "updatedAt" : "2021-02-15T23:31:05+01:00",
-  "hospitalAdmissions" : {
     "new" : 1,
     "trend" : 1,
-    "total" : 83,
+    "total" : 31,
     "per100KInhabitants" : 4.4085879325866699
+  },
+  "securityRegionName" : "Twente",
+  "updatedAt" : "2021-02-16T15:28:16+01:00",
+  "hospitalAdmissions" : {
+    "new" : 0,
+    "trend" : -1,
+    "total" : 83,
+    "per100KInhabitants" : 0
   },
   "provinceName" : "Overijssel",
   "municupalityName" : "Losser"

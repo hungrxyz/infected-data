@@ -10,9 +10,8 @@ import Foundation
 struct LCPSEntry {
 
     let date: Date
-    let intensiveCareCOVIDOccupancy: Int
-    let intensiveCareNonCOVIDOccupancy: Int
-    let clinicCOVIDOccupancy: Int
+    let intensiveCareCOVIDOccupancy: Int?
+    let clinicCOVIDOccupancy: Int?
 
 }
 
@@ -22,7 +21,6 @@ extension LCPSEntry: Decodable {
 
         case date = "Datum"
         case intensiveCareCOVIDOccupancy = "IC_Bedden_COVID"
-        case intensiveCareNonCOVIDOccupancy = "IC_Bedden_Non_COVID"
         case clinicCOVIDOccupancy = "Kliniek_Bedden"
 
     }

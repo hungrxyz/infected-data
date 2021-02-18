@@ -137,7 +137,7 @@ struct Scalpel: ParsableCommand {
                                                  total: totalCounts,
                                                  population: nationalPopulation)
 
-        let nationalHospitalizationsPer100K = hospitalOccupancy.flatMap { per100k(number: $0.newAdmissions, population: nationalPopulation) }
+        let nationalHospitalizationsPer100K = hospitalOccupancy?.newAdmissions.flatMap { per100k(number: $0, population: nationalPopulation) }
 
         let nationalHospitalizationsSummary = SummaryNumbers(
             new: hospitalOccupancy?.newAdmissions,

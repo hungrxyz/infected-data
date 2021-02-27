@@ -147,11 +147,11 @@ struct Scalpel: ParsableCommand {
             percentageOfPopulation: nil
         )
 
-        let previousVaccinationsTotal = 1_169_302
-        let currentVaccinationsTotal = 1_236_192
+        let previousVaccinationsTotal = 1_236_192
+        let currentVaccinationsTotal = 1_285_742
         let newVaccinations = currentVaccinationsTotal - previousVaccinationsTotal
-        let percentageVaccinations = Float(currentVaccinationsTotal) / Float(nationalPopulation)
-        let nationalVaccinationsPer100K = per100k(number: currentVaccinationsTotal, population: nationalPopulation)
+        let percentageVaccinations = Float(currentVaccinationsTotal) / Float(nationalPopulation * 2)
+        let nationalVaccinationsPer100K = per100k(number: currentVaccinationsTotal, population: nationalPopulation * 2)
 
         let vaccinations = SummaryNumbers(new: newVaccinations,
                                           trend: nil,

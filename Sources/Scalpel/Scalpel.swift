@@ -147,17 +147,18 @@ struct Scalpel: ParsableCommand {
             percentageOfPopulation: nil
         )
 
-        let previousVaccinationsTotal = 1_236_192
-        let currentVaccinationsTotal = 1_285_742
-        let newVaccinations = currentVaccinationsTotal - previousVaccinationsTotal
-        let percentageVaccinations = Float(currentVaccinationsTotal) / Float(nationalPopulation * 2)
-        let nationalVaccinationsPer100K = per100k(number: currentVaccinationsTotal, population: nationalPopulation * 2)
+        let vaccinationEntries = try Vaccinations()()
 
-        let vaccinations = SummaryNumbers(new: newVaccinations,
-                                          trend: nil,
-                                          total: currentVaccinationsTotal,
-                                          per100KInhabitants: nationalVaccinationsPer100K,
-                                          percentageOfPopulation: percentageVaccinations)
+        let currentVaccinationsTotal = vaccinationEntries.last!.administered
+
+        let newVaccinations = NewVaccinationsCalculator(entries: vaccinationEntries)()
+        let vaccinationsCoverage = VaccionationCoverageCalculator(totalAdministered: currentVaccinationsTotal, population: nationalPopulation)()
+
+        let vaccinationsSummaryNumbers = SummaryNumbers(new: newVaccinations,
+                                                        trend: nil,
+                                                        total: currentVaccinationsTotal,
+                                                        per100KInhabitants: nil,
+                                                        percentageOfPopulation: vaccinationsCoverage)
 
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
@@ -170,7 +171,7 @@ struct Scalpel: ParsableCommand {
                               hospitalOccupancy: hospitalOccupancy,
                               intensiveCareOccupancy: intensiveCareOccupancy,
                               deaths: summarizedNumbers.deaths,
-                              vaccinations: vaccinations)
+                              vaccinations: vaccinationsSummaryNumbers)
 
         let encoder = JSONEncoder()
 

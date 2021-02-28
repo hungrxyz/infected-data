@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  LCPSEntry.swift
 //  
 //
 //  Created by marko on 12/13/20.

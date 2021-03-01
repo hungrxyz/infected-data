@@ -15,7 +15,7 @@ struct Vaccinations {
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
         var configuration = CSVDecoder.Configuration()
-        configuration.delimiters.field = ";"
+        configuration.delimiters.field = ","
         configuration.headerStrategy = .firstLine
         configuration.dateStrategy = .formatted(dateFormatter)
 

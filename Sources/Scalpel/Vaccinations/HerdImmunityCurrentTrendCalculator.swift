@@ -14,7 +14,7 @@ struct HerdImmunityCurrentTrendCalculator {
     let population: Int
 
     func callAsFunction() -> Date {
-        let last4Entries = Array(vaccinationEntries.suffix(4))
+        let last4Entries = Array(vaccinationEntries.suffix(8))
 
         var perDay = [Int]()
 

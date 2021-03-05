@@ -9,14 +9,13 @@ import Foundation
 
 struct VaccionationCoverageCalculator {
 
-    let totalAdministered: Int
+    let entry: VaccinationsEntry
     let population: Int
 
     func callAsFunction() -> Float {
-        // Double population since all vaccines currently require 2 shots
-        let doublePopulation = population * 2
+        let totalAdministeredPerEffectiveness = Float(entry.doses) * entry.effectiveness
 
-        return Float(totalAdministered) / Float(doublePopulation)
+        return totalAdministeredPerEffectiveness / Float(population)
     }
 
 }

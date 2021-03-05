@@ -21,7 +21,7 @@ struct NewVaccinationsCalculator {
             fatalError("Mmmm okay, no vaccionation entries present")
         }
 
-        return current.administered - previous.administered
+        return current.doses - previous.doses
     }
 
 }

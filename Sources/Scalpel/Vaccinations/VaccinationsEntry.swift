@@ -10,7 +10,8 @@ import Foundation
 struct VaccinationsEntry {
 
     let date: Date
-    let administered: Int
+    let doses: Int
+    let effectiveness: Float
 
 }
 

@@ -10,7 +10,15 @@ import CodableCSV
 
 struct Vaccinations {
 
-    func callAsFunction() throws -> [VaccinationsEntry] {
+    func administered() throws -> [VaccinationsEntry] {
+        try entries(resourceName: "vaccinations_administered")
+    }
+
+    func deliveries() throws -> [VaccinationsEntry] {
+        try entries(resourceName: "vaccinations_deliveries")
+    }
+
+    private func entries(resourceName: String) throws -> [VaccinationsEntry] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
@@ -21,7 +29,7 @@ struct Vaccinations {
 
         let decoder = CSVDecoder(configuration: configuration)
 
-        let fileURL = Bundle.module.url(forResource: "vaccinations", withExtension: "csv")!
+        let fileURL = Bundle.module.url(forResource: resourceName, withExtension: "csv")!
         let fileData = try Data(contentsOf: fileURL)
 
         let areas = try decoder.decode([VaccinationsEntry].self, from: fileData)

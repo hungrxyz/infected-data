@@ -21,7 +21,8 @@ let package = Package(
             ],
             resources: [
                 .process("CBS/Gebieden_in_Nederland_2020_07122020_202646.csv"),
-                .process("Vaccinations/vaccinations.csv")
+                .process("Vaccinations/vaccinations_administered.csv"),
+                .process("Vaccinations/vaccinations_deliveries.csv")
             ]
         ),
         .testTarget(

@@ -10,6 +10,8 @@ import ArgumentParser
 import CodableCSV
 
 struct Scalpel: ParsableCommand {
+
+    static let calendar = Calendar(identifier: .iso8601)
     
     func run() throws {
         
@@ -50,7 +52,7 @@ struct Scalpel: ParsableCommand {
         group.wait()
         
         let accumulator = NumbersAccumulator()
-        let calendar = Calendar(identifier: .iso8601)
+        let calendar = Self.calendar
         
         let allEntries = rivmRegional.entries
         
@@ -149,12 +151,13 @@ struct Scalpel: ParsableCommand {
             herdImmunityEstimatedDate: nil
         )
         
-        let vaccinationEntries = try Vaccinations()()
+        let vaccinationEntries = try Vaccinations().administered()
         
-        let currentVaccinationsTotal = vaccinationEntries.last!.administered
+        let currentVaccinationsTotal = vaccinationEntries.last!.doses
         
         let newVaccinations = NewVaccinationsCalculator(entries: vaccinationEntries)()
-        let vaccinationsCoverage = VaccionationCoverageCalculator(totalAdministered: currentVaccinationsTotal, population: nationalPopulation)()
+        let vaccinationsCoverage = VaccionationCoverageCalculator(entry: vaccinationEntries.last!,
+                                                                  population: nationalPopulation)()
         
         let herdImmunityCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
                                                                         vaccinationEntries: vaccinationEntries,

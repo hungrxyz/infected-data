@@ -194,7 +194,7 @@ struct Scalpel: ParsableCommand {
         
         if #available(OSX 10.15, *) {
             let iso8601WithTimeZoneFormatter = ISO8601DateFormatter()
-            iso8601WithTimeZoneFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+            iso8601WithTimeZoneFormatter.timeZone = .amsterdam
             
             encoder.dateEncodingStrategy = .custom({ (date, encoder) in
                 let stringRepresentation = iso8601WithTimeZoneFormatter.string(from: date)

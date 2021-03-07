@@ -152,6 +152,7 @@ struct Scalpel: ParsableCommand {
         )
         
         let vaccinationEntries = try Vaccinations().administered()
+        let vaccinationDeliveries = try Vaccinations().deliveries()
         
         let currentVaccinationsTotal = vaccinationEntries.last!.doses
         
@@ -159,17 +160,22 @@ struct Scalpel: ParsableCommand {
         let vaccinationsCoverage = VaccionationCoverageCalculator(entry: vaccinationEntries.last!,
                                                                   population: nationalPopulation)()
         
-        let herdImmunityCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
+        let herdImmunityCurrentTrendCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
                                                                         vaccinationEntries: vaccinationEntries,
                                                                         population: nationalPopulation)
+
+        let herdImmunityEstimationCalculator = HerdImmunityEstimationCalculator(calendar: calendar,
+                                                                                vaccinationEntries: vaccinationEntries,
+                                                                                vaccinationDeliveries: vaccinationDeliveries,
+                                                                                population: nationalPopulation)
         
         let vaccinationsSummaryNumbers = SummaryNumbers(new: newVaccinations,
                                                         trend: nil,
                                                         total: currentVaccinationsTotal,
                                                         per100KInhabitants: nil,
                                                         percentageOfPopulation: vaccinationsCoverage,
-                                                        herdImmunityCurrentTrendDate: herdImmunityCalculator(),
-                                                        herdImmunityEstimatedDate: nil)
+                                                        herdImmunityCurrentTrendDate: herdImmunityCurrentTrendCalculator(),
+                                                        herdImmunityEstimatedDate: herdImmunityEstimationCalculator())
         
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,

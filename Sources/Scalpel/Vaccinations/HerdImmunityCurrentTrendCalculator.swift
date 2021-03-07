@@ -30,7 +30,7 @@ struct HerdImmunityCurrentTrendCalculator {
         let currentAverageAdministeredPerPerson = Int(Float(currentAverageAdministeredPerDay) * currentAverageEffectiveness)
 
         let latestEntry = vaccinationEntries.last!
-        let totalAdministered = Int(Float(latestEntry.doses) * 0.5)
+        let totalAdministered = Int(Float(latestEntry.doses) * latestEntry.effectiveness)
         let totalAdministeredGoal = population
 
         let herdImmunityThreshold = Int(Float(totalAdministeredGoal) * 0.7)

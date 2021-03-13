@@ -11,7 +11,7 @@ struct VaccinationsEntry {
 
     let date: Date
     let doses: Int
-    let effectiveness: Float
+    let dosage: Float
 
 }
 

@@ -14,6 +14,12 @@ struct Scalpel: ParsableCommand {
     static let calendar = Calendar(identifier: .iso8601)
     
     func run() throws {
+        let updatedAt = Date()
+        let calendar = Self.calendar
+
+        let cbsAreaProvider = CBSAreaProvider()
+        let cbsAreas = try cbsAreaProvider.areas()
+        let nationalPopulation = cbsAreas.reduce(into: 0) { $0 += $1.population }
         
         var rivmRegional: RIVMRegional!
         var rivmHospitalAdmissions: [RIVMHospitalAdmissionsEntry]!
@@ -52,18 +58,10 @@ struct Scalpel: ParsableCommand {
         group.wait()
         
         let accumulator = NumbersAccumulator()
-        let calendar = Self.calendar
         
         let allEntries = rivmRegional.entries
         
-        let cbsAreaProvider = CBSAreaProvider()
-        let cbsAreas = try cbsAreaProvider.areas()
-        
-        let updatedAt = Date()
-        
         // MARK: - National
-        
-        let nationalPopulation = cbsAreas.reduce(into: 0) { $0 += $1.population }
         
         // MARK: RIVM
         
@@ -145,6 +143,7 @@ struct Scalpel: ParsableCommand {
             new: hospitalOccupancy?.newAdmissions,
             trend: hospitalOccupancy?.newAdmissionsTrend,
             total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions),
+            average: nil,
             per100KInhabitants: nationalHospitalizationsPer100K,
             percentageOfPopulation: nil,
             herdImmunityCurrentTrendDate: nil,
@@ -168,10 +167,14 @@ struct Scalpel: ParsableCommand {
                                                                                 vaccinationEntries: vaccinationEntries,
                                                                                 vaccinationDeliveries: vaccinationDeliveries,
                                                                                 population: nationalPopulation)
+
+        let averageCalculator = NewVaccinationsAverageCalculator(entries: Array(vaccinationEntries.suffix(8)))
+        let averageTrendCalculator = NewVaccinationsAverageTrendCalculator(entries: vaccinationEntries)
         
         let vaccinationsSummaryNumbers = SummaryNumbers(new: newVaccinations,
-                                                        trend: nil,
+                                                        trend: averageTrendCalculator(),
                                                         total: currentVaccinationsTotal,
+                                                        average: averageCalculator(),
                                                         per100KInhabitants: nil,
                                                         percentageOfPopulation: vaccinationsCoverage,
                                                         herdImmunityCurrentTrendDate: herdImmunityCurrentTrendCalculator(),
@@ -503,6 +506,7 @@ struct Scalpel: ParsableCommand {
             new: today.positiveCases,
             trend: trend(today: today.positiveCases, yesterday: yesterday.positiveCases),
             total: total.positiveCases,
+            average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.positiveCases, population: $0) },
             percentageOfPopulation: nil,
             herdImmunityCurrentTrendDate: nil,
@@ -513,6 +517,7 @@ struct Scalpel: ParsableCommand {
             new: today.hospitalAdmissions,
             trend: trend(today: today.hospitalAdmissions, yesterday: yesterday.hospitalAdmissions),
             total: total.hospitalAdmissions,
+            average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.hospitalAdmissions, population: $0) },
             percentageOfPopulation: nil,
             herdImmunityCurrentTrendDate: nil,
@@ -523,6 +528,7 @@ struct Scalpel: ParsableCommand {
             new: today.deaths,
             trend: trend(today: today.deaths, yesterday: yesterday.deaths),
             total: total.deaths,
+            average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.deaths, population: $0) },
             percentageOfPopulation: nil,
             herdImmunityCurrentTrendDate: nil,

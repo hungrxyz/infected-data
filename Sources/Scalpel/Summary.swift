@@ -29,6 +29,7 @@ struct SummaryNumbers: Encodable {
     let new: Int?
     let trend: Int?
     let total: Int?
+    let average: Int?
     let per100KInhabitants: Float?
     let percentageOfPopulation: Float?
     let herdImmunityCurrentTrendDate: Date?

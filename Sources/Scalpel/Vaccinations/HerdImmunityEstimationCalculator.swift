@@ -15,19 +15,8 @@ struct HerdImmunityEstimationCalculator {
     let population: Int
 
     func callAsFunction() -> Date {
-        let last8Entries = Array(vaccinationEntries.suffix(8))
-
-        var perDay = [Int]()
-
-        for (index, previous) in Array(last8Entries.dropLast()).enumerated() {
-            let current = last8Entries[index + 1]
-
-            let diff = current.doses - previous.doses
-            perDay.append(diff)
-        }
-
         let latestEntry = vaccinationEntries.last!
-        let totalAdministered = Int(Float(latestEntry.doses) * latestEntry.effectiveness)
+        let totalAdministered = Int(Float(latestEntry.doses) * latestEntry.dosage)
         let totalAdministeredGoal = population
 
         // 70% of population
@@ -37,7 +26,7 @@ struct HerdImmunityEstimationCalculator {
         var averageDeliveriesPerQuarter = [Date: Int]()
         for deliveryEntry in vaccinationDeliveries {
             let daysInQuarter = calendar.range(of: .day, in: .quarter, for: deliveryEntry.date)!.upperBound
-            let perPerson = Int(Float(deliveryEntry.doses) * deliveryEntry.effectiveness)
+            let perPerson = Int(Float(deliveryEntry.doses) * deliveryEntry.dosage)
             let average = perPerson / daysInQuarter
 
             averageDeliveriesPerQuarter[deliveryEntry.date] = average

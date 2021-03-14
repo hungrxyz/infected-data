@@ -1,45 +1,45 @@
 {
   "hospitalOccupancy" : {
-    "newAdmissionsTrend" : -66,
-    "currentlyOccupiedTrend" : -13,
-    "currentlyOccupied" : 1321,
-    "newAdmissionsPer100KInhabitants" : 0.6950993537902832,
-    "newAdmissions" : 121
+    "newAdmissionsTrend" : -92,
+    "currentlyOccupiedTrend" : 47,
+    "currentlyOccupied" : 1368,
+    "newAdmissionsPer100KInhabitants" : 0.59169608354568481,
+    "newAdmissions" : 103
   },
-  "numbersDate" : "2021-03-13T01:00:00+01:00",
+  "numbersDate" : "2021-03-14T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 6446,
-    "trend" : 405,
-    "total" : 1151218,
-    "per100KInhabitants" : 37.029838562011719
+    "new" : 6012,
+    "trend" : -420,
+    "total" : 1157192,
+    "per100KInhabitants" : 34.536670684814453
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : -1,
-    "currentlyOccupiedTrend" : -22,
+    "newAdmissionsTrend" : -6,
+    "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 554,
-    "newAdmissionsPer100KInhabitants" : 0.21255102753639221,
-    "newAdmissions" : 37
+    "newAdmissionsPer100KInhabitants" : 0.19531716406345367,
+    "newAdmissions" : 34
   },
   "deaths" : {
-    "new" : 22,
-    "trend" : -5,
-    "total" : 16046,
-    "per100KInhabitants" : 0.12638169527053833
+    "new" : 24,
+    "trend" : 2,
+    "total" : 16069,
+    "per100KInhabitants" : 0.13787093758583069
   },
   "hospitalAdmissions" : {
-    "new" : 121,
-    "trend" : -66,
-    "total" : 48584,
-    "per100KInhabitants" : 0.6950993537902832
+    "new" : 103,
+    "trend" : -92,
+    "total" : 48721,
+    "per100KInhabitants" : 0.59169608354568481
   },
-  "updatedAt" : "2021-03-13T23:30:13+01:00",
+  "updatedAt" : "2021-03-14T15:27:42+01:00",
   "vaccinations" : {
     "trend" : -3419,
     "percentageOfPopulation" : 0.052648372948169708,
     "average" : 37377,
     "herdImmunityEstimatedDate" : "2021-07-10T02:00:00+02:00",
     "total" : 1832962,
-    "herdImmunityCurrentTrendDate" : "2022-11-06T01:00:00+01:00",
+    "herdImmunityCurrentTrendDate" : "2022-11-07T01:00:00+01:00",
     "new" : 48227
   },
   "regionCode" : "NL00"

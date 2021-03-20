@@ -1,45 +1,45 @@
 {
   "hospitalOccupancy" : {
-    "newAdmissionsTrend" : -46,
-    "currentlyOccupiedTrend" : 26,
-    "currentlyOccupied" : 1462,
+    "newAdmissionsTrend" : -64,
+    "currentlyOccupiedTrend" : -17,
+    "currentlyOccupied" : 1445,
     "newAdmissionsPer100KInhabitants" : 0.79275786876678467,
     "newAdmissions" : 138
   },
-  "numbersDate" : "2021-03-19T01:00:00+01:00",
+  "numbersDate" : "2021-03-20T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 7425,
-    "trend" : 1254,
-    "total" : 1186987,
-    "per100KInhabitants" : 42.653823852539062
+    "new" : 7668,
+    "trend" : 280,
+    "total" : 1194580,
+    "per100KInhabitants" : 44.049766540527344
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : 3,
-    "currentlyOccupiedTrend" : 15,
-    "currentlyOccupied" : 579,
-    "newAdmissionsPer100KInhabitants" : 0.24701875448226929,
-    "newAdmissions" : 43
+    "newAdmissionsTrend" : -4,
+    "currentlyOccupiedTrend" : 23,
+    "currentlyOccupied" : 602,
+    "newAdmissionsPer100KInhabitants" : 0.22978490591049194,
+    "newAdmissions" : 40
   },
   "deaths" : {
-    "new" : 46,
-    "trend" : 13,
-    "total" : 16244,
-    "per100KInhabitants" : 0.26425263285636902
+    "new" : 18,
+    "trend" : -28,
+    "total" : 16260,
+    "per100KInhabitants" : 0.10340320318937302
   },
   "hospitalAdmissions" : {
     "new" : 138,
-    "trend" : -46,
-    "total" : 49805,
+    "trend" : -64,
+    "total" : 50041,
     "per100KInhabitants" : 0.79275786876678467
   },
-  "updatedAt" : "2021-03-19T23:37:28+01:00",
+  "updatedAt" : "2021-03-20T15:28:43+01:00",
   "vaccinations" : {
     "trend" : -4883,
     "percentageOfPopulation" : 0.057683911174535751,
     "average" : 31934,
-    "herdImmunityEstimatedDate" : "2021-07-10T02:00:00+02:00",
+    "herdImmunityEstimatedDate" : "2021-07-11T02:00:00+02:00",
     "total" : 2008275,
-    "herdImmunityCurrentTrendDate" : "2023-02-18T01:00:00+01:00",
+    "herdImmunityCurrentTrendDate" : "2023-02-19T01:00:00+01:00",
     "new" : 31051
   },
   "regionCode" : "NL00"

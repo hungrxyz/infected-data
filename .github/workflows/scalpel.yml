@@ -2,10 +2,9 @@ name: Download and dissect RIVM, NICE and LCPS data
 
 on:
   schedule:
-    - cron: "10 14,16,18,20,22 * * *"
+    - cron: "15 13,15,17,19,21 * * *"
   
   workflow_dispatch:
-
 
 jobs:
   scalpel:

@@ -23,31 +23,31 @@ struct HerdImmunityEstimationCalculator {
         let herdImmunityThreshold = Int(Float(totalAdministeredGoal) * 0.7)
 
         // Averages per quarter
-        var averageDeliveriesPerQuarter = [Date: Int]()
+        var averageDeliveriesPerWeek = [Date: Int]()
         for deliveryEntry in vaccinationDeliveries {
-            let daysInQuarter = calendar.range(of: .day, in: .quarter, for: deliveryEntry.date)!.upperBound
+            let daysInAWeek = 7
             let perPerson = Int(Float(deliveryEntry.doses) * deliveryEntry.dosage)
-            let average = perPerson / daysInQuarter
+            let average = perPerson / daysInAWeek
 
-            averageDeliveriesPerQuarter[deliveryEntry.date] = average
+            averageDeliveriesPerWeek[deliveryEntry.date] = average
         }
 
         let todayStartOfDay = calendar.startOfDay(for: Date())
 
         var daysToGo = 0
         var dayByDay = totalAdministered
-        var lastKnownQuarterStartDate: Date!
+        var lastKnownWeekStartDate: Date!
 
         let enumarationDateComponents = DateComponents(hour: 0, minute: 0, second: 0)
         calendar.enumerateDates(startingAfter: todayStartOfDay, matching: enumarationDateComponents, matchingPolicy: .nextTime) { (date, _, shouldStop) in
-            let quarterStartDate = calendar.startOfQuarter(for: date!)
+            let weekStartDate = calendar.startOfWeek(for: date!)
 
             let averagePerDay: Int
-            if let knownAveragePerDay = averageDeliveriesPerQuarter[quarterStartDate] {
+            if let knownAveragePerDay = averageDeliveriesPerWeek[weekStartDate] {
                 averagePerDay = knownAveragePerDay
-                lastKnownQuarterStartDate = quarterStartDate
+                lastKnownWeekStartDate = weekStartDate
             } else {
-                averagePerDay = averageDeliveriesPerQuarter[lastKnownQuarterStartDate]!
+                averagePerDay = averageDeliveriesPerWeek[lastKnownWeekStartDate]!
             }
 
             daysToGo += 1
@@ -69,14 +69,8 @@ struct HerdImmunityEstimationCalculator {
 
 private extension Calendar {
 
-    func startOfQuarter(for date: Date) -> Date {
-        let year = component(.year, from: date)
-        let month = component(.month, from: date)
-        let startOfQuarterMonth = month.startOfQuarterMonth
-
-        let components = DateComponents(year: year, month: startOfQuarterMonth, day: 1, hour: 0, minute: 0, second: 0)
-
-        return self.date(from: components)!
+    func startOfWeek(for date: Date) -> Date {
+        dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
     }
 
 }

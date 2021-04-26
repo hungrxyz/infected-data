@@ -1,45 +1,45 @@
 {
   "hospitalOccupancy" : {
-    "newAdmissionsTrend" : -149,
-    "currentlyOccupiedTrend" : -7,
-    "currentlyOccupied" : 1691,
-    "newAdmissionsPer100KInhabitants" : 0.77552402019500732,
-    "newAdmissions" : 135
+    "newAdmissionsTrend" : -120,
+    "currentlyOccupiedTrend" : 68,
+    "currentlyOccupied" : 1759,
+    "newAdmissionsPer100KInhabitants" : 0.70658856630325317,
+    "newAdmissions" : 123
   },
-  "numbersDate" : "2021-04-25T02:00:00+02:00",
+  "numbersDate" : "2021-04-26T02:00:00+02:00",
   "positiveCases" : {
-    "new" : 8079,
-    "trend" : -21,
-    "total" : 1461137,
-    "per100KInhabitants" : 46.410804748535156
+    "new" : 6257,
+    "trend" : -1797,
+    "total" : 1467337,
+    "per100KInhabitants" : 35.944103240966797
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : -6,
-    "currentlyOccupiedTrend" : 25,
-    "currentlyOccupied" : 841,
-    "newAdmissionsPer100KInhabitants" : 0.29297575354576111,
-    "newAdmissions" : 51
+    "newAdmissionsTrend" : -2,
+    "currentlyOccupiedTrend" : -28,
+    "currentlyOccupied" : 813,
+    "newAdmissionsPer100KInhabitants" : 0.26999726891517639,
+    "newAdmissions" : 47
   },
   "deaths" : {
-    "new" : 11,
-    "trend" : -11,
-    "total" : 17049,
-    "per100KInhabitants" : 0.063190847635269165
+    "new" : 13,
+    "trend" : 2,
+    "total" : 17062,
+    "per100KInhabitants" : 0.074680089950561523
   },
   "hospitalAdmissions" : {
-    "new" : 135,
-    "trend" : -149,
-    "total" : 58811,
-    "per100KInhabitants" : 0.77552402019500732
+    "new" : 123,
+    "trend" : -120,
+    "total" : 58993,
+    "per100KInhabitants" : 0.70658856630325317
   },
-  "updatedAt" : "2021-04-25T21:31:54+02:00",
+  "updatedAt" : "2021-04-26T15:41:47+02:00",
   "vaccinations" : {
     "trend" : -90909,
     "percentageOfPopulation" : 0.14729692041873932,
     "average" : 93497,
-    "herdImmunityEstimatedDate" : "2021-07-17T02:00:00+02:00",
+    "herdImmunityEstimatedDate" : "2021-07-18T02:00:00+02:00",
     "total" : 5128167,
-    "herdImmunityCurrentTrendDate" : "2021-11-17T01:00:00+01:00",
+    "herdImmunityCurrentTrendDate" : "2021-11-18T01:00:00+01:00",
     "new" : 88782
   },
   "regionCode" : "NL00"

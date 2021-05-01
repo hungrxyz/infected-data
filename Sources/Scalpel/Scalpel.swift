@@ -25,6 +25,7 @@ struct Scalpel: ParsableCommand {
         var rivmHospitalAdmissions: [RIVMHospitalAdmissionsEntry]!
         var rivmIntensiveCareAdmissions: [RIVMIntensiveCareAdmissionsEntry]?
         var lcpsEntries: [LCPSEntry]?
+        var reproductionNumberEntries: [RIVMReproductionNumbersEntry]?
         
         let group = DispatchGroup()
         
@@ -51,6 +52,12 @@ struct Scalpel: ParsableCommand {
         group.enter()
         LCPSAPI().entries { result in
             lcpsEntries = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        rivmAPI.reproductionNumber { result in
+            reproductionNumberEntries = try! result.get()
             group.leave()
         }
         
@@ -125,11 +132,14 @@ struct Scalpel: ParsableCommand {
         } else {
             intensiveCareOccupancy = nil
         }
+
+        let reproductionNumber = reproductionNumberEntries?.last(where: { $0.average != nil })?.average
         
         let summarizedNumbers = summarizeEntries(today: todayCounts,
                                                  yesterday: yesterdaysCounts,
                                                  total: totalCounts,
-                                                 population: nationalPopulation)
+                                                 population: nationalPopulation,
+                                                 reproductionNumber: reproductionNumber)
         
         let nationalHospitalizationsPer100K = hospitalOccupancy?.newAdmissions.flatMap { per100k(number: $0, population: nationalPopulation) }
         
@@ -494,7 +504,8 @@ struct Scalpel: ParsableCommand {
     func summarizeEntries(today: AccumulatedNumbers,
                           yesterday: AccumulatedNumbers,
                           total: AccumulatedNumbers,
-                          population: Int?) -> (positiveCases: SummaryNumbers, hospitalAdmissions: SummaryNumbers, deaths: SummaryNumbers) {
+                          population: Int?,
+                          reproductionNumber: Float? = nil) -> (positiveCases: SummaryNumbers, hospitalAdmissions: SummaryNumbers, deaths: SummaryNumbers) {
         
         let positiveCases = SummaryNumbers(
             new: today.positiveCases,
@@ -502,7 +513,7 @@ struct Scalpel: ParsableCommand {
             total: total.positiveCases,
             average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.positiveCases, population: $0) },
-            percentageOfPopulation: nil,
+            percentageOfPopulation: reproductionNumber,
             herdImmunityCurrentTrendDate: nil,
             herdImmunityEstimatedDate: nil
         )

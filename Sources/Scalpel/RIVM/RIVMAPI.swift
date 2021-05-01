@@ -64,4 +64,15 @@ final class RIVMAPI {
 
     }
 
+    func reproductionNumber(completion: @escaping (Result<[RIVMReproductionNumbersEntry], Error>) -> Void) {
+        let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json")!
+
+        urlSession.dataTask(with: url) { (data, response, error) in
+            let entries = try! JSONDecoder().decode([RIVMReproductionNumbersEntry].self, from: data!)
+
+            completion(.success(entries))
+        }.resume()
+
+    }
+
 }

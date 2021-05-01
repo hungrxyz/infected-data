@@ -23,13 +23,12 @@ struct Scalpel: ParsableCommand {
         
         var rivmRegional: RIVMRegional!
         var rivmHospitalAdmissions: [RIVMHospitalAdmissionsEntry]!
-        var niceDailyIntensiveCareAdmissions: [NICEEntry]?
+        var rivmIntensiveCareAdmissions: [RIVMIntensiveCareAdmissionsEntry]?
         var lcpsEntries: [LCPSEntry]?
         
         let group = DispatchGroup()
         
         let rivmAPI = RIVMAPI()
-        let niceAPI = NICEAPI()
         
         group.enter()
         rivmAPI.regional { result in
@@ -44,8 +43,8 @@ struct Scalpel: ParsableCommand {
         }
         
         group.enter()
-        niceAPI.dailyIntensiveCareAddmissions { result in
-            niceDailyIntensiveCareAdmissions = try! result.get()
+        rivmAPI.intensiveCareAdmissions { result in
+            rivmIntensiveCareAdmissions = try! result.get()
             group.leave()
         }
         
@@ -73,24 +72,19 @@ struct Scalpel: ParsableCommand {
         let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
         let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
         
-        let latestRIVMHospitalAdmissions = rivmHospitalAdmissions.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
-        let previousRIVMHospitalAdmissions = rivmHospitalAdmissions.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
-        
-        let latestRIVMHospitalAdmissionsAverage = latestRIVMHospitalAdmissions.averageOfThreeDays()
-        let previousRIVMHospitalAdmissionsAverage = previousRIVMHospitalAdmissions.averageOfThreeDays()
-        
+        let latestRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 1) }
+        let previousRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+
+        let latestNationalRIVMHospitalAdmissions = latestRIVMHospitalAdmissionEntries.accumulatedHospitalAdmissions()
+        let previousNationalRIVMHospitalAdmissions = previousRIVMHospitalAdmissionEntries.accumulatedHospitalAdmissions()
+
+        let latestIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.last?.icAdmissionNotification
+        let previousIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.dropLast().last?.icAdmissionNotification
+
         guard let numbersDate = todaysEntries.first?.dateOfPublication else {
             fatalError("Missing todays entries dates")
         }
-        
-        // MARK: NICE
-        
-        let niceIntensiveCare1_2_3DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 1...3, calendar: calendar)
-        let niceIntensiveCare4_5_6DaysAgo = niceDailyIntensiveCareAdmissions?.filter(inRangeOfDaysAgo: 4...6, calendar: calendar)
-        
-        let latestIntensiveCareAverage = niceIntensiveCare1_2_3DaysAgo?.average()
-        let previousIntensiveCareAverage = niceIntensiveCare4_5_6DaysAgo?.average()
-        
+
         // MARK: LCPS
         
         let latestLCPSEntry = lcpsEntries?.first { calendar.isDateInToday($0.date) }
@@ -103,9 +97,9 @@ struct Scalpel: ParsableCommand {
            let previousLCPSEntry = previousLCPSEntry {
             
             hospitalOccupancy = Occupancy(
-                newAdmissions: latestRIVMHospitalAdmissionsAverage,
-                newAdmissionsTrend: trend(today: latestRIVMHospitalAdmissionsAverage, yesterday: previousRIVMHospitalAdmissionsAverage),
-                newAdmissionsPer100KInhabitants: per100k(number: latestRIVMHospitalAdmissionsAverage, population: nationalPopulation),
+                newAdmissions: latestNationalRIVMHospitalAdmissions,
+                newAdmissionsTrend: trend(today: latestNationalRIVMHospitalAdmissions, yesterday: previousNationalRIVMHospitalAdmissions),
+                newAdmissionsPer100KInhabitants: per100k(number: latestNationalRIVMHospitalAdmissions, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
             )
@@ -116,15 +110,15 @@ struct Scalpel: ParsableCommand {
         // MARK: Intensive Care Occupancy
         
         let intensiveCareOccupancy: Occupancy?
-        if let latestIntensiveCareAverage = latestIntensiveCareAverage,
-           let previousIntensiveCareAverage = previousIntensiveCareAverage,
+        if let latestIntensiveCareAdmissions = latestIntensiveCareAdmissions,
+           let previousIntensiveCareAdmissions = previousIntensiveCareAdmissions,
            let latestLCPSEntry = latestLCPSEntry,
            let previousLCPSEntry = previousLCPSEntry {
             
             intensiveCareOccupancy = Occupancy(
-                newAdmissions: latestIntensiveCareAverage,
-                newAdmissionsTrend: trend(today: latestIntensiveCareAverage, yesterday: previousIntensiveCareAverage),
-                newAdmissionsPer100KInhabitants: per100k(number: latestIntensiveCareAverage, population: nationalPopulation),
+                newAdmissions: latestIntensiveCareAdmissions,
+                newAdmissionsTrend: trend(today: latestIntensiveCareAdmissions, yesterday: previousIntensiveCareAdmissions),
+                newAdmissionsPer100KInhabitants: per100k(number: latestIntensiveCareAdmissions, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
                 currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
             )
@@ -253,13 +247,13 @@ struct Scalpel: ParsableCommand {
                 continue
             }
             
-            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissionEntries
                 .filter { $0.municipalityCode == regionCode }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
-            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissionEntries
                 .filter { $0.municipalityCode == regionCode }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
             let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions.filter { $0.municipalityCode == regionCode }
             let totalHospitalAdmissions = accumulator.accumulateHospitalAdmissions(fromEntries: allHospitalAdmissionsForThisRegion)
@@ -330,13 +324,13 @@ struct Scalpel: ParsableCommand {
             let yesterdaysEntriesForSecurityRegion = yesterdaysEntries.filter { $0.securityRegionCode == regionCode }
             let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysEntriesForSecurityRegion)
             
-            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissionEntries
                 .filter { $0.securityRegionCode == regionCode }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
-            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissionEntries
                 .filter { $0.securityRegionCode == regionCode }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
             let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions.filter { $0.securityRegionCode == regionCode }
             let totalHospitalAdmissions = accumulator.accumulateHospitalAdmissions(fromEntries: allHospitalAdmissionsForThisRegion)
@@ -429,13 +423,13 @@ struct Scalpel: ParsableCommand {
             
             let safetyRegionCodes = provinceNameSafetyRegionCodesMap[provinceName] ?? []
             
-            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissions
+            let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissionEntries
                 .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
-            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissions
+            let previousHospitalAdmissionsAverage = previousRIVMHospitalAdmissionEntries
                 .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
-                .averageOfThreeDays()
+                .accumulatedHospitalAdmissions()
             
             let allHospitalAdmissionsForThisRegion = rivmHospitalAdmissions
                 .filter { $0.securityRegionCode.flatMap(safetyRegionCodes.contains) ?? false }
@@ -541,31 +535,10 @@ struct Scalpel: ParsableCommand {
     
 }
 
-private extension Array where Element: Entry {
-    
-    func filter(inRangeOfDaysAgo range: ClosedRange<Int>, calendar: Calendar) -> Self {
-        var elements = [Element]()
-        for daysAgo in range {
-            let entries = filter { calendar.isDate($0.date, inSameDayAsDaysAgo: daysAgo) }
-            elements.append(contentsOf: entries)
-        }
-        return elements
-    }
-    
-}
-
-private extension Array where Element == NICEEntry {
-    
-    func average() -> Int {
-        reduce(into: 0) { $0 += $1.value } / count
-    }
-    
-}
-
 private extension Array where Element == RIVMHospitalAdmissionsEntry {
     
-    func averageOfThreeDays() -> Int {
-        reduce(into: 0) { $0 += $1.hospitalAdmission ?? 0 } / 3
+    func accumulatedHospitalAdmissions() -> Int {
+        reduce(into: 0) { $0 += $1.hospitalAdmissionNotification ?? 0 }
     }
     
 }

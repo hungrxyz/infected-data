@@ -53,4 +53,15 @@ final class RIVMAPI {
 
     }
 
+    func intensiveCareAdmissions(completion: @escaping (Result<[RIVMIntensiveCareAdmissionsEntry], Error>) -> Void) {
+        let url = URL(string: "https://data.rivm.nl/covid-19/COVID-19_ic_opnames.csv")!
+
+        urlSession.dataTask(with: url) { (data, response, error) in
+            let entries = try! Self.csvDecoder.decode([RIVMIntensiveCareAdmissionsEntry].self, from: data!)
+
+            completion(.success(entries))
+        }.resume()
+
+    }
+
 }

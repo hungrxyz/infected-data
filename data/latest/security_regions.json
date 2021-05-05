@@ -1,25 +1,25 @@
 {
-  "updatedAt" : "2021-05-04T23:34:57+02:00",
+  "updatedAt" : "2021-05-05T15:33:49+02:00",
   "regions" : [
     {
       "securityRegionName" : "Amsterdam-Amstelland",
       "positiveCases" : {
-        "new" : 478,
-        "trend" : -85,
-        "total" : 97827,
-        "per100KInhabitants" : 44.648902893066406
+        "new" : 447,
+        "trend" : -29,
+        "total" : 98272,
+        "per100KInhabitants" : 41.753261566162109
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 931,
-        "per100KInhabitants" : 0
+        "new" : 1,
+        "trend" : 1,
+        "total" : 932,
+        "per100KInhabitants" : 0.093407750129699707
       },
       "hospitalAdmissions" : {
-        "new" : 9,
-        "trend" : 1,
-        "total" : 4065,
-        "per100KInhabitants" : 0.84066969156265259
+        "new" : 15,
+        "trend" : 6,
+        "total" : 4080,
+        "per100KInhabitants" : 1.4011162519454956
       },
       "regionCode" : "VR13",
       "provinceName" : "Noord-Holland"
@@ -27,22 +27,22 @@
     {
       "securityRegionName" : "Brabant-Noord",
       "positiveCases" : {
-        "new" : 495,
-        "trend" : 56,
-        "total" : 65499,
-        "per100KInhabitants" : 74.631706237792969
+        "new" : 415,
+        "trend" : -82,
+        "total" : 65920,
+        "per100KInhabitants" : 62.570014953613281
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : -2,
-        "total" : 990,
-        "per100KInhabitants" : 0
+        "new" : 3,
+        "trend" : 3,
+        "total" : 993,
+        "per100KInhabitants" : 0.45231336355209351
       },
       "hospitalAdmissions" : {
-        "new" : 3,
-        "trend" : -10,
-        "total" : 2938,
-        "per100KInhabitants" : 0.45231336355209351
+        "new" : 19,
+        "trend" : 16,
+        "total" : 2957,
+        "per100KInhabitants" : 2.8646512031555176
       },
       "regionCode" : "VR21",
       "provinceName" : "Noord-Brabant"
@@ -50,22 +50,22 @@
     {
       "securityRegionName" : "Brabant-Zuidoost",
       "positiveCases" : {
-        "new" : 406,
-        "trend" : -99,
-        "total" : 76920,
-        "per100KInhabitants" : 52.010540008544922
+        "new" : 391,
+        "trend" : -11,
+        "total" : 77299,
+        "per100KInhabitants" : 50.088966369628906
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 967,
-        "per100KInhabitants" : 0
+        "new" : 1,
+        "trend" : 1,
+        "total" : 968,
+        "per100KInhabitants" : 0.1281047910451889
       },
       "hospitalAdmissions" : {
-        "new" : 14,
+        "new" : 16,
         "trend" : 2,
-        "total" : 3799,
-        "per100KInhabitants" : 1.7934669256210327
+        "total" : 3815,
+        "per100KInhabitants" : 2.0496766567230225
       },
       "regionCode" : "VR22",
       "provinceName" : "Noord-Brabant"
@@ -73,22 +73,22 @@
     {
       "securityRegionName" : "Drenthe",
       "positiveCases" : {
-        "new" : 153,
-        "trend" : -41,
-        "total" : 31269,
-        "per100KInhabitants" : 30.991609573364258
+        "new" : 113,
+        "trend" : -40,
+        "total" : 31382,
+        "per100KInhabitants" : 22.889228820800781
       },
       "deaths" : {
-        "new" : 1,
-        "trend" : 0,
+        "new" : 0,
+        "trend" : -1,
         "total" : 345,
-        "per100KInhabitants" : 0.20255954563617706
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 4,
-        "trend" : 3,
-        "total" : 1125,
-        "per100KInhabitants" : 0.81023818254470825
+        "new" : 6,
+        "trend" : 2,
+        "total" : 1132,
+        "per100KInhabitants" : 1.2153571844100952
       },
       "regionCode" : "VR03",
       "provinceName" : "Drenthe"
@@ -96,22 +96,22 @@
     {
       "securityRegionName" : "Flevoland",
       "positiveCases" : {
-        "new" : 142,
-        "trend" : -82,
-        "total" : 34010,
-        "per100KInhabitants" : 33.568073272705078
+        "new" : 132,
+        "trend" : -9,
+        "total" : 34141,
+        "per100KInhabitants" : 31.204126358032227
       },
       "deaths" : {
-        "new" : 1,
-        "trend" : 1,
+        "new" : 0,
+        "trend" : -1,
         "total" : 234,
-        "per100KInhabitants" : 0.23639488220214844
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 4,
-        "trend" : 1,
-        "total" : 871,
-        "per100KInhabitants" : 0.94557952880859375
+        "new" : 3,
+        "trend" : -1,
+        "total" : 874,
+        "per100KInhabitants" : 0.70918464660644531
       },
       "regionCode" : "VR25",
       "provinceName" : "Flevoland"
@@ -119,22 +119,22 @@
     {
       "securityRegionName" : "Fryslân",
       "positiveCases" : {
-        "new" : 219,
-        "trend" : -79,
-        "total" : 39772,
-        "per100KInhabitants" : 33.694538116455078
+        "new" : 147,
+        "trend" : -70,
+        "total" : 39917,
+        "per100KInhabitants" : 22.616880416870117
       },
       "deaths" : {
-        "new" : 1,
+        "new" : 0,
         "trend" : -1,
         "total" : 466,
-        "per100KInhabitants" : 0.15385633707046509
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 2,
-        "trend" : 0,
-        "total" : 1303,
-        "per100KInhabitants" : 0.30771267414093018
+        "new" : 13,
+        "trend" : 11,
+        "total" : 1317,
+        "per100KInhabitants" : 2.0001323223114014
       },
       "regionCode" : "VR02",
       "provinceName" : "Fryslân"
@@ -142,22 +142,22 @@
     {
       "securityRegionName" : "Gelderland-Midden",
       "positiveCases" : {
-        "new" : 230,
-        "trend" : -149,
-        "total" : 56404,
-        "per100KInhabitants" : 33.016326904296875
+        "new" : 272,
+        "trend" : 44,
+        "total" : 56670,
+        "per100KInhabitants" : 39.045394897460938
       },
       "deaths" : {
-        "new" : 3,
-        "trend" : 2,
-        "total" : 568,
-        "per100KInhabitants" : 0.43064779043197632
+        "new" : 1,
+        "trend" : -2,
+        "total" : 569,
+        "per100KInhabitants" : 0.14354924857616425
       },
       "hospitalAdmissions" : {
-        "new" : 10,
-        "trend" : 4,
-        "total" : 1696,
-        "per100KInhabitants" : 1.4354926347732544
+        "new" : 6,
+        "trend" : -4,
+        "total" : 1702,
+        "per100KInhabitants" : 0.86129558086395264
       },
       "regionCode" : "VR07",
       "provinceName" : "Gelderland"
@@ -165,22 +165,22 @@
     {
       "securityRegionName" : "Gelderland-Zuid",
       "positiveCases" : {
-        "new" : 368,
-        "trend" : 47,
-        "total" : 51239,
-        "per100KInhabitants" : 65.52752685546875
+        "new" : 280,
+        "trend" : -85,
+        "total" : 51516,
+        "per100KInhabitants" : 49.857906341552734
       },
       "deaths" : {
-        "new" : 1,
-        "trend" : 1,
+        "new" : 0,
+        "trend" : -1,
         "total" : 666,
-        "per100KInhabitants" : 0.17806394398212433
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 10,
-        "trend" : 5,
-        "total" : 2279,
-        "per100KInhabitants" : 1.7806394100189209
+        "new" : 12,
+        "trend" : 1,
+        "total" : 2292,
+        "per100KInhabitants" : 2.1367673873901367
       },
       "regionCode" : "VR08",
       "provinceName" : "Gelderland"
@@ -188,22 +188,22 @@
     {
       "securityRegionName" : "Gooi en Vechtstreek",
       "positiveCases" : {
-        "new" : 80,
-        "trend" : -25,
-        "total" : 20276,
-        "per100KInhabitants" : 31.11932373046875
+        "new" : 78,
+        "trend" : -1,
+        "total" : 20352,
+        "per100KInhabitants" : 30.341339111328125
       },
       "deaths" : {
-        "new" : 2,
-        "trend" : 2,
+        "new" : 0,
+        "trend" : -2,
         "total" : 238,
-        "per100KInhabitants" : 0.77798306941986084
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 7,
-        "trend" : 7,
-        "total" : 439,
-        "per100KInhabitants" : 2.7229406833648682
+        "new" : 3,
+        "trend" : -3,
+        "total" : 441,
+        "per100KInhabitants" : 1.166974663734436
       },
       "regionCode" : "VR14",
       "provinceName" : "Noord-Holland"
@@ -211,10 +211,10 @@
     {
       "securityRegionName" : "Groningen",
       "positiveCases" : {
-        "new" : 160,
-        "trend" : 5,
-        "total" : 34581,
-        "per100KInhabitants" : 27.30999755859375
+        "new" : 112,
+        "trend" : -46,
+        "total" : 34691,
+        "per100KInhabitants" : 19.116998672485352
       },
       "deaths" : {
         "new" : 0,
@@ -223,10 +223,10 @@
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 7,
-        "trend" : 3,
-        "total" : 1304,
-        "per100KInhabitants" : 1.1948124170303345
+        "new" : 4,
+        "trend" : -3,
+        "total" : 1308,
+        "per100KInhabitants" : 0.68274998664855957
       },
       "regionCode" : "VR01",
       "provinceName" : "Groningen"
@@ -234,22 +234,22 @@
     {
       "securityRegionName" : "Haaglanden",
       "positiveCases" : {
-        "new" : 523,
-        "trend" : -244,
-        "total" : 100314,
-        "per100KInhabitants" : 46.820545196533203
+        "new" : 509,
+        "trend" : -9,
+        "total" : 100817,
+        "per100KInhabitants" : 45.567222595214844
       },
       "deaths" : {
         "new" : 1,
         "trend" : 0,
-        "total" : 1011,
+        "total" : 1012,
         "per100KInhabitants" : 0.089523032307624817
       },
       "hospitalAdmissions" : {
-        "new" : 21,
-        "trend" : 15,
-        "total" : 4034,
-        "per100KInhabitants" : 1.8799835443496704
+        "new" : 19,
+        "trend" : -2,
+        "total" : 4053,
+        "per100KInhabitants" : 1.7009375095367432
       },
       "regionCode" : "VR15",
       "provinceName" : "Zuid-Holland"
@@ -257,22 +257,22 @@
     {
       "securityRegionName" : "Hollands-Midden",
       "positiveCases" : {
-        "new" : 428,
-        "trend" : 195,
-        "total" : 75620,
-        "per100KInhabitants" : 52.913978576660156
+        "new" : 334,
+        "trend" : -92,
+        "total" : 75952,
+        "per100KInhabitants" : 41.292682647705078
       },
       "deaths" : {
-        "new" : 2,
-        "trend" : 2,
+        "new" : 0,
+        "trend" : -2,
         "total" : 745,
-        "per100KInhabitants" : 0.24726156890392303
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 17,
-        "trend" : 9,
-        "total" : 2644,
-        "per100KInhabitants" : 2.1017234325408936
+        "new" : 14,
+        "trend" : -2,
+        "total" : 2657,
+        "per100KInhabitants" : 1.7308310270309448
       },
       "regionCode" : "VR16",
       "provinceName" : "Zuid-Holland"
@@ -280,21 +280,21 @@
     {
       "securityRegionName" : "IJsselland",
       "positiveCases" : {
-        "new" : 187,
-        "trend" : -1,
-        "total" : 38877,
-        "per100KInhabitants" : 35.193904876708984
+        "new" : 172,
+        "trend" : -15,
+        "total" : 39049,
+        "per100KInhabitants" : 32.370864868164062
       },
       "deaths" : {
         "new" : 1,
-        "trend" : 1,
-        "total" : 433,
+        "trend" : 0,
+        "total" : 434,
         "per100KInhabitants" : 0.18820270895957947
       },
       "hospitalAdmissions" : {
         "new" : 6,
-        "trend" : 3,
-        "total" : 1054,
+        "trend" : 0,
+        "total" : 1060,
         "per100KInhabitants" : 1.129216194152832
       },
       "regionCode" : "VR04",
@@ -303,22 +303,22 @@
     {
       "securityRegionName" : "Kennemerland",
       "positiveCases" : {
-        "new" : 182,
-        "trend" : -59,
-        "total" : 45189,
-        "per100KInhabitants" : 33.094100952148438
+        "new" : 151,
+        "trend" : -31,
+        "total" : 45338,
+        "per100KInhabitants" : 27.457191467285156
       },
       "deaths" : {
-        "new" : 2,
-        "trend" : 2,
+        "new" : 0,
+        "trend" : -2,
         "total" : 543,
-        "per100KInhabitants" : 0.36367142200469971
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 12,
-        "trend" : 11,
-        "total" : 1051,
-        "per100KInhabitants" : 2.1820282936096191
+        "new" : 3,
+        "trend" : -9,
+        "total" : 1054,
+        "per100KInhabitants" : 0.54550707340240479
       },
       "regionCode" : "VR12",
       "provinceName" : "Noord-Holland"
@@ -326,22 +326,22 @@
     {
       "securityRegionName" : "Limburg-Noord",
       "positiveCases" : {
-        "new" : 334,
-        "trend" : -75,
-        "total" : 56351,
-        "per100KInhabitants" : 64.228668212890625
+        "new" : 265,
+        "trend" : -69,
+        "total" : 56614,
+        "per100KInhabitants" : 50.959869384765625
       },
       "deaths" : {
-        "new" : 1,
-        "trend" : 0,
-        "total" : 701,
-        "per100KInhabitants" : 0.19230139255523682
+        "new" : 3,
+        "trend" : 2,
+        "total" : 704,
+        "per100KInhabitants" : 0.57690423727035522
       },
       "hospitalAdmissions" : {
-        "new" : 11,
-        "trend" : 10,
-        "total" : 1304,
-        "per100KInhabitants" : 2.1153154373168945
+        "new" : 3,
+        "trend" : -8,
+        "total" : 1307,
+        "per100KInhabitants" : 0.57690423727035522
       },
       "regionCode" : "VR23",
       "provinceName" : "Limburg"
@@ -349,22 +349,22 @@
     {
       "securityRegionName" : "Limburg-Zuid",
       "positiveCases" : {
-        "new" : 408,
-        "trend" : 17,
-        "total" : 47423,
-        "per100KInhabitants" : 68.320655822753906
+        "new" : 359,
+        "trend" : -46,
+        "total" : 47779,
+        "per100KInhabitants" : 60.115474700927734
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : -2,
-        "total" : 891,
-        "per100KInhabitants" : 0
+        "new" : 2,
+        "trend" : 2,
+        "total" : 893,
+        "per100KInhabitants" : 0.33490514755249023
       },
       "hospitalAdmissions" : {
-        "new" : 9,
-        "trend" : 2,
-        "total" : 2071,
-        "per100KInhabitants" : 1.5070731639862061
+        "new" : 12,
+        "trend" : 3,
+        "total" : 2083,
+        "per100KInhabitants" : 2.0094308853149414
       },
       "regionCode" : "VR24",
       "provinceName" : "Limburg"
@@ -372,22 +372,22 @@
     {
       "securityRegionName" : "Midden- en West-Brabant",
       "positiveCases" : {
-        "new" : 512,
-        "trend" : -96,
-        "total" : 102229,
-        "per100KInhabitants" : 45.751583099365234
+        "new" : 518,
+        "trend" : 5,
+        "total" : 102748,
+        "per100KInhabitants" : 46.287734985351562
       },
       "deaths" : {
-        "new" : 1,
-        "trend" : 1,
+        "new" : 0,
+        "trend" : -1,
         "total" : 1112,
-        "per100KInhabitants" : 0.089358560740947723
+        "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 27,
-        "trend" : 23,
-        "total" : 4661,
-        "per100KInhabitants" : 2.4126811027526855
+        "new" : 19,
+        "trend" : -8,
+        "total" : 4681,
+        "per100KInhabitants" : 1.697812557220459
       },
       "regionCode" : "VR20",
       "provinceName" : "Noord-Brabant"
@@ -395,22 +395,22 @@
     {
       "securityRegionName" : "Noord- en Oost-Gelderland",
       "positiveCases" : {
-        "new" : 229,
-        "trend" : -228,
-        "total" : 62777,
-        "per100KInhabitants" : 27.665992736816406
+        "new" : 260,
+        "trend" : 32,
+        "total" : 63033,
+        "per100KInhabitants" : 31.411170959472656
       },
       "deaths" : {
-        "new" : 3,
-        "trend" : 3,
-        "total" : 748,
-        "per100KInhabitants" : 0.36243659257888794
+        "new" : 1,
+        "trend" : -2,
+        "total" : 749,
+        "per100KInhabitants" : 0.12081219255924225
       },
       "hospitalAdmissions" : {
-        "new" : 14,
-        "trend" : -3,
-        "total" : 2450,
-        "per100KInhabitants" : 1.6913707256317139
+        "new" : 9,
+        "trend" : -5,
+        "total" : 2459,
+        "per100KInhabitants" : 1.087309718132019
       },
       "regionCode" : "VR06",
       "provinceName" : "Gelderland"
@@ -418,21 +418,21 @@
     {
       "securityRegionName" : "Noord-Holland-Noord",
       "positiveCases" : {
-        "new" : 191,
-        "trend" : -175,
-        "total" : 60806,
-        "per100KInhabitants" : 28.819400787353516
+        "new" : 181,
+        "trend" : -11,
+        "total" : 60987,
+        "per100KInhabitants" : 27.310531616210938
       },
       "deaths" : {
         "new" : 1,
-        "trend" : 1,
-        "total" : 467,
+        "trend" : 0,
+        "total" : 468,
         "per100KInhabitants" : 0.1508869081735611
       },
       "hospitalAdmissions" : {
         "new" : 4,
-        "trend" : -4,
-        "total" : 2230,
+        "trend" : 0,
+        "total" : 2234,
         "per100KInhabitants" : 0.60354763269424438
       },
       "regionCode" : "VR10",
@@ -441,22 +441,22 @@
     {
       "securityRegionName" : "Rotterdam-Rijnmond",
       "positiveCases" : {
-        "new" : 925,
-        "trend" : 134,
-        "total" : 139923,
-        "per100KInhabitants" : 69.893928527832031
+        "new" : 646,
+        "trend" : -279,
+        "total" : 140568,
+        "per100KInhabitants" : 48.812408447265625
       },
       "deaths" : {
-        "new" : 2,
-        "trend" : -1,
-        "total" : 1850,
-        "per100KInhabitants" : 0.15112200379371643
+        "new" : 4,
+        "trend" : 2,
+        "total" : 1854,
+        "per100KInhabitants" : 0.30224400758743286
       },
       "hospitalAdmissions" : {
-        "new" : 14,
-        "trend" : -27,
-        "total" : 6640,
-        "per100KInhabitants" : 1.0578540563583374
+        "new" : 104,
+        "trend" : 90,
+        "total" : 6746,
+        "per100KInhabitants" : 7.8583440780639648
       },
       "regionCode" : "VR17",
       "provinceName" : "Zuid-Holland"
@@ -464,22 +464,22 @@
     {
       "securityRegionName" : "Twente",
       "positiveCases" : {
-        "new" : 214,
-        "trend" : -190,
-        "total" : 60370,
-        "per100KInhabitants" : 33.910984039306641
+        "new" : 408,
+        "trend" : 195,
+        "total" : 60776,
+        "per100KInhabitants" : 64.652717590332031
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 679,
-        "per100KInhabitants" : 0
+        "new" : 1,
+        "trend" : 1,
+        "total" : 680,
+        "per100KInhabitants" : 0.15846253931522369
       },
       "hospitalAdmissions" : {
-        "new" : 6,
-        "trend" : -8,
-        "total" : 2362,
-        "per100KInhabitants" : 0.95077520608901978
+        "new" : 7,
+        "trend" : 1,
+        "total" : 2369,
+        "per100KInhabitants" : 1.1092377901077271
       },
       "regionCode" : "VR05",
       "provinceName" : "Overijssel"
@@ -487,22 +487,22 @@
     {
       "securityRegionName" : "Utrecht",
       "positiveCases" : {
-        "new" : 482,
-        "trend" : -122,
-        "total" : 117264,
-        "per100KInhabitants" : 35.576313018798828
+        "new" : 488,
+        "trend" : 6,
+        "total" : 117750,
+        "per100KInhabitants" : 36.019172668457031
       },
       "deaths" : {
-        "new" : 4,
-        "trend" : 1,
-        "total" : 1252,
-        "per100KInhabitants" : 0.29523912072181702
+        "new" : 2,
+        "trend" : -2,
+        "total" : 1254,
+        "per100KInhabitants" : 0.14761956036090851
       },
       "hospitalAdmissions" : {
-        "new" : 13,
-        "trend" : 1,
-        "total" : 4214,
-        "per100KInhabitants" : 0.95952719449996948
+        "new" : 16,
+        "trend" : 2,
+        "total" : 4231,
+        "per100KInhabitants" : 1.1809564828872681
       },
       "regionCode" : "VR09",
       "provinceName" : "Utrecht"
@@ -510,22 +510,22 @@
     {
       "securityRegionName" : "Zaanstreek-Waterland",
       "positiveCases" : {
-        "new" : 144,
-        "trend" : 32,
-        "total" : 32843,
-        "per100KInhabitants" : 42.455081939697266
+        "new" : 139,
+        "trend" : -2,
+        "total" : 32979,
+        "per100KInhabitants" : 40.980949401855469
       },
       "deaths" : {
         "new" : 0,
-        "trend" : -1,
+        "trend" : 0,
         "total" : 341,
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 3,
-        "trend" : -7,
-        "total" : 1579,
-        "per100KInhabitants" : 0.88448089361190796
+        "new" : 5,
+        "trend" : 2,
+        "total" : 1584,
+        "per100KInhabitants" : 1.4741348028182983
       },
       "regionCode" : "VR11",
       "provinceName" : "Noord-Holland"
@@ -533,22 +533,22 @@
     {
       "securityRegionName" : "Zeeland",
       "positiveCases" : {
-        "new" : 138,
-        "trend" : -22,
-        "total" : 26402,
-        "per100KInhabitants" : 35.985481262207031
+        "new" : 236,
+        "trend" : 98,
+        "total" : 26638,
+        "per100KInhabitants" : 61.540386199951172
       },
       "deaths" : {
         "new" : 1,
-        "trend" : 1,
-        "total" : 235,
+        "trend" : 0,
+        "total" : 236,
         "per100KInhabitants" : 0.26076436042785645
       },
       "hospitalAdmissions" : {
-        "new" : 4,
-        "trend" : -2,
-        "total" : 1025,
-        "per100KInhabitants" : 1.0430574417114258
+        "new" : 5,
+        "trend" : 1,
+        "total" : 1030,
+        "per100KInhabitants" : 1.3038218021392822
       },
       "regionCode" : "VR19",
       "provinceName" : "Zeeland"
@@ -556,26 +556,26 @@
     {
       "securityRegionName" : "Zuid-Holland-Zuid",
       "positiveCases" : {
-        "new" : 194,
-        "trend" : -116,
-        "total" : 49935,
-        "per100KInhabitants" : 42.231658935546875
+        "new" : 273,
+        "trend" : 79,
+        "total" : 50208,
+        "per100KInhabitants" : 59.429088592529297
       },
       "deaths" : {
-        "new" : 4,
-        "trend" : 4,
-        "total" : 560,
-        "per100KInhabitants" : 0.87075585126876831
+        "new" : 1,
+        "trend" : -3,
+        "total" : 561,
+        "per100KInhabitants" : 0.21768896281719208
       },
       "hospitalAdmissions" : {
-        "new" : 7,
-        "trend" : 5,
-        "total" : 2250,
-        "per100KInhabitants" : 1.5238227844238281
+        "new" : 8,
+        "trend" : 1,
+        "total" : 2258,
+        "per100KInhabitants" : 1.7415117025375366
       },
       "regionCode" : "VR18",
       "provinceName" : "Zuid-Holland"
     }
   ],
-  "numbersDate" : "2021-05-04T02:00:00+02:00"
+  "numbersDate" : "2021-05-05T02:00:00+02:00"
 }

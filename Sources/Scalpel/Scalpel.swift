@@ -153,6 +153,32 @@ struct Scalpel: ParsableCommand {
             herdImmunityCurrentTrendDate: nil,
             herdImmunityEstimatedDate: nil
         )
+
+        // MARK: Home Admissions
+
+        let homeAdmissionEntries = try HomeAdmissions().entries()
+
+        let latestNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: homeAdmissionEntries)()
+        let previousNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: Array(homeAdmissionEntries.dropFirst()))()
+
+        let newHomeAdmissionsTrend = trend(today: latestNewHomeAdmissions, yesterday: previousNewHomeAdmissions)
+
+        let per100KNewHomeAdmissions = per100k(number: latestNewHomeAdmissions, population: nationalPopulation)
+
+        let latestActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: homeAdmissionEntries[0])()
+        let previousActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: homeAdmissionEntries[1])()
+
+        let activeHomeAdmissionsTrend = trend(today: latestActiveHomeAdmissions, yesterday: previousActiveHomeAdmissions)
+
+        let homeAdmissionsSummary = Occupancy(
+            newAdmissions: latestNewHomeAdmissions,
+            newAdmissionsTrend: newHomeAdmissionsTrend,
+            newAdmissionsPer100KInhabitants: per100KNewHomeAdmissions,
+            currentlyOccupied: latestActiveHomeAdmissions,
+            currentlyOccupiedTrend: activeHomeAdmissionsTrend
+        )
+
+        // MARK: Vaccinations
         
         let vaccinationEntries = try Vaccinations().administered()
         let vaccinationDeliveries = try Vaccinations().deliveries()
@@ -194,6 +220,7 @@ struct Scalpel: ParsableCommand {
                               hospitalAdmissions: nationalHospitalizationsSummary,
                               hospitalOccupancy: hospitalOccupancy,
                               intensiveCareOccupancy: intensiveCareOccupancy,
+                              homeAdmissions: homeAdmissionsSummary,
                               deaths: summarizedNumbers.deaths,
                               vaccinations: vaccinationsSummaryNumbers)
         
@@ -286,6 +313,7 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
+                homeAdmissions: nil,
                 deaths: summarizedNumbers.deaths,
                 vaccinations: nil
             )
@@ -368,6 +396,7 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
+                homeAdmissions: nil,
                 deaths: summarizedNumbers.deaths,
                 vaccinations: nil
             )
@@ -463,6 +492,7 @@ struct Scalpel: ParsableCommand {
                 hospitalAdmissions: summarizedNumbers.hospitalAdmissions,
                 hospitalOccupancy: nil,
                 intensiveCareOccupancy: nil,
+                homeAdmissions: nil,
                 deaths: summarizedNumbers.deaths,
                 vaccinations: nil
             )
@@ -567,6 +597,7 @@ private extension Summary {
                 hospitalAdmissions: hospitalAdmissions,
                 hospitalOccupancy: hospitalOccupancy,
                 intensiveCareOccupancy: intensiveCareOccupancy,
+                homeAdmissions: homeAdmissions,
                 deaths: deaths,
                 vaccinations: vaccinations)
     }

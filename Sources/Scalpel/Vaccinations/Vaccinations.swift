@@ -32,9 +32,7 @@ struct Vaccinations {
         let fileURL = Bundle.module.url(forResource: resourceName, withExtension: "csv")!
         let fileData = try Data(contentsOf: fileURL)
 
-        let areas = try decoder.decode([VaccinationsEntry].self, from: fileData)
-
-        return areas
+        return try decoder.decode([VaccinationsEntry].self, from: fileData)
     }
 
 }

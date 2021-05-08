@@ -1,4 +1,4 @@
-name: Download and dissect RIVM, NICE and LCPS data
+name: Download and dissect latest data
 
 on:
   schedule:
@@ -21,7 +21,7 @@ jobs:
         git config --local user.email "marko@hungry.dev"
         git config --local user.name "infected-data Action"
         git add .
-        git commit -m 'Updates latest RIVM, NICE and LCPS data'
+        git commit -m 'Updates latest numbers'
 
     - name: Push changes
       uses: ad-m/github-push-action@master

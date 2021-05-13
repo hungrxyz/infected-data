@@ -11,6 +11,7 @@ struct HomeAdmissionsEntry {
 
     let totalActivated: Int
     let totalStopped: Int
+    let currentlyActive: Int
 
 }
 

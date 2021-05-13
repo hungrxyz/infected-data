@@ -26,6 +26,7 @@ struct Scalpel: ParsableCommand {
         var rivmIntensiveCareAdmissions: [RIVMIntensiveCareAdmissionsEntry]?
         var lcpsEntries: [LCPSEntry]?
         var reproductionNumberEntries: [RIVMReproductionNumbersEntry]?
+        var homeAdmissionEntries: [HomeAdmissionsEntry]!
         
         let group = DispatchGroup()
         
@@ -58,6 +59,12 @@ struct Scalpel: ParsableCommand {
         group.enter()
         rivmAPI.reproductionNumber { result in
             reproductionNumberEntries = try! result.get()
+            group.leave()
+        }
+
+        group.enter()
+        HomeAdmissionsAPI().admissions { result in
+            homeAdmissionEntries = try! result.get()
             group.leave()
         }
         
@@ -155,8 +162,6 @@ struct Scalpel: ParsableCommand {
         )
 
         // MARK: Home Admissions
-
-        let homeAdmissionEntries = try HomeAdmissions().entries()
 
         let latestNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: homeAdmissionEntries)()
         let previousNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: Array(homeAdmissionEntries.dropFirst()))()

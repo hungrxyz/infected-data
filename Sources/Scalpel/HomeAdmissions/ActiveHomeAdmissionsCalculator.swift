@@ -12,7 +12,7 @@ struct ActiveHomeAdmissionsCalculator {
     let entry: HomeAdmissionsEntry
 
     func callAsFunction() -> Int {
-        entry.totalActivated - entry.totalStopped
+        entry.currentlyActive.doubled()
     }
 
 }

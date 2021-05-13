@@ -12,7 +12,7 @@ struct NewHomeAdmissionsCalculator {
     let entries: [HomeAdmissionsEntry]
 
     func callAsFunction() -> Int {
-        entries[0].totalActivated - entries[1].totalActivated
+        entries[0].totalActivated.doubled() - entries[1].totalActivated.doubled()
     }
 
 }

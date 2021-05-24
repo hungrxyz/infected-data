@@ -45,5 +45,6 @@ struct Occupancy: Encodable {
     let newAdmissionsPer100KInhabitants: Float?
     let currentlyOccupied: Int?
     let currentlyOccupiedTrend: Int?
+    let currentlyOccupiedPer100KInhabitants: Float?
 
 }

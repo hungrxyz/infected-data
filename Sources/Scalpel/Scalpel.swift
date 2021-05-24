@@ -115,7 +115,8 @@ struct Scalpel: ParsableCommand {
                 newAdmissionsTrend: trend(today: latestNationalRIVMHospitalAdmissions, yesterday: previousNationalRIVMHospitalAdmissions),
                 newAdmissionsPer100KInhabitants: per100k(number: latestNationalRIVMHospitalAdmissions, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
-                currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
+                currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy),
+                currentlyOccupiedPer100KInhabitants: latestLCPSEntry.clinicCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
             )
         } else {
             hospitalOccupancy = nil
@@ -134,7 +135,8 @@ struct Scalpel: ParsableCommand {
                 newAdmissionsTrend: trend(today: latestIntensiveCareAdmissions, yesterday: previousIntensiveCareAdmissions),
                 newAdmissionsPer100KInhabitants: per100k(number: latestIntensiveCareAdmissions, population: nationalPopulation),
                 currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
-                currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
+                currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy),
+                currentlyOccupiedPer100KInhabitants: latestLCPSEntry.intensiveCareCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
             )
         } else {
             intensiveCareOccupancy = nil
@@ -175,12 +177,15 @@ struct Scalpel: ParsableCommand {
 
         let activeHomeAdmissionsTrend = trend(today: latestActiveHomeAdmissions, yesterday: previousActiveHomeAdmissions)
 
+        let per100KActiveHomeAdmissions = per100k(number: latestActiveHomeAdmissions, population: nationalPopulation)
+
         let homeAdmissionsSummary = Occupancy(
             newAdmissions: latestNewHomeAdmissions,
             newAdmissionsTrend: newHomeAdmissionsTrend,
             newAdmissionsPer100KInhabitants: per100KNewHomeAdmissions,
             currentlyOccupied: latestActiveHomeAdmissions,
-            currentlyOccupiedTrend: activeHomeAdmissionsTrend
+            currentlyOccupiedTrend: activeHomeAdmissionsTrend,
+            currentlyOccupiedPer100KInhabitants: per100KActiveHomeAdmissions
         )
 
         // MARK: Vaccinations

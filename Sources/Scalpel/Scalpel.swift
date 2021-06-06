@@ -27,6 +27,7 @@ struct Scalpel: ParsableCommand {
         var lcpsEntries: [LCPSEntry]?
         var reproductionNumberEntries: [RIVMReproductionNumbersEntry]?
         var homeAdmissionEntries: [HomeAdmissionsEntry]!
+        var vaccinationEntries: [VaccinationsEntry]!
         
         let group = DispatchGroup()
         
@@ -69,7 +70,12 @@ struct Scalpel: ParsableCommand {
         }
 
         group.enter()
-        CoronaDashboardAPI().scrapeVaccinations(calendar: calendar) {
+        CoronaDashboardAPI().scrapeVaccinations(calendar: calendar) { entries in
+            if let entries = entries {
+                vaccinationEntries = entries
+            } else {
+                vaccinationEntries = try! Vaccinations().administered()
+            }
             group.leave()
         }
         
@@ -194,8 +200,7 @@ struct Scalpel: ParsableCommand {
         )
 
         // MARK: Vaccinations
-        
-        let vaccinationEntries = try Vaccinations().administered()
+
         let vaccinationDeliveries = try Vaccinations().deliveries()
         
         let currentVaccinationsTotal = vaccinationEntries.last!.doses

@@ -34,7 +34,6 @@ struct Vaccinations {
             .appendingPathComponent("Scalpel")
             .appendingPathComponent("Vaccinations")
             .appendingPathComponent("vaccinations_administered.csv")
-//        let fileURL = Bundle.module.url(forResource: "vaccinations_administered", withExtension: "csv")!
 
         try encoder.encode(entries, into: fileURL)
     }

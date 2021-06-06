@@ -2,7 +2,7 @@ name: Download and dissect latest data
 
 on:
   schedule:
-    - cron: "25 13,15,17,19,21 * * *"
+    - cron: "15 13,14,15,16,17,18,19 * * *"
   
   workflow_dispatch:
 

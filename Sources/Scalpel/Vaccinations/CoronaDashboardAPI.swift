@@ -11,7 +11,7 @@ import CodableCSV
 
 struct CoronaDashboardAPI {
 
-    func scrapeVaccinations(calendar: Calendar, completion: @escaping () -> Void) {
+    func scrapeVaccinations(calendar: Calendar, completion: @escaping ([VaccinationsEntry]?) -> Void) {
         let url = URL(string: "https://coronadashboard.government.nl/landelijk/vaccinaties")!
 
         URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -24,7 +24,7 @@ struct CoronaDashboardAPI {
             let vaxNumberString = try? vaxDiv?.text().components(separatedBy: " ")[1].components(separatedBy: ",").joined()
 
             guard let vaxNumber = vaxNumberString.flatMap(Int.init) else {
-                completion()
+                completion(nil)
                 return
             }
 
@@ -36,7 +36,7 @@ struct CoronaDashboardAPI {
             // Current vax number should be larger than last one.
             // Otherwise there's no need to update.
             guard vaxNumber > lastEntry.doses else {
-                completion()
+                completion(nil)
                 return
             }
 
@@ -49,7 +49,7 @@ struct CoronaDashboardAPI {
 
             try! vaccinations.update(entries: vaccinationEntries)
 
-            completion()
+            completion(vaccinationEntries)
         }.resume()
 
     }

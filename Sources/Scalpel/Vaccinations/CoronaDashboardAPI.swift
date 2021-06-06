@@ -23,9 +23,7 @@ struct CoronaDashboardAPI {
 
             let vaxNumberString = try? vaxDiv?.text().components(separatedBy: " ")[1].components(separatedBy: ",").joined()
 
-            let vaxNumber = vaxNumberString.flatMap(Int.init)
-
-            guard let vaxNumber = vaxNumber else {
+            guard let vaxNumber = vaxNumberString.flatMap(Int.init) else {
                 completion()
                 return
             }

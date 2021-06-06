@@ -11,7 +11,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.3.0")),
         .package(url: "https://github.com/dehesa/CodableCSV.git", .upToNextMinor(from: "0.6.3")),
-        .package(url: "https://github.com/scinfu/SwiftSoup.git", .upToNextMinor(from: "1.7.4"))
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", .upToNextMinor(from: "2.3.0"))
     ],
     targets: [
         .target(

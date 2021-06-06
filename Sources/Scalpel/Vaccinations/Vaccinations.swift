@@ -18,6 +18,27 @@ struct Vaccinations {
         try entries(resourceName: "vaccinations_deliveries")
     }
 
+    func update(entries: [VaccinationsEntry]) throws {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        var configuration = CSVEncoder.Configuration()
+        configuration.delimiters.field = ","
+        configuration.headers = ["date", "doses", "dosage"]
+        configuration.dateStrategy = .formatted(dateFormatter)
+
+        let encoder = CSVEncoder(configuration: configuration)
+
+        let fileURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("Sources")
+            .appendingPathComponent("Scalpel")
+            .appendingPathComponent("Vaccinations")
+            .appendingPathComponent("vaccinations_administered.csv")
+//        let fileURL = Bundle.module.url(forResource: "vaccinations_administered", withExtension: "csv")!
+
+        try encoder.encode(entries, into: fileURL)
+    }
+
     private func entries(resourceName: String) throws -> [VaccinationsEntry] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

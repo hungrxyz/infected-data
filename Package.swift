@@ -10,14 +10,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.3.0")),
-        .package(url: "https://github.com/dehesa/CodableCSV.git", .upToNextMinor(from: "0.6.3"))
+        .package(url: "https://github.com/dehesa/CodableCSV.git", .upToNextMinor(from: "0.6.3")),
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", .upToNextMinor(from: "1.7.4"))
     ],
     targets: [
         .target(
             name: "Scalpel",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "CodableCSV", package: "CodableCSV")
+                .product(name: "CodableCSV", package: "CodableCSV"),
+                .product(name: "SwiftSoup", package: "SwiftSoup")
             ],
             resources: [
                 .process("CBS/Gebieden_in_Nederland_2020_07122020_202646.csv"),

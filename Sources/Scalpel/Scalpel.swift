@@ -67,6 +67,11 @@ struct Scalpel: ParsableCommand {
             homeAdmissionEntries = try! result.get()
             group.leave()
         }
+
+        group.enter()
+        CoronaDashboardAPI().scrapeVaccinations(calendar: calendar) {
+            group.leave()
+        }
         
         group.wait()
         

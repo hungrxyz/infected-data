@@ -15,5 +15,5 @@ struct VaccinationsEntry {
 
 }
 
-extension VaccinationsEntry: Decodable {
+extension VaccinationsEntry: Codable {
 }

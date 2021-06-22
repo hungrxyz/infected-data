@@ -24,5 +24,13 @@ extension LCPSEntry: Decodable {
         case clinicCOVIDOccupancy = "Kliniek_Bedden"
 
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        date = try container.decode(Date.self, forKey: .date)
+        intensiveCareCOVIDOccupancy = try? container.decode(Int.self, forKey: .intensiveCareCOVIDOccupancy)
+        clinicCOVIDOccupancy = try? container.decode(Int.self, forKey: .clinicCOVIDOccupancy)
+    }
 
 }

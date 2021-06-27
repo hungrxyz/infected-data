@@ -1,12 +1,12 @@
 {
-  "updatedAt" : "2021-06-26T21:23:25+02:00",
+  "updatedAt" : "2021-06-27T15:32:11+02:00",
   "regions" : [
     {
       "positiveCases" : {
-        "new" : 6,
-        "trend" : -1,
-        "total" : 34325,
-        "per100KInhabitants" : 1.2153571844100952
+        "new" : 4,
+        "trend" : -2,
+        "total" : 34329,
+        "per100KInhabitants" : 0.81023818254470825
       },
       "deaths" : {
         "new" : 0,
@@ -25,10 +25,10 @@
     },
     {
       "positiveCases" : {
-        "new" : 2,
-        "trend" : -4,
-        "total" : 37006,
-        "per100KInhabitants" : 0.47278976440429688
+        "new" : 8,
+        "trend" : 6,
+        "total" : 37014,
+        "per100KInhabitants" : 1.8911590576171875
       },
       "deaths" : {
         "new" : 0,
@@ -47,32 +47,32 @@
     },
     {
       "positiveCases" : {
-        "new" : 5,
-        "trend" : -8,
-        "total" : 43841,
-        "per100KInhabitants" : 0.76928162574768066
+        "new" : 11,
+        "trend" : 6,
+        "total" : 43852,
+        "per100KInhabitants" : 1.6924195289611816
       },
       "deaths" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 477,
-        "per100KInhabitants" : 0
-      },
-      "hospitalAdmissions" : {
         "new" : 1,
         "trend" : 1,
-        "total" : 1452,
+        "total" : 478,
         "per100KInhabitants" : 0.15385633707046509
+      },
+      "hospitalAdmissions" : {
+        "new" : 0,
+        "trend" : -1,
+        "total" : 1452,
+        "per100KInhabitants" : 0
       },
       "regionCode" : "PV21",
       "provinceName" : "Fryslân"
     },
     {
       "positiveCases" : {
-        "new" : 52,
-        "trend" : -11,
-        "total" : 189041,
-        "per100KInhabitants" : 2.4928665161132812
+        "new" : 61,
+        "trend" : 9,
+        "total" : 189101,
+        "per100KInhabitants" : 2.9243242740631104
       },
       "deaths" : {
         "new" : 0,
@@ -81,20 +81,20 @@
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 2,
-        "trend" : 2,
+        "new" : 0,
+        "trend" : -2,
         "total" : 7043,
-        "per100KInhabitants" : 0.095879487693309784
+        "per100KInhabitants" : 0
       },
       "regionCode" : "PV25",
       "provinceName" : "Gelderland"
     },
     {
       "positiveCases" : {
-        "new" : 12,
-        "trend" : -1,
-        "total" : 37986,
-        "per100KInhabitants" : 2.0482499599456787
+        "new" : 4,
+        "trend" : -8,
+        "total" : 37990,
+        "per100KInhabitants" : 0.68274998664855957
       },
       "deaths" : {
         "new" : 0,
@@ -103,10 +103,10 @@
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : 1,
+        "new" : 0,
+        "trend" : -1,
         "total" : 1406,
-        "per100KInhabitants" : 0.17068749666213989
+        "per100KInhabitants" : 0
       },
       "regionCode" : "PV20",
       "provinceName" : "Groningen"
@@ -114,64 +114,64 @@
     {
       "positiveCases" : {
         "new" : 21,
-        "trend" : -11,
-        "total" : 115910,
+        "trend" : 0,
+        "total" : 115931,
         "per100KInhabitants" : 1.8796976804733276
       },
       "deaths" : {
         "new" : 0,
-        "trend" : -1,
+        "trend" : 0,
         "total" : 1657,
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : 0,
+        "new" : 0,
+        "trend" : -1,
         "total" : 3679,
-        "per100KInhabitants" : 0.08950941264629364
+        "per100KInhabitants" : 0
       },
       "regionCode" : "PV31",
       "provinceName" : "Limburg"
     },
     {
       "positiveCases" : {
-        "new" : 97,
-        "trend" : 12,
-        "total" : 273169,
-        "per100KInhabitants" : 3.784693717956543
+        "new" : 68,
+        "trend" : -29,
+        "total" : 273234,
+        "per100KInhabitants" : 2.6531875133514404
       },
       "deaths" : {
         "new" : 0,
-        "trend" : -1,
+        "trend" : 0,
         "total" : 3134,
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : -1,
-        "total" : 12279,
-        "per100KInhabitants" : 0.039017461240291595
+        "new" : 2,
+        "trend" : 1,
+        "total" : 12281,
+        "per100KInhabitants" : 0.078034922480583191
       },
       "regionCode" : "PV30",
       "provinceName" : "Noord-Brabant"
     },
     {
       "positiveCases" : {
-        "new" : 109,
-        "trend" : -3,
-        "total" : 278429,
-        "per100KInhabitants" : 3.7853438854217529
+        "new" : 105,
+        "trend" : -2,
+        "total" : 278526,
+        "per100KInhabitants" : 3.6464323997497559
       },
       "deaths" : {
         "new" : 0,
-        "trend" : -1,
+        "trend" : 0,
         "total" : 2627,
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
         "new" : 1,
-        "trend" : -1,
-        "total" : 9920,
+        "trend" : 0,
+        "total" : 9921,
         "per100KInhabitants" : 0.034727927297353745
       },
       "regionCode" : "PV27",
@@ -179,10 +179,10 @@
     },
     {
       "positiveCases" : {
-        "new" : 47,
-        "trend" : 19,
-        "total" : 110570,
-        "per100KInhabitants" : 4.0433378219604492
+        "new" : 33,
+        "trend" : -11,
+        "total" : 110600,
+        "per100KInhabitants" : 2.8389391899108887
       },
       "deaths" : {
         "new" : 0,
@@ -191,20 +191,20 @@
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 1,
-        "trend" : 0,
+        "new" : 0,
+        "trend" : -1,
         "total" : 3751,
-        "per100KInhabitants" : 0.086028464138507843
+        "per100KInhabitants" : 0
       },
       "regionCode" : "PV23",
       "provinceName" : "Overijssel"
     },
     {
       "positiveCases" : {
-        "new" : 48,
-        "trend" : -10,
-        "total" : 128637,
-        "per100KInhabitants" : 3.5428693294525146
+        "new" : 39,
+        "trend" : -9,
+        "total" : 128676,
+        "per100KInhabitants" : 2.8785815238952637
       },
       "deaths" : {
         "new" : 0,
@@ -213,20 +213,20 @@
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 0,
-        "trend" : 0,
-        "total" : 4521,
-        "per100KInhabitants" : 0
+        "new" : 1,
+        "trend" : 1,
+        "total" : 4522,
+        "per100KInhabitants" : 0.073809780180454254
       },
       "regionCode" : "PV26",
       "provinceName" : "Utrecht"
     },
     {
       "positiveCases" : {
-        "new" : 13,
-        "trend" : -8,
-        "total" : 29904,
-        "per100KInhabitants" : 3.3899366855621338
+        "new" : 21,
+        "trend" : 8,
+        "total" : 29925,
+        "per100KInhabitants" : 5.4760513305664062
       },
       "deaths" : {
         "new" : 0,
@@ -245,26 +245,26 @@
     },
     {
       "positiveCases" : {
-        "new" : 157,
-        "trend" : -58,
-        "total" : 403955,
-        "per100KInhabitants" : 4.2332940101623535
+        "new" : 147,
+        "trend" : -9,
+        "total" : 404093,
+        "per100KInhabitants" : 3.9636571407318115
       },
       "deaths" : {
         "new" : 0,
-        "trend" : -2,
+        "trend" : 0,
         "total" : 4290,
         "per100KInhabitants" : 0
       },
       "hospitalAdmissions" : {
-        "new" : 8,
-        "trend" : 6,
-        "total" : 17135,
-        "per100KInhabitants" : 0.21570925414562225
+        "new" : 2,
+        "trend" : -6,
+        "total" : 17137,
+        "per100KInhabitants" : 0.053927313536405563
       },
       "regionCode" : "PV28",
       "provinceName" : "Zuid-Holland"
     }
   ],
-  "numbersDate" : "2021-06-26T02:00:00+02:00"
+  "numbersDate" : "2021-06-27T02:00:00+02:00"
 }

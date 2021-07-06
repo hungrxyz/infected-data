@@ -1,31 +1,31 @@
 {
   "hospitalOccupancy" : {
-    "newAdmissionsTrend" : 0,
-    "currentlyOccupiedTrend" : 0,
-    "currentlyOccupied" : 126,
-    "newAdmissionsPer100KInhabitants" : 0.017233867198228836,
-    "newAdmissions" : 3,
-    "currentlyOccupiedPer100KInhabitants" : 0.72382247447967529
+    "newAdmissionsTrend" : 12,
+    "currentlyOccupiedTrend" : -17,
+    "currentlyOccupied" : 109,
+    "newAdmissionsPer100KInhabitants" : 0.086169339716434479,
+    "newAdmissions" : 15,
+    "currentlyOccupiedPer100KInhabitants" : 0.62616384029388428
   },
-  "numbersDate" : "2021-07-05T02:00:00+02:00",
+  "numbersDate" : "2021-07-06T02:00:00+02:00",
   "positiveCases" : {
-    "new" : 1545,
-    "trend" : 322,
-    "percentageOfPopulation" : 0.81999999284744263,
-    "total" : 1690625,
-    "per100KInhabitants" : 8.8754415512084961
+    "new" : 2253,
+    "trend" : 728,
+    "percentageOfPopulation" : 0.97000002861022949,
+    "total" : 1692834,
+    "per100KInhabitants" : 12.942634582519531
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : -2,
-    "currentlyOccupiedTrend" : 11,
-    "currentlyOccupied" : 110,
-    "newAdmissionsPer100KInhabitants" : 0,
-    "newAdmissions" : 0,
-    "currentlyOccupiedPer100KInhabitants" : 0.63190847635269165
+    "newAdmissionsTrend" : 3,
+    "currentlyOccupiedTrend" : -7,
+    "currentlyOccupied" : 103,
+    "newAdmissionsPer100KInhabitants" : 0.017233867198228836,
+    "newAdmissions" : 3,
+    "currentlyOccupiedPer100KInhabitants" : 0.59169608354568481
   },
   "homeAdmissions" : {
     "newAdmissionsTrend" : 0,
-    "currentlyOccupiedTrend" : -4,
+    "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 20,
     "newAdmissionsPer100KInhabitants" : 0,
     "newAdmissions" : 0,
@@ -33,24 +33,24 @@
   },
   "deaths" : {
     "new" : 1,
-    "trend" : 1,
-    "total" : 17757,
+    "trend" : 0,
+    "total" : 17758,
     "per100KInhabitants" : 0.0057446225546300411
   },
   "hospitalAdmissions" : {
-    "new" : 3,
-    "trend" : 0,
-    "total" : 66541,
-    "per100KInhabitants" : 0.017233867198228836
+    "new" : 15,
+    "trend" : 12,
+    "total" : 66554,
+    "per100KInhabitants" : 0.086169339716434479
   },
-  "updatedAt" : "2021-07-05T21:23:30+02:00",
+  "updatedAt" : "2021-07-06T15:32:23+02:00",
   "vaccinations" : {
     "trend" : -12012,
     "percentageOfPopulation" : 0.49760660529136658,
     "average" : 197677,
-    "herdImmunityEstimatedDate" : "2021-08-12T02:00:00+02:00",
+    "herdImmunityEstimatedDate" : "2021-08-13T02:00:00+02:00",
     "total" : 16726739,
-    "herdImmunityCurrentTrendDate" : "2021-08-09T02:00:00+02:00",
+    "herdImmunityCurrentTrendDate" : "2021-08-10T02:00:00+02:00",
     "new" : 129768
   },
   "regionCode" : "NL00"

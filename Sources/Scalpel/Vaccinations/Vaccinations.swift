@@ -24,7 +24,7 @@ struct Vaccinations {
 
         var configuration = CSVEncoder.Configuration()
         configuration.delimiters.field = ","
-        configuration.headers = ["date", "doses", "dosage"]
+        configuration.headers = ["date", "doses", "dosage", "fullyVaxxedPercentage"]
         configuration.dateStrategy = .formatted(dateFormatter)
 
         let encoder = CSVEncoder(configuration: configuration)

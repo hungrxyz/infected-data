@@ -43,7 +43,8 @@ struct CoronaDashboardAPI {
             let date = calendar.startOfDay(for: Date())
             let newEntry = VaccinationsEntry(date: date,
                                              doses: vaxNumber,
-                                             dosage: lastEntry.dosage)
+                                             dosage: lastEntry.dosage,
+                                             fullyVaxxedPercentage: lastEntry.fullyVaxxedPercentage)
 
             vaccinationEntries.append(newEntry)
 

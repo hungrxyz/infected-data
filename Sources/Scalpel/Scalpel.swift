@@ -116,38 +116,43 @@ struct Scalpel: ParsableCommand {
         let previousLCPSEntry = lcpsEntries?.first { calendar.isDateInYesterday($0.date) }
         
         // MARK: Hospital Occupancy
-        
-        let hospitalOccupancy: Occupancy?
-        if let latestLCPSEntry = latestLCPSEntry,
-           let previousLCPSEntry = previousLCPSEntry {
-            
-            hospitalOccupancy = Occupancy(
-                newAdmissions: latestNationalRIVMHospitalAdmissions,
-                newAdmissionsTrend: trend(today: latestNationalRIVMHospitalAdmissions, yesterday: previousNationalRIVMHospitalAdmissions),
-                newAdmissionsPer100KInhabitants: per100k(number: latestNationalRIVMHospitalAdmissions, population: nationalPopulation),
-                currentlyOccupied: latestLCPSEntry.clinicCOVIDOccupancy,
-                currentlyOccupiedTrend: trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy),
-                currentlyOccupiedPer100KInhabitants: latestLCPSEntry.clinicCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
-            )
+        let currentlyOccupiedHospitalBedsTrend: Int?
+        if let latestLCPSEntry = latestLCPSEntry, let previousLCPSEntry = previousLCPSEntry {
+            currentlyOccupiedHospitalBedsTrend = trend(today: latestLCPSEntry.clinicCOVIDOccupancy, yesterday: previousLCPSEntry.clinicCOVIDOccupancy)
         } else {
-            hospitalOccupancy = nil
+            currentlyOccupiedHospitalBedsTrend = nil
         }
         
+        let hospitalOccupancy = Occupancy(
+            newAdmissions: latestNationalRIVMHospitalAdmissions,
+            newAdmissionsTrend: trend(today: latestNationalRIVMHospitalAdmissions, yesterday: previousNationalRIVMHospitalAdmissions),
+            newAdmissionsPer100KInhabitants: per100k(number: latestNationalRIVMHospitalAdmissions, population: nationalPopulation),
+            currentlyOccupied: latestLCPSEntry?.clinicCOVIDOccupancy,
+            currentlyOccupiedTrend: currentlyOccupiedHospitalBedsTrend,
+            currentlyOccupiedPer100KInhabitants: latestLCPSEntry?.clinicCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
+        )
+
         // MARK: Intensive Care Occupancy
         
         let intensiveCareOccupancy: Occupancy?
         if let latestIntensiveCareAdmissions = latestIntensiveCareAdmissions,
-           let previousIntensiveCareAdmissions = previousIntensiveCareAdmissions,
-           let latestLCPSEntry = latestLCPSEntry,
-           let previousLCPSEntry = previousLCPSEntry {
+           let previousIntensiveCareAdmissions = previousIntensiveCareAdmissions {
+
+            let currentlyOccupiedBedsTrend: Int?
+            if let latestLCPSEntry = latestLCPSEntry, let previousLCPSEntry = previousLCPSEntry {
+                currentlyOccupiedBedsTrend = trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy,
+                                                   yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy)
+            } else {
+                currentlyOccupiedBedsTrend = nil
+            }
             
             intensiveCareOccupancy = Occupancy(
                 newAdmissions: latestIntensiveCareAdmissions,
                 newAdmissionsTrend: trend(today: latestIntensiveCareAdmissions, yesterday: previousIntensiveCareAdmissions),
                 newAdmissionsPer100KInhabitants: per100k(number: latestIntensiveCareAdmissions, population: nationalPopulation),
-                currentlyOccupied: latestLCPSEntry.intensiveCareCOVIDOccupancy,
-                currentlyOccupiedTrend: trend(today: latestLCPSEntry.intensiveCareCOVIDOccupancy, yesterday: previousLCPSEntry.intensiveCareCOVIDOccupancy),
-                currentlyOccupiedPer100KInhabitants: latestLCPSEntry.intensiveCareCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
+                currentlyOccupied: latestLCPSEntry?.intensiveCareCOVIDOccupancy,
+                currentlyOccupiedTrend: currentlyOccupiedBedsTrend,
+                currentlyOccupiedPer100KInhabitants: latestLCPSEntry?.intensiveCareCOVIDOccupancy.flatMap { per100k(number: $0, population: nationalPopulation) }
             )
         } else {
             intensiveCareOccupancy = nil
@@ -161,11 +166,11 @@ struct Scalpel: ParsableCommand {
                                                  population: nationalPopulation,
                                                  reproductionNumber: reproductionNumber)
         
-        let nationalHospitalizationsPer100K = hospitalOccupancy?.newAdmissions.flatMap { per100k(number: $0, population: nationalPopulation) }
+        let nationalHospitalizationsPer100K = hospitalOccupancy.newAdmissions.flatMap { per100k(number: $0, population: nationalPopulation) }
         
         let nationalHospitalizationsSummary = SummaryNumbers(
-            new: hospitalOccupancy?.newAdmissions,
-            trend: hospitalOccupancy?.newAdmissionsTrend,
+            new: hospitalOccupancy.newAdmissions,
+            trend: hospitalOccupancy.newAdmissionsTrend,
             total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions),
             average: nil,
             per100KInhabitants: nationalHospitalizationsPer100K,

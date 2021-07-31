@@ -17,7 +17,7 @@ final class LCPSAPI {
     }
 
     func entries(completion: @escaping (Result<[LCPSEntry], Error>) -> Void) {
-        let url = URL(string: "https://lcps.nu/wp-content/uploads/covid-19.csv")!
+        let url = URL(string: "https://lcps.nu/wp-content/uploads/covid-19-datafeed.csv")!
 
         urlSession.dataTask(with: url) { (data, response, error) in
             let dateFormatter = DateFormatter()

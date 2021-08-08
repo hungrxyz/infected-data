@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewVaccinationsAverageCalculator {
+struct NewVaccinationsAveragePerWeekCalculator {
 
     let entries: [VaccinationsEntry]
 
@@ -21,7 +21,7 @@ struct NewVaccinationsAverageCalculator {
             perDay.append(diff)
         }
 
-        return perDay.reduce(0, +) / perDay.count
+        return perDay.reduce(0, +) / 7
     }
 
 }

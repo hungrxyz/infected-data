@@ -212,19 +212,19 @@ struct Scalpel: ParsableCommand {
         let newVaccinations = NewVaccinationsCalculator(entries: vaccinationEntries)()
         let vaccinationsCoverage = VaccionationCoverageCalculator(entry: latestVaccinationsEntry,
                                                                   population: nationalPopulation)()
-        
+
         let herdImmunityCurrentTrendCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
-                                                                        vaccinationEntries: vaccinationEntries,
-                                                                        population: nationalPopulation)
+                                                                                    vaccinationEntries: vaccinationEntries,
+                                                                                    population: nationalPopulation)
 
         let herdImmunityEstimationCalculator = HerdImmunityEstimationCalculator(calendar: calendar,
                                                                                 vaccinationEntries: vaccinationEntries,
                                                                                 vaccinationDeliveries: vaccinationDeliveries,
                                                                                 population: nationalPopulation)
 
-        let averageCalculator = NewVaccinationsAverageCalculator(entries: Array(vaccinationEntries.suffix(8)))
+        let averageCalculator = NewVaccinationsAveragePerWeekCalculator(entries: Array(vaccinationEntries.suffix(3)))
         let averageTrendCalculator = NewVaccinationsAverageTrendCalculator(entries: vaccinationEntries)
-        
+
         let vaccinationsSummaryNumbers = SummaryNumbers(new: newVaccinations,
                                                         trend: averageTrendCalculator(),
                                                         total: currentVaccinationsTotal,

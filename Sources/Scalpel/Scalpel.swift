@@ -174,9 +174,7 @@ struct Scalpel: ParsableCommand {
             total: accumulator.accumulateHospitalAdmissions(fromEntries: rivmHospitalAdmissions),
             average: nil,
             per100KInhabitants: nationalHospitalizationsPer100K,
-            percentageOfPopulation: nil,
-            herdImmunityCurrentTrendDate: nil,
-            herdImmunityEstimatedDate: nil
+            percentageOfPopulation: nil
         )
 
         // MARK: Home Admissions
@@ -207,11 +205,12 @@ struct Scalpel: ParsableCommand {
         // MARK: Vaccinations
 
         let vaccinationDeliveries = try Vaccinations().deliveries()
-        
-        let currentVaccinationsTotal = vaccinationEntries.last!.doses
-        
+
+        let latestVaccinationsEntry = vaccinationEntries.last!
+        let currentVaccinationsTotal = latestVaccinationsEntry.doses
+
         let newVaccinations = NewVaccinationsCalculator(entries: vaccinationEntries)()
-        let vaccinationsCoverage = VaccionationCoverageCalculator(entry: vaccinationEntries.last!,
+        let vaccinationsCoverage = VaccionationCoverageCalculator(entry: latestVaccinationsEntry,
                                                                   population: nationalPopulation)()
         
         let herdImmunityCurrentTrendCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
@@ -231,10 +230,19 @@ struct Scalpel: ParsableCommand {
                                                         total: currentVaccinationsTotal,
                                                         average: averageCalculator(),
                                                         per100KInhabitants: nil,
-                                                        percentageOfPopulation: vaccinationsCoverage,
-                                                        herdImmunityCurrentTrendDate: herdImmunityCurrentTrendCalculator(),
-                                                        herdImmunityEstimatedDate: herdImmunityEstimationCalculator())
-        
+                                                        percentageOfPopulation: vaccinationsCoverage)
+
+        let vaccinationsSummary = VaccinationsSummary(numbers: vaccinationsSummaryNumbers,
+                                                      herdImmunityCurrentTrendDate: herdImmunityCurrentTrendCalculator(),
+                                                      herdImmunityEstimatedDate: herdImmunityEstimationCalculator(),
+                                                      lastUpdated: latestVaccinationsEntry.date,
+                                                      new: vaccinationsSummaryNumbers.new,
+                                                      trend: vaccinationsSummaryNumbers.trend,
+                                                      total: vaccinationsSummaryNumbers.total,
+                                                      average: vaccinationsSummaryNumbers.average,
+                                                      per100KInhabitants: vaccinationsSummaryNumbers.per100KInhabitants,
+                                                      percentageOfPopulation: vaccinationsSummaryNumbers.percentageOfPopulation)
+
         let summary = Summary(updatedAt: updatedAt,
                               numbersDate: numbersDate,
                               regionCode: "NL00",
@@ -247,7 +255,7 @@ struct Scalpel: ParsableCommand {
                               intensiveCareOccupancy: intensiveCareOccupancy,
                               homeAdmissions: homeAdmissionsSummary,
                               deaths: summarizedNumbers.deaths,
-                              vaccinations: vaccinationsSummaryNumbers)
+                              vaccinations: vaccinationsSummary)
         
         let encoder = JSONEncoder()
         
@@ -568,9 +576,7 @@ struct Scalpel: ParsableCommand {
             total: total.positiveCases,
             average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.positiveCases, population: $0) },
-            percentageOfPopulation: reproductionNumber,
-            herdImmunityCurrentTrendDate: nil,
-            herdImmunityEstimatedDate: nil
+            percentageOfPopulation: reproductionNumber
         )
         
         let hospitalAdmissions = SummaryNumbers(
@@ -579,9 +585,7 @@ struct Scalpel: ParsableCommand {
             total: total.hospitalAdmissions,
             average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.hospitalAdmissions, population: $0) },
-            percentageOfPopulation: nil,
-            herdImmunityCurrentTrendDate: nil,
-            herdImmunityEstimatedDate: nil
+            percentageOfPopulation: nil
         )
         
         let deaths = SummaryNumbers(
@@ -590,9 +594,7 @@ struct Scalpel: ParsableCommand {
             total: total.deaths,
             average: nil,
             per100KInhabitants: population.flatMap { per100k(number: today.deaths, population: $0) },
-            percentageOfPopulation: nil,
-            herdImmunityCurrentTrendDate: nil,
-            herdImmunityEstimatedDate: nil
+            percentageOfPopulation: nil
         )
         
         return (positiveCases, hospitalAdmissions, deaths)

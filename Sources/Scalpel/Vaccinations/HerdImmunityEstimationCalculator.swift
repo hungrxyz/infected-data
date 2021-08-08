@@ -16,7 +16,7 @@ struct HerdImmunityEstimationCalculator {
 
     func callAsFunction() -> Date {
         let latestEntry = vaccinationEntries.last!
-        let totalAdministered = Int(Float(latestEntry.doses) * latestEntry.dosage)
+        let fullyVaxxedPeople = Int(Float(latestEntry.doses) * latestEntry.fullyVaxxedPercentage)
         let totalAdministeredGoal = population
 
         // 70% of population
@@ -35,7 +35,7 @@ struct HerdImmunityEstimationCalculator {
         let todayStartOfDay = calendar.startOfDay(for: Date())
 
         var daysToGo = 0
-        var dayByDay = totalAdministered
+        var dayByDay = fullyVaxxedPeople
         var lastKnownWeekStartDate: Date!
 
         let enumarationDateComponents = DateComponents(hour: 0, minute: 0, second: 0)

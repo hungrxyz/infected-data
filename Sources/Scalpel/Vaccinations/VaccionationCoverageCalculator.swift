@@ -13,9 +13,9 @@ struct VaccionationCoverageCalculator {
     let population: Int
 
     func callAsFunction() -> Float {
-        let totalAdministeredPerEffectiveness = Float(entry.doses) * entry.dosage
+        let fullyVaxxedDoses = Float(entry.doses) * entry.fullyVaxxedPercentage
 
-        return totalAdministeredPerEffectiveness / Float(population)
+        return fullyVaxxedDoses / Float(population)
     }
 
 }

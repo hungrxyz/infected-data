@@ -19,9 +19,16 @@ struct CoronaDashboardAPI {
 
             let html = try! SwiftSoup.parse(htmlString)
 
-            let vaxDiv = try? html.body()?.getElementsByClass("kpi-value__StyledValue-sc-8puhi4-0 emUSfS")
+            let vaxDiv = try? html.body()?.getElementsByClass("sc-8puhi4-0 qJICb")
 
-            let vaxNumberString = try? vaxDiv?.text().components(separatedBy: " ")[1].components(separatedBy: ",").joined()
+            let vaxDivComponents = try? vaxDiv?.text().components(separatedBy: " ")
+
+            guard (vaxDivComponents?.count ?? 0) >= 4 else {
+                completion(nil)
+                return
+            }
+
+            let vaxNumberString = vaxDivComponents?[3].components(separatedBy: ",").joined()
 
             guard let vaxNumber = vaxNumberString.flatMap(Int.init) else {
                 completion(nil)

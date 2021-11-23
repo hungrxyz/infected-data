@@ -1,25 +1,25 @@
 {
   "regionCode" : "GM0622",
-  "numbersDate" : "2021-11-22T01:00:00+01:00",
+  "numbersDate" : "2021-11-23T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 78,
-    "trend" : -5,
-    "total" : 11858,
-    "per100KInhabitants" : 106.27136993408203
+    "new" : 56,
+    "trend" : -22,
+    "total" : 11914,
+    "per100KInhabitants" : 76.297393798828125
   },
   "deaths" : {
-    "new" : 0,
-    "trend" : 0,
-    "total" : 99,
-    "per100KInhabitants" : 0
-  },
-  "securityRegionName" : "Rotterdam-Rijnmond",
-  "updatedAt" : "2021-11-22T21:35:27+01:00",
-  "hospitalAdmissions" : {
     "new" : 1,
     "trend" : 1,
-    "total" : 416,
+    "total" : 100,
     "per100KInhabitants" : 1.3624535799026489
+  },
+  "securityRegionName" : "Rotterdam-Rijnmond",
+  "updatedAt" : "2021-11-23T15:31:30+01:00",
+  "hospitalAdmissions" : {
+    "new" : 0,
+    "trend" : -1,
+    "total" : 416,
+    "per100KInhabitants" : 0
   },
   "provinceName" : "Zuid-Holland",
   "municupalityName" : "Vlaardingen"

@@ -1,25 +1,25 @@
 {
   "regionCode" : "GM0106",
-  "numbersDate" : "2021-12-03T01:00:00+01:00",
+  "numbersDate" : "2021-12-04T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 73,
-    "trend" : 3,
-    "total" : 6347,
-    "per100KInhabitants" : 106.41555023193359
+    "new" : 68,
+    "trend" : -10,
+    "total" : 6420,
+    "per100KInhabitants" : 99.126808166503906
   },
   "deaths" : {
-    "new" : 0,
-    "trend" : 0,
-    "total" : 19,
-    "per100KInhabitants" : 0
-  },
-  "securityRegionName" : "Drenthe",
-  "updatedAt" : "2021-12-03T21:35:32+01:00",
-  "hospitalAdmissions" : {
     "new" : 1,
     "trend" : 1,
-    "total" : 171,
+    "total" : 20,
     "per100KInhabitants" : 1.457747220993042
+  },
+  "securityRegionName" : "Drenthe",
+  "updatedAt" : "2021-12-04T15:31:29+01:00",
+  "hospitalAdmissions" : {
+    "new" : 0,
+    "trend" : -1,
+    "total" : 171,
+    "per100KInhabitants" : 0
   },
   "provinceName" : "Drenthe",
   "municupalityName" : "Assen"

@@ -1,8 +1,11 @@
 {
   "hospitalOccupancy" : {
-    "newAdmissions" : 443,
     "newAdmissionsTrend" : 241,
-    "newAdmissionsPer100KInhabitants" : 2.5448677539825439
+    "currentlyOccupiedTrend" : 68,
+    "currentlyOccupied" : 2202,
+    "newAdmissionsPer100KInhabitants" : 2.5448677539825439,
+    "newAdmissions" : 443,
+    "currentlyOccupiedPer100KInhabitants" : 12.649658203125
   },
   "numbersDate" : "2021-12-07T01:00:00+01:00",
   "positiveCases" : {
@@ -13,17 +16,20 @@
     "per100KInhabitants" : 103.50086975097656
   },
   "intensiveCareOccupancy" : {
-    "newAdmissions" : 70,
     "newAdmissionsTrend" : 36,
-    "newAdmissionsPer100KInhabitants" : 0.40212357044219971
+    "currentlyOccupiedTrend" : 13,
+    "currentlyOccupied" : 624,
+    "newAdmissionsPer100KInhabitants" : 0.40212357044219971,
+    "newAdmissions" : 70,
+    "currentlyOccupiedPer100KInhabitants" : 3.5846445560455322
   },
   "homeAdmissions" : {
-    "newAdmissionsTrend" : -10,
-    "currentlyOccupiedTrend" : 12,
-    "currentlyOccupied" : 300,
-    "newAdmissionsPer100KInhabitants" : 0.14936017990112305,
-    "newAdmissions" : 26,
-    "currentlyOccupiedPer100KInhabitants" : 1.7233867645263672
+    "newAdmissionsTrend" : -2,
+    "currentlyOccupiedTrend" : 20,
+    "currentlyOccupied" : 308,
+    "newAdmissionsPer100KInhabitants" : 0.19531716406345367,
+    "newAdmissions" : 34,
+    "currentlyOccupiedPer100KInhabitants" : 1.7693437337875366
   },
   "deaths" : {
     "new" : 68,
@@ -37,7 +43,7 @@
     "total" : 82933,
     "per100KInhabitants" : 2.5448677539825439
   },
-  "updatedAt" : "2021-12-07T21:36:37+01:00",
+  "updatedAt" : "2021-12-07T22:35:44+01:00",
   "vaccinations" : {
     "trend" : 21173,
     "lastUpdated" : "2021-11-28T01:00:00+01:00",

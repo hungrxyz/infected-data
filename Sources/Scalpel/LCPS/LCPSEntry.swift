@@ -20,8 +20,8 @@ extension LCPSEntry: Decodable {
     enum CodingKeys: String, CodingKey {
 
         case date = "Datum"
-        case intensiveCareCOVIDOccupancy = "IC_Bedden_COVID"
-        case clinicCOVIDOccupancy = "Kliniek_Bedden"
+        case intensiveCareCOVIDOccupancy = "IC_Bedden_COVID_Nederland"
+        case clinicCOVIDOccupancy = "Kliniek_Bedden_Nederland"
 
     }
     

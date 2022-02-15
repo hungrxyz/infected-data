@@ -204,23 +204,12 @@ struct Scalpel: ParsableCommand {
 
         // MARK: Vaccinations
 
-        let vaccinationDeliveries = try Vaccinations().deliveries()
-
         let latestVaccinationsEntry = vaccinationEntries.last!
         let currentVaccinationsTotal = latestVaccinationsEntry.doses
 
         let newVaccinations = NewVaccinationsCalculator(entries: vaccinationEntries)()
         let vaccinationsCoverage = VaccionationCoverageCalculator(entry: latestVaccinationsEntry,
                                                                   population: nationalPopulation)()
-
-        let herdImmunityCurrentTrendCalculator = HerdImmunityCurrentTrendCalculator(calendar: calendar,
-                                                                                    vaccinationEntries: vaccinationEntries,
-                                                                                    population: nationalPopulation)
-
-        let herdImmunityEstimationCalculator = HerdImmunityEstimationCalculator(calendar: calendar,
-                                                                                vaccinationEntries: vaccinationEntries,
-                                                                                vaccinationDeliveries: vaccinationDeliveries,
-                                                                                population: nationalPopulation)
 
         let averageCalculator = NewVaccinationsAveragePerWeekCalculator(entries: Array(vaccinationEntries.suffix(3)))
         let averageTrendCalculator = NewVaccinationsAverageTrendCalculator(entries: vaccinationEntries)
@@ -233,8 +222,8 @@ struct Scalpel: ParsableCommand {
                                                         percentageOfPopulation: vaccinationsCoverage)
 
         let vaccinationsSummary = VaccinationsSummary(numbers: vaccinationsSummaryNumbers,
-                                                      herdImmunityCurrentTrendDate: herdImmunityCurrentTrendCalculator(),
-                                                      herdImmunityEstimatedDate: herdImmunityEstimationCalculator(),
+                                                      herdImmunityCurrentTrendDate: updatedAt,
+                                                      herdImmunityEstimatedDate: updatedAt,
                                                       lastUpdated: latestVaccinationsEntry.date,
                                                       new: vaccinationsSummaryNumbers.new,
                                                       trend: vaccinationsSummaryNumbers.trend,

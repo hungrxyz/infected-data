@@ -99,8 +99,10 @@ struct Scalpel: ParsableCommand {
         let previousEntries = allEntries.filter { calendar.isDate($0.dateOfPublication, inSameDayAs: previousNumbersDate) }
         let previousCounts = accumulator.accumulate(entries: previousEntries)
 
-        let latestRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 1) }
-        let previousRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
+        let latestRIVMHADate = rivmHospitalAdmissions.first?.dateOfStatistics ?? Date()
+        let previousRIVMHADate = calendar.date(byAdding: .day, value: -1, to: latestRIVMHADate)!
+        let latestRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.dateOfStatistics, inSameDayAs: latestRIVMHADate) }
+        let previousRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.dateOfStatistics, inSameDayAs: previousRIVMHADate) }
 
         let latestNationalRIVMHospitalAdmissions = latestRIVMHospitalAdmissionEntries.accumulatedHospitalAdmissions()
         let previousNationalRIVMHospitalAdmissions = previousRIVMHospitalAdmissionEntries.accumulatedHospitalAdmissions()
@@ -109,9 +111,11 @@ struct Scalpel: ParsableCommand {
         let previousIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.dropLast().last?.icAdmissionNotification
 
         // MARK: LCPS
-        
-        let latestLCPSEntry = lcpsEntries?.first { calendar.isDateInToday($0.date) }
-        let previousLCPSEntry = lcpsEntries?.first { calendar.isDateInYesterday($0.date) }
+
+        let latestLCPSDate = lcpsEntries?.first?.date ?? Date()
+        let previousLCPSDate = calendar.date(byAdding: .day, value: -1, to: latestLCPSDate)!
+        let latestLCPSEntry = lcpsEntries?.first { calendar.isDate($0.date, inSameDayAs: latestLCPSDate) }
+        let previousLCPSEntry = lcpsEntries?.first { calendar.isDate($0.date, inSameDayAs: previousLCPSDate) }
         
         // MARK: Hospital Occupancy
         let currentlyOccupiedHospitalBedsTrend: Int?

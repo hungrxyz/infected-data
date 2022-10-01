@@ -256,7 +256,7 @@ struct Scalpel: ParsableCommand {
                               intensiveCareOccupancy: intensiveCareOccupancy,
                               homeAdmissions: homeAdmissionsSummary,
                               deaths: summarizedNumbers.deaths,
-                              vaccinations: vaccinationsSummary)
+                              vaccinations: nil)
         
         let encoder = JSONEncoder()
         

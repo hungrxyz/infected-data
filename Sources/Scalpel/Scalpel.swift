@@ -84,19 +84,21 @@ struct Scalpel: ParsableCommand {
         let accumulator = NumbersAccumulator()
         
         let allEntries = rivmRegional.entries
-        
+        let numbersDate = allEntries.last!.dateOfPublication
+        let previousNumbersDate = calendar.date(byAdding: .day, value: -1, to: numbersDate)!
+
         // MARK: - National
-        
+
         // MARK: RIVM
-        
+
         let totalCounts = accumulator.accumulate(entries: allEntries)
-        
-        let todaysEntries = allEntries.filter { calendar.isDateInToday($0.dateOfPublication) }
-        let todayCounts = accumulator.accumulate(entries: todaysEntries)
-        
-        let yesterdaysEntries = allEntries.filter { calendar.isDateInYesterday($0.dateOfPublication) }
-        let yesterdaysCounts = accumulator.accumulate(entries: yesterdaysEntries)
-        
+
+        let latestEntries = allEntries.filter { calendar.isDate($0.dateOfPublication, inSameDayAs: numbersDate) }
+        let latestCounts = accumulator.accumulate(entries: latestEntries)
+
+        let previousEntries = allEntries.filter { calendar.isDate($0.dateOfPublication, inSameDayAs: previousNumbersDate) }
+        let previousCounts = accumulator.accumulate(entries: previousEntries)
+
         let latestRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 1) }
         let previousRIVMHospitalAdmissionEntries = rivmHospitalAdmissions.filter { calendar.isDate($0.date, inSameDayAsDaysAgo: 2) }
 
@@ -105,8 +107,6 @@ struct Scalpel: ParsableCommand {
 
         let latestIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.last?.icAdmissionNotification
         let previousIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.dropLast().last?.icAdmissionNotification
-
-        let numbersDate = allEntries.last!.dateOfPublication
 
         // MARK: LCPS
         
@@ -158,8 +158,8 @@ struct Scalpel: ParsableCommand {
 
         let reproductionNumber = reproductionNumberEntries?.last(where: { $0.average != nil })?.average
         
-        let summarizedNumbers = summarizeEntries(today: todayCounts,
-                                                 yesterday: yesterdaysCounts,
+        let summarizedNumbers = summarizeEntries(today: latestCounts,
+                                                 yesterday: previousCounts,
                                                  total: totalCounts,
                                                  population: nationalPopulation,
                                                  reproductionNumber: reproductionNumber)
@@ -293,7 +293,7 @@ struct Scalpel: ParsableCommand {
         
         var municipalSummaries = [Summary]()
         
-        let municipalEntries = todaysEntries.filter { $0.municipalityCode != nil }
+        let municipalEntries = latestEntries.filter { $0.municipalityCode != nil }
         
         for entry in municipalEntries {
             
@@ -308,8 +308,8 @@ struct Scalpel: ParsableCommand {
             let totals = accumulator.accumulate(entries: totalsEntries)
             
             guard
-                let todaysEntry = todaysEntries.first(where: { $0.municipalityCode == regionCode }),
-                let yesterdaysEntry = yesterdaysEntries.first(where: { $0.municipalityCode == regionCode })
+                let todaysEntry = latestEntries.first(where: { $0.municipalityCode == regionCode }),
+                let yesterdaysEntry = previousEntries.first(where: { $0.municipalityCode == regionCode })
             else {
                 continue
             }
@@ -386,10 +386,10 @@ struct Scalpel: ParsableCommand {
             let totalsEntries = allEntries.filter { $0.securityRegionCode == regionCode }
             let totals = accumulator.accumulate(entries: totalsEntries)
             
-            let todaysEntriesForSecurityRegion = todaysEntries.filter { $0.securityRegionCode == regionCode }
+            let todaysEntriesForSecurityRegion = latestEntries.filter { $0.securityRegionCode == regionCode }
             let todaysNumbers = accumulator.accumulate(entries: todaysEntriesForSecurityRegion)
             
-            let yesterdaysEntriesForSecurityRegion = yesterdaysEntries.filter { $0.securityRegionCode == regionCode }
+            let yesterdaysEntriesForSecurityRegion = previousEntries.filter { $0.securityRegionCode == regionCode }
             let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysEntriesForSecurityRegion)
             
             let latestHospitalAdmissionsAverage = latestRIVMHospitalAdmissionEntries
@@ -479,10 +479,10 @@ struct Scalpel: ParsableCommand {
             let totalsEntries = allEntries.filter { $0.provinceName == provinceName }
             let totals = accumulator.accumulate(entries: totalsEntries)
             
-            let todaysProvincialEntries = todaysEntries.filter { $0.provinceName == provinceName }
+            let todaysProvincialEntries = latestEntries.filter { $0.provinceName == provinceName }
             let todaysNumbers = accumulator.accumulate(entries: todaysProvincialEntries)
             
-            let yesterdaysProvincialEntries = yesterdaysEntries.filter { $0.provinceName == provinceName }
+            let yesterdaysProvincialEntries = previousEntries.filter { $0.provinceName == provinceName }
             let yesterdaysNumbers = accumulator.accumulate(entries: yesterdaysProvincialEntries)
             
             // Early exit in case no entries found for province

@@ -106,9 +106,7 @@ struct Scalpel: ParsableCommand {
         let latestIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.last?.icAdmissionNotification
         let previousIntensiveCareAdmissions = rivmIntensiveCareAdmissions?.dropLast().last?.icAdmissionNotification
 
-        guard let numbersDate = todaysEntries.first?.dateOfPublication else {
-            fatalError("Missing todays entries dates")
-        }
+        let numbersDate = allEntries.last!.dateOfPublication
 
         // MARK: LCPS
         
@@ -179,28 +177,38 @@ struct Scalpel: ParsableCommand {
 
         // MARK: Home Admissions
 
-        let latestNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: homeAdmissionEntries)()
-        let previousNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: Array(homeAdmissionEntries.dropFirst()))()
+        func homeAdmissions(entries: [HomeAdmissionsEntry], nationalPopulation: Int) -> Occupancy? {
+            if entries.isEmpty {
+                return nil
+            }
 
-        let newHomeAdmissionsTrend = trend(today: latestNewHomeAdmissions, yesterday: previousNewHomeAdmissions)
+            let latestNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: entries)()
+            let previousNewHomeAdmissions = NewHomeAdmissionsCalculator(entries: Array(entries.dropFirst()))()
 
-        let per100KNewHomeAdmissions = per100k(number: latestNewHomeAdmissions, population: nationalPopulation)
+            let newHomeAdmissionsTrend = trend(today: latestNewHomeAdmissions, yesterday: previousNewHomeAdmissions)
 
-        let latestActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: homeAdmissionEntries[0])()
-        let previousActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: homeAdmissionEntries[1])()
+            let per100KNewHomeAdmissions = per100k(number: latestNewHomeAdmissions, population: nationalPopulation)
 
-        let activeHomeAdmissionsTrend = trend(today: latestActiveHomeAdmissions, yesterday: previousActiveHomeAdmissions)
+            let latestActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: entries[0])()
+            let previousActiveHomeAdmissions = ActiveHomeAdmissionsCalculator(entry: entries[1])()
 
-        let per100KActiveHomeAdmissions = per100k(number: latestActiveHomeAdmissions, population: nationalPopulation)
+            let activeHomeAdmissionsTrend = trend(today: latestActiveHomeAdmissions, yesterday: previousActiveHomeAdmissions)
 
-        let homeAdmissionsSummary = Occupancy(
-            newAdmissions: latestNewHomeAdmissions,
-            newAdmissionsTrend: newHomeAdmissionsTrend,
-            newAdmissionsPer100KInhabitants: per100KNewHomeAdmissions,
-            currentlyOccupied: latestActiveHomeAdmissions,
-            currentlyOccupiedTrend: activeHomeAdmissionsTrend,
-            currentlyOccupiedPer100KInhabitants: per100KActiveHomeAdmissions
-        )
+            let per100KActiveHomeAdmissions = per100k(number: latestActiveHomeAdmissions, population: nationalPopulation)
+
+            let summary = Occupancy(
+                newAdmissions: latestNewHomeAdmissions,
+                newAdmissionsTrend: newHomeAdmissionsTrend,
+                newAdmissionsPer100KInhabitants: per100KNewHomeAdmissions,
+                currentlyOccupied: latestActiveHomeAdmissions,
+                currentlyOccupiedTrend: activeHomeAdmissionsTrend,
+                currentlyOccupiedPer100KInhabitants: per100KActiveHomeAdmissions
+            )
+
+            return summary
+        }
+
+        let homeAdmissionsSummary = homeAdmissions(entries: homeAdmissionEntries, nationalPopulation: nationalPopulation)
 
         // MARK: Vaccinations
 

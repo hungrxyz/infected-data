@@ -1,11 +1,11 @@
 {
   "hospitalOccupancy" : {
     "newAdmissionsTrend" : 73,
-    "currentlyOccupiedTrend" : -29,
-    "currentlyOccupied" : 1093,
+    "currentlyOccupiedTrend" : -42,
+    "currentlyOccupied" : 1051,
     "newAdmissionsPer100KInhabitants" : 0.41935744881629944,
     "newAdmissions" : 73,
-    "currentlyOccupiedPer100KInhabitants" : 6.2788729667663574
+    "currentlyOccupiedPer100KInhabitants" : 6.0375981330871582
   },
   "numbersDate" : "2022-10-25T02:00:00+02:00",
   "positiveCases" : {
@@ -17,18 +17,18 @@
   },
   "intensiveCareOccupancy" : {
     "newAdmissionsTrend" : 10,
-    "currentlyOccupiedTrend" : 4,
-    "currentlyOccupied" : 59,
+    "currentlyOccupiedTrend" : -2,
+    "currentlyOccupied" : 57,
     "newAdmissionsPer100KInhabitants" : 0.074680089950561523,
     "newAdmissions" : 13,
-    "currentlyOccupiedPer100KInhabitants" : 0.33893272280693054
+    "currentlyOccupiedPer100KInhabitants" : 0.32744348049163818
   },
   "homeAdmissions" : {
-    "newAdmissionsTrend" : 2,
-    "currentlyOccupiedTrend" : 2,
+    "newAdmissionsTrend" : -2,
+    "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 8,
-    "newAdmissionsPer100KInhabitants" : 0.011489245109260082,
-    "newAdmissions" : 2,
+    "newAdmissionsPer100KInhabitants" : 0,
+    "newAdmissions" : 0,
     "currentlyOccupiedPer100KInhabitants" : 0.045956980437040329
   },
   "deaths" : {
@@ -43,6 +43,6 @@
     "total" : 51526,
     "per100KInhabitants" : 0.41935744881629944
   },
-  "updatedAt" : "2022-10-26T22:26:40+02:00",
+  "updatedAt" : "2022-10-27T16:27:55+02:00",
   "regionCode" : "NL00"
 }

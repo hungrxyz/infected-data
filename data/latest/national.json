@@ -1,46 +1,48 @@
 {
   "hospitalOccupancy" : {
     "newAdmissionsTrend" : 73,
-    "currentlyOccupied" : 673,
+    "currentlyOccupiedTrend" : 5,
+    "currentlyOccupied" : 678,
     "newAdmissionsPer100KInhabitants" : 0.41935744881629944,
     "newAdmissions" : 73,
-    "currentlyOccupiedPer100KInhabitants" : 3.866131067276001
+    "currentlyOccupiedPer100KInhabitants" : 3.8948538303375244
   },
-  "numbersDate" : "2022-11-11T01:00:00+01:00",
+  "numbersDate" : "2022-11-15T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 962,
-    "trend" : -123,
-    "percentageOfPopulation" : 0.8399999737739563,
-    "total" : 6520809,
-    "per100KInhabitants" : 5.5263271331787109
+    "new" : 1053,
+    "trend" : 607,
+    "percentageOfPopulation" : 0.79000002145767212,
+    "total" : 6523741,
+    "per100KInhabitants" : 6.0490875244140625
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : 0,
+    "newAdmissionsTrend" : 2,
+    "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 36,
     "newAdmissionsPer100KInhabitants" : 0.028723113238811493,
     "newAdmissions" : 5,
     "currentlyOccupiedPer100KInhabitants" : 0.20680640637874603
   },
   "homeAdmissions" : {
-    "newAdmissionsTrend" : 2,
+    "newAdmissionsTrend" : -2,
     "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 10,
-    "newAdmissionsPer100KInhabitants" : 0.011489245109260082,
-    "newAdmissions" : 2,
+    "newAdmissionsPer100KInhabitants" : 0,
+    "newAdmissions" : 0,
     "currentlyOccupiedPer100KInhabitants" : 0.057446226477622986
   },
   "deaths" : {
-    "new" : 1,
-    "trend" : -7,
-    "total" : 4691,
-    "per100KInhabitants" : 0.0057446225546300411
+    "new" : 9,
+    "trend" : 9,
+    "total" : 4706,
+    "per100KInhabitants" : 0.051701601594686508
   },
   "hospitalAdmissions" : {
     "new" : 73,
     "trend" : 73,
-    "total" : 53345,
+    "total" : 53586,
     "per100KInhabitants" : 0.41935744881629944
   },
-  "updatedAt" : "2022-11-14T21:27:03+01:00",
+  "updatedAt" : "2022-11-15T15:24:26+01:00",
   "regionCode" : "NL00"
 }

@@ -1,46 +1,48 @@
 {
   "hospitalOccupancy" : {
     "newAdmissionsTrend" : 73,
-    "currentlyOccupied" : 632,
+    "currentlyOccupiedTrend" : -8,
+    "currentlyOccupied" : 624,
     "newAdmissionsPer100KInhabitants" : 0.41935744881629944,
     "newAdmissions" : 73,
-    "currentlyOccupiedPer100KInhabitants" : 3.6306014060974121
+    "currentlyOccupiedPer100KInhabitants" : 3.5846445560455322
   },
-  "numbersDate" : "2022-11-18T01:00:00+01:00",
+  "numbersDate" : "2022-11-22T01:00:00+01:00",
   "positiveCases" : {
-    "new" : 853,
-    "trend" : -68,
-    "percentageOfPopulation" : 0.93999999761581421,
-    "total" : 6526438,
-    "per100KInhabitants" : 4.9001631736755371
+    "new" : 970,
+    "trend" : 535,
+    "percentageOfPopulation" : 0.87000000476837158,
+    "total" : 6529143,
+    "per100KInhabitants" : 5.5722837448120117
   },
   "intensiveCareOccupancy" : {
-    "newAdmissionsTrend" : 4,
+    "newAdmissionsTrend" : 9,
+    "currentlyOccupiedTrend" : 0,
     "currentlyOccupied" : 33,
-    "newAdmissionsPer100KInhabitants" : 0.028723113238811493,
-    "newAdmissions" : 5,
+    "newAdmissionsPer100KInhabitants" : 0.057446226477622986,
+    "newAdmissions" : 10,
     "currentlyOccupiedPer100KInhabitants" : 0.1895725429058075
   },
   "homeAdmissions" : {
     "newAdmissionsTrend" : 0,
-    "currentlyOccupiedTrend" : 0,
-    "currentlyOccupied" : 4,
+    "currentlyOccupiedTrend" : -4,
+    "currentlyOccupied" : 0,
     "newAdmissionsPer100KInhabitants" : 0,
     "newAdmissions" : 0,
-    "currentlyOccupiedPer100KInhabitants" : 0.022978490218520164
+    "currentlyOccupiedPer100KInhabitants" : 0
   },
   "deaths" : {
-    "new" : 2,
-    "trend" : -1,
-    "total" : 4713,
-    "per100KInhabitants" : 0.011489245109260082
+    "new" : 4,
+    "trend" : 3,
+    "total" : 4721,
+    "per100KInhabitants" : 0.022978490218520164
   },
   "hospitalAdmissions" : {
     "new" : 73,
     "trend" : 73,
-    "total" : 53767,
+    "total" : 53982,
     "per100KInhabitants" : 0.41935744881629944
   },
-  "updatedAt" : "2022-11-21T21:25:06+01:00",
+  "updatedAt" : "2022-11-22T15:24:42+01:00",
   "regionCode" : "NL00"
 }
